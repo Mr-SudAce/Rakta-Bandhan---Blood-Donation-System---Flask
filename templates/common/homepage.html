@@ -1,0 +1,16 @@
+
+<link rel="stylesheet" href="{{ url_for('static', filename='homepage.css') }}">
+
+{% include "common/heropage.html" %}
+
+{% include "common/blood_type.html" %}
+
+<!-- Tiny mobile menu toggle (no framework) -->
+<script>
+    const btn = document.querySelector('.hamburger');
+    const menu = document.querySelector('.menu');
+    btn.addEventListener('click', () => {
+      const open = menu.classList.toggle('menu--open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  </script>

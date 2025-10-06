@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="mt-4">
+    <h2>Reports</h2>
+    <div class="mb-3">
+        <form method="get" action="{% url 'admin_reports' %}">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="report_type" class="form-label">Select Report Type</label>
+                    <select id="report_type" name="report_type" class="form-select">
+                        <option value="donations">Donations</option>
+                        <option value="inventory">Inventory</option>
+                        <option value="events">Events</option>
+                        <option value="feedback">Feedback</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="date_range" class="form-label">Date Range</label>
+                    <input type="text" id="date_range" name="date_range" class="form-control" placeholder="YYYY-MM-DD to YYYY-MM-DD">
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">Generate Report</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <hr>
+    <h4 class="mt-4">Report Results</h4>
+    {% if report_data %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    {% for header in report_headers %}
+                        <th>{{ header }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in report_data %}
+                    <tr>
+                        {% for item in row %}
+                            <td>{{ item }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'admin_download_report' %}?report_type={{ request.GET.report_type }}&date_range={{ request.GET.date_range }}" class="btn btn-success mt-2">Download Report</a>
+    {% else %}
+        <p>No report data available. Please select criteria and generate a report.</p>
+    {% endif %}
+</div>

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="mt-4">
+
+    {% if current_user.role == 'donor' %}
+    <h2>Donor Profile</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <img src="{{ url_for('static', filename='profile_pics/' + current_user.profile_picture) }}"
+                alt="Profile Picture"
+                class="img-fluid mb-3"
+                style="max-width: 150px;">
+            <p class="card-text"> <strong>Title:</strong> {{ current_user.username }}</p>
+            <p class="card-text"><strong>Email:</strong> {{ current_user.email | default("N/A") }}</p>
+            <p class="card-text"><strong>Phone:</strong> {{ current_user.phone | default("N/A") }}</p>
+            <p class="card-text"><strong>Blood Type:</strong> {{ current_user.blood_type | default("N/A") }}</p>
+            <p class="card-text"><strong>Last Donation:</strong> {{ current_user.last_donation | default("N/A") }}</p>
+            <p class="card-text"><strong>Eligibility:</strong> {{ current_user.eligibility | default("N/A") }}</p>
+        </div>
+    </div>
+    {% elif current_user.role == 'recipient' %}
+    <h2>Recipient Profile</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <img src="{{ url_for('static', filename='profile_pics/' + current_user.profile_picture) }}"
+                alt="Profile Picture"
+                class="img-fluid mb-3"
+                style="max-width: 150px;">
+            <p class="card-text"> <strong>Title:</strong> {{ current_user.username }}</p>
+            <p class="card-text"><strong>Email:</strong> {{ current_user.email | default("N/A") }}</p>
+            <p class="card-text"><strong>Phone:</strong> {{ current_user.phone | default("N/A") }}</p>
+            <p class="card-text"><strong>Blood Type Needed:</strong> {{ current_user.required_blood | default("N/A") }}</p>
+            <p class="card-text"><strong>Urgency:</strong> {{ current_user.urgency | default("N/A") }}</p>
+            <p class="card-text"><strong>Hospital:</strong> {{ current_user.hospital | default("N/A") }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <h4>Donation Certificates</h4>
+    <ul class="list-group">
+        {% if certificates %}
+        {% for certificate in certificates %}
+        <li class="list-group-item">
+            {{ certificate.date | default("Unknown Date") }} - {{ certificate.event_name | default("Unnamed Event") }}
+            <a href="{{ certificate.download_url | default('#') }}" class="btn btn-sm btn-success float-end">Download</a>
+        </li>
+        {% endfor %}
+        {% else %}
+        <li class="list-group-item">No certificates available.</li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}

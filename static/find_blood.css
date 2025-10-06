@@ -1,0 +1,80 @@
+/* ========== Forms & Lists ========== */
+.form {
+    display: grid;
+    gap: 1rem
+}
+
+.form--inline {
+    grid-template-columns: 1.3fr 1fr 1fr auto;
+    align-items: end
+}
+
+.form label {
+    display: grid;
+    gap: .4rem
+}
+
+.no-data{
+    width: 100%;
+    justify-content: center;
+    display: flex;
+}
+
+input,
+select {
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 12px;
+    padding: .7rem .8rem;
+    outline: none;
+}
+
+input:focus,
+select:focus {
+    box-shadow: var(--ring);
+    border-color: transparent
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: .6rem
+}
+
+.checkbox input {
+    width: 18px;
+    height: 18px
+}
+
+.list {
+    display: grid;
+    gap: .8rem;
+    margin-top: 1rem
+}
+
+.list__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background: var(--surface);
+    padding: 1rem;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, .06)
+}
+
+.list__item h3 {
+    margin: .2rem 0
+}
+
+@media (max-width:900px) {
+    .form--inline {
+        grid-template-columns: 1fr
+    }
+
+    .list__item {
+        flex-direction: column;
+        align-items: flex-start
+    }
+}

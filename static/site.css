@@ -1,0 +1,14 @@
+/* ========== Base Recipient ========== */
+:root {
+    --bg: #ff0000;
+    --surface: #002fff;
+    --surface-2: #1b1e29;
+    --text: #e7e9ee;
+    --muted: #9aa1ae;
+    --primary: #e11d48;
+    /* crimson */
+    --primary-600: #be123c;
+    --ring: 0 0 0 2px rgba(225, 29, 72, 0.35);
+    --radius: 20px;
+    --shadow: 0 10px 25px rgba(0, 0, 0, .35);
+}

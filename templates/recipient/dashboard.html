@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .card-body{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+</style>
+
+<div class="mt-4">
+    <h2>Recipient Dashboard</h2>
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Total Requests:</h5>
+                    <p class="card-text">{{ total_requests }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Active Requests:</h5>
+                    <p class="card-text">{{ active_requests }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Recommended Donors:</h5>
+                    <p class="card-text">{{ recommended_donors }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <h4 class="mt-4">Quick Actions</h4>
+    <div class="btn-group" role="group">
+        <a href="{{ url_for('recipient_requests') }}" class="btn btn-primary">Make New Request</a>
+        <a href="{{ url_for('recipient_requests') }}" class="btn btn-success">View Requests</a>
+        <a href="{{ url_for('my_donations') }}" class="btn btn-info">Search Donors</a>
+    </div>
+    <hr>
+    <h4 class="mt-4">Recent Requests</h4>
+    <ul class="list-group">
+        {% if donor_data %}
+        {% for donor in donor_data %}
+        <li class="list-group-item">
+            {{ donor.date }} - {{ donor.blood_type }} ({{ donor.status }})
+        </li>
+        {% endfor %}
+        {% else %}
+        <li class="list-group-item">No recent requests.</li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}

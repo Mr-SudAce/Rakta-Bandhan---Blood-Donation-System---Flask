@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="mt-4">
+    <h2>My Blood Requests</h2>
+    <div class="mb-3">
+        <a href="#" class="btn btn-primary">Create New Request</a>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Blood Type</th>
+                <th>Status</th>
+                <th>Donor Assigned</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if requests %}
+
+            {% for request in requests %}
+            <tr>
+                <td>{{ request.date }}</td>
+                <td>{{ request.blood_type }}</td>
+                <td>{{ request.status }}</td>
+                <td>
+                    {% if request.donor %}
+                    {{ request.donor.name }}
+                    {% else %}
+                    Not Assigned
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="#" class="btn btn-sm btn-info">View</a>
+                    {% if request.status == 'Pending' %}
+                    <a href="#" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="#" class="btn btn-sm btn-danger">Cancel</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center">No requests found.</td>
+            </tr>
+
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

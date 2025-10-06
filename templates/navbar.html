@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='navbar.css') }}">
+
+{% if current_user.is_authenticated %}
+<header class="nav">
+  <div class="nav__wrap container">
+    <a class="brand" href="{{ url_for('home') }}">🩸 Rakta Bandhan</a>
+    <nav class="menu" aria-label="Primary">
+      <!-- {% if current_user.role == 'donor' %}
+      <a href="{{ url_for('donate_blood') }}">Donate</a>
+      {% elif current_user.role == 'recipient' %}
+      <a href="{{ url_for('find_blood') }}">Find Blood</a>
+      {% endif %} -->
+
+      <a href="{{ url_for('donate_blood') }}">Donate</a>
+      <a href="{{ url_for('find_blood') }}">Find Blood</a>
+
+      <a href="{{ url_for('events') }}">Campaigns</a>
+      <a href="{{ url_for('about') }}">About</a>
+      {% if current_user.is_authenticated %}
+      <div class="profile-dropdown">
+        <div class="profile_pic">
+          {% if current_user.role == 'recipient' or current_user.role == 'donor' %}
+          <img class="profile_image" src="{{ url_for('static', filename='profile_pics/' + current_user.profile_picture) }}" alt="Profile Picture">
+          {% elif current_user.role == 'admin' %}
+          <img class="profile_image" src="{{ url_for('static', filename='profile_pics/admin_dflt.jpg') }}" alt="Profile Picture">
+          {% else %}
+          <img class="profile_image" src="{{ url_for('static', filename='profile_pics/default.png') }}" alt="Profile Picture">
+          {% endif %}
+        </div>
+        <div class="profile_info">
+          <p class="user_name">{{ current_user.username }}</p>
+          <p class="user-role m-0">{{ current_user.role }}</p>
+        </div>
+        <div class="dropdown-content">
+          <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+      </div>
+      {% endif %}
+    </nav>
+    <button class="hamburger" aria-label="Open Menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+{% endif %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="mt-4">
+    <h2>Manage Events</h2>
+    <div class="mb-3">
+        <a href="{% url 'admin_create_event' %}" class="btn btn-primary">Create New Event</a>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Event Name</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Participants</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td>{{ event.name }}</td>
+                <td>{{ event.date }}</td>
+                <td>{{ event.location }}</td>
+                <td>{{ event.participants_count }}</td>
+                <td>
+                    <a href="{% url 'admin_edit_event' event.id %}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'admin_delete_event' event.id %}" class="btn btn-sm btn-danger">Delete</a>
+                    <a href="{% url 'admin_event_detail' event.id %}" class="btn btn-sm btn-info">View</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No events found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>

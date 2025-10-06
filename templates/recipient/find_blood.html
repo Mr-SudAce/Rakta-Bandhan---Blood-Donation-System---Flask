@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='find_blood.css') }}">
+
+<section id="find" class="panel" aria-labelledby="find-title">
+<div class="panel__header">
+  <h2 id="find-title">Find Blood</h2>
+  <p class="muted">Search nearby donors by location, blood group, and urgency.</p>
+</div>
+
+<!-- Search Form -->
+<form class="form form--inline" action="{{ url_for('find_blood') }}" method="get">
+  <label>
+    <span>City/District</span>
+    <input type="text" name="q" placeholder="e.g., Kathmandu" required />
+  </label>
+
+  <label>
+    <span>Blood Group</span>
+    <select name="group" required>
+      <option value disabled selected>Select</option>
+      <option value="A+">A+</option>
+      <option value="A-">A-</option>
+      <option value="B+">B+</option>
+      <option value="B-">B-</option>
+      <option value="AB+">AB+</option>
+      <option value="AB-">AB-</option>
+      <option value="O+">O+</option>
+      <option value="O-">O-</option>
+    </select>
+  </label>
+
+  <label>
+    <span>Urgency</span>
+    <select name="urgency">
+      <option value="Normal">Normal</option>
+      <option value="High">High</option>
+      <option value="Critical">Critical</option>
+    </select>
+  </label>
+
+  <button class="btn" type="submit">Search</button>
+</form>
+
+<!-- Donor Results -->
+<div class="list mt-4">
+  {% if donors %}
+    {% for donor in donors %}
+    <article class="list__item card">
+      <div class="card-body">
+        <h3>{{ donor.name }} ({{ donor.group }})</h3>
+        <p class="muted">{{ donor.city }}</p>
+        <p>Urgency: <strong>{{ donor.urgency }}</strong></p>
+        <a href="tel:{{ donor.phone }}" class="btn btn--ghost">📞 Contact</a>
+      </div>
+    </article>
+    {% endfor %}
+  {% elif city or group or urgency %}
+    <div class="no-data">
+      <p>No donors found matching your search.</p>
+    </div>
+  {% else %}
+    <div class="no-data">
+      <p>No search data provided.</p>
+    </div>
+  {% endif %}
+</div>
+</section>
+{% endblock %}

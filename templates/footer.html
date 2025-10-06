@@ -1,0 +1,39 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='footer.css') }}">
+{% if current_user.is_authenticated %}
+<!-- Footer -->
+
+<footer class="footer">
+    <div class="footer__grid container">
+        <div>
+            <h3>Rakta Bandhan</h3>
+            <p class="muted">Connecting donors and patients across Nepal, 24/7.</p>
+        </div>
+        <div>
+            <h4>Links</h4>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('recipient_dashboard') }}">Donate</a></li>
+                <li><a href="{{ url_for('find_blood') }}">Find Blood</a></li>
+                <li><a href="{{ url_for('events') }}">Campaigns</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4>Contact</h4>
+            <ul>
+                <li>help@raktabandhan.org</li>
+                <li>+977-1-555-1234</li>
+                <li>Kathmandu, Nepal</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer__bar container">
+        <span>© 2025 Rakta Bandhan</span>
+        <div class="socials">
+            <a href="#" aria-label="Facebook">F</a>
+            <a href="#" aria-label="X">X</a>
+            <a href="#" aria-label="Instagram">I</a>
+        </div>
+    </div>
+</footer>
+
+{% endif %}

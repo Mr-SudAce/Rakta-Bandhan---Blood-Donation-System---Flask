@@ -1,0 +1,131 @@
+/* ========== Base Recipient ========== */
+:root {
+    --bg: #ff0000;
+    --surface: #0f1015;
+    --surface-2: #1b1e29;
+    --text: #e7e9ee;
+    --muted: #9aa1ae;
+    --primary: #e11d48;
+    /* crimson */
+    --primary-600: #be123c;
+    --ring: 0 0 0 2px rgba(225, 29, 72, 0.35);
+    --radius: 20px;
+    --shadow: 0 10px 25px rgba(0, 0, 0, .35);
+}
+
+* {
+    box-sizing: border-box;
+    color: var(--text);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+}
+
+/* messages */
+
+
+/* Container for all flash messages */
+.flash-container {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    right: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 250px;
+    text-align: center;
+}
+
+/* Make each alert a bit nicer */
+.flash-container .alert {
+    border-radius: 0.75rem;
+    /* smoother corners */
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    text-transform: capitalize;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.flash-container .alert-success {
+    background-color: #28a745;
+}
+
+.flash-container .alert-danger {
+    background-color: #dc3545;
+}
+
+.flash-container .alert-warning {
+    background-color: #ffc107;
+    color: black;
+}
+
+.flash-container .alert-error {
+    background-color: #dc3545;
+}
+
+.flash-container .alert-info {
+    background-color: #17a2b8;
+}
+
+.flash-container .alert-dismissible .btn-close {
+    color: white;
+    opacity: 1;
+}
+
+.flash-container .alert-dismissible .btn-close:hover {
+    color: #ddd;
+}
+
+.flash-container .alert-dismissible .btn-close:focus {
+    box-shadow: none;
+}
+
+/* messages */
+
+body {
+    margin: 0;
+    font-family: Inter, system-ui, Segoe UI, Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, #0e0f13, #10131a 40%, #0e0f13);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 5px;
+    position: relative;
+}
+
+
+
+/* ========== Layout Helpers ========== */
+.container {
+    width: 1200px;
+    margin-inline: auto
+}
+
+.grid {
+    display: grid;
+    gap: 1rem
+}
+
+.grid--2 {
+    grid-template-columns: repeat(2, 1fr)
+}
+
+.grid--3 {
+    grid-template-columns: repeat(3, 1fr)
+}
+
+.grid--8 {
+    grid-template-columns: repeat(4, 1fr)
+}
+
+@media (max-width:900px) {
+    .grid--3 {
+        grid-template-columns: 1fr
+    }
+
+    .grid--2 {
+        grid-template-columns: 1fr
+    }
+
+    .grid--8 {
+        grid-template-columns: repeat(2, 1fr)
+    }
+}

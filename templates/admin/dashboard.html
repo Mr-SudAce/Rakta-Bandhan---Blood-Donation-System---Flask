@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="mt-4">
+    <h2>Admin Dashboard</h2>
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Total Donors</h5>
+                    <p class="card-text">{{ total_donors }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Total Recipients</h5>
+                    <p class="card-text">{{ total_recipients }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Upcoming Events</h5>
+                    <p class="card-text">{{ upcoming_events }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Blood Inventory</h5>
+                    <p class="card-text">{{ inventory_status }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <h4 class="mt-4">Quick Actions</h4>
+    <div class="btn-group" role="group">
+        <a href="{% url 'admin_events' %}" class="btn btn-primary">Manage Events</a>
+        <a href="{% url 'admin_inventory' %}" class="btn btn-success">Manage Inventory</a>
+        <a href="{% url 'admin_reports' %}" class="btn btn-info">View Reports</a>
+    </div>
+    <hr>
+    <h4 class="mt-4">Recent Activity</h4>
+    <ul class="list-group">
+        {% for activity in recent_activities %}
+            <li class="list-group-item">{{ activity }}</li>
+        {% empty %}
+            <li class="list-group-item">No recent activity.</li>
+        {% endfor %}

@@ -1,0 +1,48 @@
+
+
+.cards {
+    padding: 1rem 0 0
+}
+
+.card {
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, .06);
+    border-radius: var(--radius);
+    padding: 1rem;
+    box-shadow: var(--shadow);
+}
+
+.card--type {
+    text-align: center;
+    font-weight: 700;
+    color: aliceblue;
+    cursor: pointer;
+    transition: transform .06s ease, background .2s ease;
+}
+
+.card--type:hover {
+    background: var(--surface-2);
+    transform: translateY(-2px)
+}
+
+
+.grid{
+    padding: 10px 0;
+}
+
+.panel {
+    margin: 2rem 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .02), rgba(255, 255, 255, .00));
+    border: 1px solid rgba(255, 255, 255, .06);
+    border-radius: var(--radius);
+    padding: 1.2rem;
+    box-shadow: var(--shadow);
+}
+
+.panel__header h2 {
+    margin: .2rem 0
+}
+
+.muted {
+    color: var(--muted)
+}
