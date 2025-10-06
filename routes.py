@@ -172,16 +172,26 @@ def login():
         username = form.username.data.strip()
         password = form.password.data.strip()
 
-        # 🚨 Empty field check
+        # 🚨 Check if any field is empty
         if not username or not password:
-            flash("❌ Username and password cannot be empty", "danger")
+            flash("❌ Please fill out all fields.")
             return render_template("login.html", form=form)
 
-        # 🧠 Check if user matches the hardcoded credentials first
-        if username == HARDCODED_USER and password == HARDCODED_PASS:
-            # Ensure the hardcoded user exists in DB
+        # 🧠 1️⃣ Hardcoded Admin / Superadmin Login
+        if username == HARDCODED_USER:
+            # Validate admin credentials
+            if password != HARDCODED_PASS:
+                flash("❌ Invalid Admin Password.")
+                return render_template("login.html", form=form)
+            
+            if not form.remember_me.data:
+                flash("❌ Remember Me option is not checked.")
+                return render_template("login.html", form=form)
+
+            # Check if admin exists in DB
             user = User.query.filter_by(username=HARDCODED_USER).first()
 
+            # Create hardcoded admin in DB if not found
             if not user:
                 try:
                     user = User(
@@ -192,7 +202,7 @@ def login():
                         blood_grp=HARDCODED_BLOOD_GRP,
                         address=HARDCODED_ADDRESS,
                         profile_picture=HARDCODED_PROFILE_PIC,
-                        role=HARDCODED_ROLE
+                        role=HARDCODED_ROLE,
                     )
                     db.session.add(user)
                     db.session.commit()
@@ -201,21 +211,33 @@ def login():
                     user = User.query.filter_by(email=HARDCODED_EMAIL).first()
 
             login_user(user, remember=form.remember_me.data)
-            flash("✅ Logged in as admin!", "success")
+            flash("✅ Logged in as Superadmin!", "success")
             return redirect(url_for("home"))
 
-        # 🧍‍♂️ Regular user login
+        # 👤 2️⃣ Regular User Login
         user = User.query.filter_by(username=username).first()
 
-        if user and check_password_hash(user.password, password):
-            login_user(user, remember=form.remember_me.data)
-            flash("✅ Login successful", "success")
-            return redirect(url_for("home"))
-        else:
-            flash("❌ Invalid username or password", "danger")
+        if not user:
+            flash("❌ Username not found. Please register first.")
             return render_template("login.html", form=form)
 
+        if not check_password_hash(user.password, password):
+            flash("❌ Incorrect password.")
+            return render_template("login.html", form=form)
+        
+        if not form.remember_me.data:
+            flash("❌ Remember Me option is not checked.")
+            return render_template("login.html", form=form)
+        
+        login_user(user)
+        flash("✅ Login successful!", "success")
+        return redirect(url_for("home"))
+
+    # GET request or invalid form submission
     return render_template("login.html", form=form)
+
+
+
 
 
 @app.route("/logout")
