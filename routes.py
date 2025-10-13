@@ -49,36 +49,74 @@ def profile():
 @role_required('donor')
 def donate_blood():
     if request.method == "POST":
-        # Get form data
-        name = request.form.get("name")
-        phone = request.form.get("phone")
-        address = request.form.get("address")
-        blood_type = request.form.get("blood_type")
-        age = request.form.get("age")
-        DOB = request.form.get("DOB")
-        gender = request.form.get("gender")
-        email = request.form.get("email")
+        try:
+            name = request.form.get("name").strip()
+            phone = request.form.get("phone").strip()
+            address = request.form.get("address").strip()
+            blood_type = request.form.get("blood_type")
+            DOB = request.form.get("DOB")
+            gender = request.form.get("gender")
+            email = request.form.get("email").strip()
 
-        # Create donor entry
-        new_donor = Donor(
-            user_id=current_user.id,
-            name=name or current_user.name,  # fallback to user's name
-            email=email or current_user.email,  # fallback to user's email
-            phone=phone,
-            address=address,
-            blood_type=blood_type,
-            age=age if age else None,
-            DOB=DOB if DOB else None,
-            gender=gender
-        )
+            dob_date = datetime.strptime(DOB, '%Y-%m-%d').date() if DOB else None
 
-        db.session.add(new_donor)
-        db.session.commit()
+            # ✅ Step 1: Get the current user's donor (if exists)
+            existing_donor = Donor.query.filter_by(user_id=current_user.id).first()
 
-        flash("🎉 Thank you for registering as a donor!", "success")
-        return redirect(url_for("home"))
+            # ✅ Step 2: Check if the submitted data matches current_user
+            data_changed = (
+                name != current_user.username
+                or email != current_user.email
+                or (existing_donor and (
+                    phone != existing_donor.phone or
+                    address != existing_donor.address or
+                    blood_type != existing_donor.blood_type or
+                    gender != existing_donor.gender or
+                    dob_date != existing_donor.DOB
+                ))
+            )
 
-    return render_template("donor/donate_blood.html")
+            # ✅ Step 3: If data changed → create a new donor record
+            if data_changed or not existing_donor:
+                donor = Donor(
+                    user_id=current_user.id,
+                    name=name,
+                    email=email,
+                    phone=phone,
+                    address=address,
+                    blood_type=blood_type,
+                    DOB=dob_date,
+                    gender=gender,
+                    last_donation=datetime.utcnow().date()
+                )
+                db.session.add(donor)
+                db.session.flush()
+            else:
+                donor = existing_donor
+                donor.last_donation = datetime.utcnow().date()
+
+            # ✅ Step 4: Record donation history
+            new_donation = DonationHistory(
+                donor_id=donor.id,
+                request_id=0,
+                date=datetime.utcnow().date()
+            )
+            db.session.add(new_donation)
+            db.session.commit()
+
+            flash(f"✅ Donation successfully registered for {name}! 🩸", "success")
+            return redirect(url_for("home"))
+
+        except Exception as e:
+            db.session.rollback()
+            flash(f"❌ Something went wrong: {e}", "danger")
+            return redirect(url_for("donate_blood"))
+
+    # ✅ Pre-fill form with user's data
+    return render_template(
+        "donor/donate_blood.html",
+        user=current_user
+    )
 
 
 @app.route("/donor/register-event")
@@ -117,29 +155,10 @@ def recipient_requests():
 @app.route("/find-blood", methods=["GET"])
 @login_required
 def find_blood():
-    donordata = Donor.query.all()
-    city = request.args.get("q")
-    group = request.args.get("group")
-    urgency = request.args.get("urgency")
-
-    filtered_donors = []
-
-    if city or group or urgency:
-        for donor in donordata:
-            if city and donor.city.lower() != city.lower():
-                continue
-            if group and donor.group != group:
-                continue
-            if urgency and donor.urgency != urgency:
-                continue
-            filtered_donors.append(donor)
-
+    donation_data = Donor.query.all()
     return render_template(
         "recipient/find_blood.html",
-        donors=filtered_donors,
-        city=city,
-        group=group,
-        urgency=urgency
+        donors=donation_data,
     )
 
 
@@ -157,7 +176,56 @@ def my_requests():
 def events():
     return render_template("events/events.html")
 
-
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 # ==============================
 # Authentication
 # ==============================
@@ -177,7 +245,7 @@ def login():
             flash("❌ Please fill out all fields.")
             return render_template("login.html", form=form)
 
-        # 🧠 1️⃣ Hardcoded Admin / Superadmin Login
+        # Hardcoded Admin / Superadmin Login
         if username == HARDCODED_USER:
             # Validate admin credentials
             if password != HARDCODED_PASS:
@@ -214,7 +282,7 @@ def login():
             flash("✅ Logged in as Superadmin!", "success")
             return redirect(url_for("home"))
 
-        # 👤 2️⃣ Regular User Login
+        # Regular User Login
         user = User.query.filter_by(username=username).first()
 
         if not user:

@@ -1,6 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 
+
+
+
 db = SQLAlchemy()
 
 class User(db.Model, UserMixin):
@@ -29,11 +32,10 @@ class Donor(db.Model):
     blood_type = db.Column(db.String(5), nullable=False)
     address = db.Column(db.String(100), nullable=True)
     phone = db.Column(db.String(20), nullable=True)
-    age = db.Column(db.Integer, nullable=True)
     DOB = db.Column(db.Date, nullable=True)
     gender = db.Column(db.String(10), nullable=True)
     email = db.Column(db.String(120), nullable=True)
-    last_donation = db.Column(db.Date)
+    last_donation = db.Column(db.Date, nullable=True)
     donations = db.relationship('DonationHistory', backref='donor', lazy=True)
 
 class BloodRequest(db.Model):
@@ -48,5 +50,5 @@ class DonationHistory(db.Model):
     __tablename__ = "donation_history"
     id = db.Column(db.Integer, primary_key=True)
     donor_id = db.Column(db.Integer, db.ForeignKey('donors.id'), nullable=False)
-    request_id = db.Column(db.Integer, db.ForeignKey('blood_requests.id'), nullable=False)
+    request_id = db.Column(db.Integer, db.ForeignKey('blood_requests.id'), nullable=True)
     date = db.Column(db.Date, nullable=False)

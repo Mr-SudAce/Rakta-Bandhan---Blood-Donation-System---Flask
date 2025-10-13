@@ -56,7 +56,6 @@ select:focus {
 .list__item {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     gap: 1rem;
     background: var(--surface);
     padding: 1rem;
@@ -66,6 +65,13 @@ select:focus {
 
 .list__item h3 {
     margin: .2rem 0
+}
+
+.list__item .card-body{
+    display: flex;
+    gap: 2rem;
+    
+    align-items: center;
 }
 
 @media (max-width:900px) {

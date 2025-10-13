@@ -1,8 +1,8 @@
-"""Rakta Bandhan Model Initialized
+"""Model Update
 
-Revision ID: acd154c815c4
+Revision ID: 663f50edb5cf
 Revises: 
-Create Date: 2025-09-28 19:30:33.041126
+Create Date: 2025-10-06 14:24:29.208327
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'acd154c815c4'
+revision = '663f50edb5cf'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -30,7 +30,7 @@ def upgrade():
     sa.Column('role', sa.String(length=20), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
-    sa.UniqueConstraint('username')
+    sa.UniqueConstraint('phone')
     )
     op.create_table('blood_requests',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -47,7 +47,6 @@ def upgrade():
     sa.Column('blood_type', sa.String(length=5), nullable=False),
     sa.Column('address', sa.String(length=100), nullable=True),
     sa.Column('phone', sa.String(length=20), nullable=True),
-    sa.Column('age', sa.Integer(), nullable=True),
     sa.Column('DOB', sa.Date(), nullable=True),
     sa.Column('gender', sa.String(length=10), nullable=True),
     sa.Column('email', sa.String(length=120), nullable=True),

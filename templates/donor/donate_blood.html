@@ -2,52 +2,58 @@
 
 {% block content %}
 
-<section id="donate" class="panel" aria-labelledby="donate-title">
+<section id="donate" class="panel donate-section" aria-labelledby="donate-title">
     <div class="panel__header">
-        <h2 id="donate-title">Donate</h2>
+        <h2 id="donate-title">🩸 Donate Blood</h2>
         <p class="muted">It takes 2 minutes to become someone's real-life hero.</p>
     </div>
-    <form class="form" action="{{ url_for('donate_blood') }}" method="post">
+
+    <form class="form donate-form" action="{{ url_for('donate_blood') }}" method="post">
         <div class="grid grid--2">
             <label>
                 <span>Full Name</span>
-                <input type="text" name="name" value="{{ current_user.name }}">
-
+                <input type="text" name="name" placeholder="John Doe" value="{{ current_user.username if current_user else '' }}" required>
             </label>
+
             <label>
                 <span>Phone</span>
-                <input type="tel" name="phone" placeholder="+977-98XXXXXXXX" required />
+                <input type="tel" name="phone" placeholder="+977-98XXXXXXXX" value="{{ current_user.phone if current_user else '' }}" required>
             </label>
+
             <label>
                 <span>Address</span>
-                <input type="text" name="address" placeholder="Your address" required />
+                <input type="text" name="address" placeholder="Your address" value="{{ current_user.address if current_user else '' }}" required>
             </label>
+
             <label>
                 <span>Email</span>
-                <input type="email" name="email" placeholder="Your email" value="{{ current_user.email }}" readonly required />
+                <input type="email" name="email" placeholder="example@email.com" value="{{ current_user.email if current_user else '' }}" required>
             </label>
+
             <label>
                 <span>Blood Group</span>
+                {% if current_user.blood_grp %}
+                <input type="text" name="blood_type" placeholder="Your blood group" value="{{ current_user.blood_grp if current_user else '' }}" required>
+                {% else %}
                 <select name="blood_type" required>
-                    <option value="">Select</option>
+                    <option value>Select</option>
                     <option>A+</option><option>A-</option>
                     <option>B+</option><option>B-</option>
                     <option>AB+</option><option>AB-</option>
                     <option>O+</option><option>O-</option>
                 </select>
+                {% endif %}
             </label>
-            <label>
-                <span>Age</span>
-                <input type="number" name="age" placeholder="Your age" min="18" />
-            </label>
+
             <label>
                 <span>Date of Birth</span>
-                <input type="date" name="DOB" />
+                <input type="date" name="DOB" required>
             </label>
+
             <label>
                 <span>Gender</span>
-                <select name="gender">
-                    <option value="">Select</option>
+                <select name="gender" required>
+                    <option value>Select</option>
                     <option>Male</option>
                     <option>Female</option>
                     <option>Other</option>
@@ -56,12 +62,12 @@
         </div>
 
         <label class="checkbox">
-            <input type="checkbox" required />
+            <input type="checkbox" required>
             <span>I agree to be contacted for donation requests.</span>
         </label>
 
-        <button class="btn" type="submit">Donate</button>
+        <button class="btn donate-btn" type="submit">💖 Donate Now</button>
     </form>
-</section> 
+</section>
 
 {% endblock %}
