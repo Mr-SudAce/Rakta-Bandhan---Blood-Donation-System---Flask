@@ -257,78 +257,100 @@ def events():
 # ==============================
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for("home"))
+    try:
+        if current_user.is_authenticated:
+            return redirect(url_for("home"))
 
-    form = LoginForm()
+        form = LoginForm()
 
-    if form.validate_on_submit():
-        username = form.username.data.strip()
-        password = form.password.data.strip()
+        if form.validate_on_submit():
+            username = form.username.data.strip()
+            password = form.password.data.strip()
 
-        # 🚨 Check if any field is empty
-        if not username or not password:
-            flash("❌ Please fill out all fields.")
-            return render_template("login.html", form=form)
+            # 🚨 Check if any field is empty
+            if not username or not password:
+                flash("❌ Please fill out all fields.")
+                return render_template("login.html", form=form)
 
-        # Hardcoded Admin / Superadmin Login
-        if username == HARDCODED_USER:
-            # Validate admin credentials
-            if password != HARDCODED_PASS:
-                flash("❌ Invalid Admin Password.")
+            # Hardcoded Admin / Superadmin Login
+            if username == HARDCODED_USER:
+                # Validate admin credentials
+                if password != HARDCODED_PASS:
+                    flash("❌ Invalid Admin Password.")
+                    return render_template("login.html", form=form)
+                
+                if not form.remember_me.data:
+                    flash("❌ Remember Me option is not checked.")
+                    return render_template("login.html", form=form)
+
+                # Check if admin exists in DB
+                user = User.query.filter_by(username=HARDCODED_USER).first()
+
+                # Create hardcoded admin in DB if not found
+                if not user:
+                    try:
+                        user = User(
+                            username=HARDCODED_USER,
+                            password=generate_password_hash(HARDCODED_PASS),
+                            email=HARDCODED_EMAIL,
+                            phone=HARDCODED_PHONE,
+                            blood_grp=HARDCODED_BLOOD_GRP,
+                            address=HARDCODED_ADDRESS,
+                            profile_picture=HARDCODED_PROFILE_PIC,
+                            role=HARDCODED_ROLE,
+                        )
+                        db.session.add(user)
+                        db.session.commit()
+                    except IntegrityError:
+                        db.session.rollback()
+                        user = User.query.filter_by(email=HARDCODED_EMAIL).first()
+                    except Exception as e:
+                        db.session.rollback()
+                        flash(f"⚠️ Error creating admin user: {e}")
+                        return render_template("login.html", form=form)
+
+                login_user(user, remember=form.remember_me.data)
+                flash("✅ Logged in as Superadmin!", "success")
+                return redirect(url_for("home"))
+
+            # Regular User Login
+            try:
+                user = User.query.filter_by(username=username).first()
+            except Exception as e:
+                flash(f"⚠️ Database error: {e}")
+                return render_template("login.html", form=form)
+
+            if not user:
+                flash("❌ Username not found. Please register first.")
+                return render_template("login.html", form=form)
+
+            try:
+                if not check_password_hash(user.password, password):
+                    flash("❌ Incorrect password.")
+                    return render_template("login.html", form=form)
+            except Exception as e:
+                flash(f"⚠️ Password check failed: {e}")
                 return render_template("login.html", form=form)
             
             if not form.remember_me.data:
                 flash("❌ Remember Me option is not checked.")
                 return render_template("login.html", form=form)
+            
+            try:
+                login_user(user)
+                flash("✅ Login successful!", "success")
+                return redirect(url_for("home"))
+            except Exception as e:
+                flash(f"⚠️ Login failed: {e}")
+                return render_template("login.html", form=form)
 
-            # Check if admin exists in DB
-            user = User.query.filter_by(username=HARDCODED_USER).first()
+        # GET request or invalid form submission
+        return render_template("login.html", form=form)
 
-            # Create hardcoded admin in DB if not found
-            if not user:
-                try:
-                    user = User(
-                        username=HARDCODED_USER,
-                        password=generate_password_hash(HARDCODED_PASS),
-                        email=HARDCODED_EMAIL,
-                        phone=HARDCODED_PHONE,
-                        blood_grp=HARDCODED_BLOOD_GRP,
-                        address=HARDCODED_ADDRESS,
-                        profile_picture=HARDCODED_PROFILE_PIC,
-                        role=HARDCODED_ROLE,
-                    )
-                    db.session.add(user)
-                    db.session.commit()
-                except IntegrityError:
-                    db.session.rollback()
-                    user = User.query.filter_by(email=HARDCODED_EMAIL).first()
+    except Exception as e:
+        flash(f"⚠️ Unexpected error: {e}")
+        return render_template("login.html", form=LoginForm())
 
-            login_user(user, remember=form.remember_me.data)
-            flash("✅ Logged in as Superadmin!", "success")
-            return redirect(url_for("home"))
-
-        # Regular User Login
-        user = User.query.filter_by(username=username).first()
-
-        if not user:
-            flash("❌ Username not found. Please register first.")
-            return render_template("login.html", form=form)
-
-        if not check_password_hash(user.password, password):
-            flash("❌ Incorrect password.")
-            return render_template("login.html", form=form)
-        
-        if not form.remember_me.data:
-            flash("❌ Remember Me option is not checked.")
-            return render_template("login.html", form=form)
-        
-        login_user(user)
-        flash("✅ Login successful!", "success")
-        return redirect(url_for("home"))
-
-    # GET request or invalid form submission
-    return render_template("login.html", form=form)
 
 
 
@@ -344,49 +366,76 @@ def logout():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if current_user.is_authenticated:
-        return redirect(url_for("home"))
+    try:
+        if current_user.is_authenticated:
+            return redirect(url_for("home"))
 
-    form = RegisterForm()
+        form = RegisterForm()
 
-    if form.validate_on_submit():
-        # Check for duplicates
-        if User.query.filter_by(username=form.username.data).first():
-            flash("Username already exists.")
-            return redirect(url_for("register"))
+        if form.validate_on_submit():
+            try:
+                # Check for duplicates
+                if User.query.filter_by(username=form.username.data).first():
+                    flash("❌ Username already exists.")
+                    return redirect(url_for("register"))
 
-        if User.query.filter_by(email=form.email.data).first():
-            flash("Email already registered.")
-            return redirect(url_for("register"))
+                if User.query.filter_by(email=form.email.data).first():
+                    flash("❌ Email already registered.")
+                    return redirect(url_for("register"))
 
-        hashed_password = generate_password_hash(form.password.data)
-        filename = save_profile_picture(form.profile_picture.data) if form.profile_picture.data else "{{ url_for('static', filename='profile_pics/admin_dflt.jpg') }}"
+            except Exception as e:
+                flash(f"⚠️ Database error while checking duplicates: {e}")
+                return redirect(url_for("register"))
 
-        user = User(
-            username=form.username.data,
-            password=hashed_password,
-            email=form.email.data,
-            phone=form.phone.data,
-            blood_grp=form.blood_grp.data,
-            address=form.address.data,
-            profile_picture=filename,
-            role=form.role.data,
-        )
+            try:
+                hashed_password = generate_password_hash(form.password.data)
+            except Exception as e:
+                flash(f"⚠️ Password hashing failed: {e}")
+                return render_template("register.html", form=form)
 
-        try:
-            db.session.add(user)
-            db.session.commit()
-        except IntegrityError:
-            db.session.rollback()
-            flash("Registration failed. Please check your data.")
-            return redirect(url_for("register"))
+            try:
+                filename = (
+                    save_profile_picture(form.profile_picture.data)
+                    if form.profile_picture.data
+                    else "{{ url_for('static', filename='profile_pics/admin_dflt.jpg') }}"
+                )
+            except Exception as e:
+                flash(f"⚠️ Profile picture upload failed: {e}")
+                filename = "{{ url_for('static', filename='profile_pics/admin_dflt.jpg') }}"
 
-        flash("Registration successful. Please log in.")
-        return redirect(url_for("login"))
+            user = User(
+                username=form.username.data,
+                password=hashed_password,
+                email=form.email.data,
+                phone=form.phone.data,
+                blood_grp=form.blood_grp.data,
+                address=form.address.data,
+                profile_picture=filename,
+                role=form.role.data,
+            )
 
-    if form.errors:
-        print("Form errors:", form.errors)  # Debugging
+            try:
+                db.session.add(user)
+                db.session.commit()
+            except IntegrityError:
+                db.session.rollback()
+                flash("⚠️ Registration failed. Please check your data.")
+                return redirect(url_for("register"))
+            except Exception as e:
+                db.session.rollback()
+                flash(f"⚠️ Unexpected error during registration: {e}")
+                return redirect(url_for("register"))
 
-    return render_template("register.html", form=form)
+            flash("✅ Registration successful. Please log in.")
+            return redirect(url_for("login"))
 
+        if form.errors:
+            print("Form errors:", form.errors)  # Debugging
+            flash("⚠️ Please fix the form errors and try again.")
+
+        return render_template("register.html", form=form)
+
+    except Exception as e:
+        flash(f"⚠️ Unexpected error: {e}")
+        return render_template("register.html", form=RegisterForm())
 

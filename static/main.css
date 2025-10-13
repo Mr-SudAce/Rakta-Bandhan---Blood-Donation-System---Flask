@@ -129,3 +129,16 @@ body {
         grid-template-columns: repeat(2, 1fr)
     }
 }
+
+
+
+
+.butonUI{
+    background-color: var(--surface-2);
+    max-width: 150px;
+    width: 100%;
+    padding: 10px 5px;
+    color: white;
+    border: var(--surface);
+    border-radius: 10px;
+}

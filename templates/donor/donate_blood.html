@@ -9,7 +9,7 @@
     </div>
 
     <form class="form donate-form" action="{{ url_for('donate_blood') }}" method="post">
-        <div class="grid grid--2">
+        <div class="grid grid--3col">
             <label>
                 <span>Full Name</span>
                 <input type="text" name="name" placeholder="John Doe" value="{{ current_user.username if current_user else '' }}" required>
@@ -65,8 +65,10 @@
             <input type="checkbox" required>
             <span>I agree to be contacted for donation requests.</span>
         </label>
+        <div class="d-flex justify-content-center">
 
-        <button class="btn donate-btn" type="submit">💖 Donate Now</button>
+            <button class="butonUI" type="submit">💖 Donate Now</button>
+        </div>
     </form>
 </section>
 
