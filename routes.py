@@ -155,10 +155,36 @@ def recipient_requests():
 @app.route("/find-blood", methods=["GET"])
 @login_required
 def find_blood():
+    # all donors data
     donation_data = Donor.query.all()
+    
+    # Extract unique addresses and blood types for dropdowns
+    cities = sorted({donor.address for donor in donation_data if donor.address})
+    groups = sorted({donor.blood_type for donor in donation_data if donor.blood_type})
+
+    # Get search params
+    selected_city = request.args.get("city")
+    selected_group = request.args.get("group")
+    
+    # base query
+    query = Donor.query
+    
+    # apply filters if selected
+    if selected_city and selected_city != "Select":
+        query = query.filter(Donor.address == selected_city)
+    if selected_group and selected_group != "Select":
+        query = query.filter(Donor.blood_type == selected_group)
+
+    # Execute query and fetch results
+    donation_data = query.all()
+
     return render_template(
         "recipient/find_blood.html",
         donors=donation_data,
+        cities=cities,
+        groups=groups,
+        selected_city=selected_city,
+        selected_group=selected_group
     )
 
 

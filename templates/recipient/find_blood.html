@@ -11,40 +11,31 @@
 
   <!-- Search Form -->
   <form class="form form--inline" action="{{ url_for('find_blood') }}" method="get">
-    <label>
-      <span>City/District</span>
-      <input type="text" name="q" placeholder="e.g., Kathmandu" required />
-    </label>
+  <label>
+    <span>City/District</span>
+    <select name="blood_type" required>
+      <option value>Select</option>
+      {% for city in cities %}
+      <option value="{{ city }}" {% if selected_city == city %}selected{% endif %}>{{ city }}</option>
+      {% endfor %}
+    </select>
+  </label>
 
-    <label>
-      <span>Blood Group</span>
-      <select name="group" required>
-        <option value disabled selected>Select</option>
-        <option value="A+">A+</option>
-        <option value="A-">A-</option>
-        <option value="B+">B+</option>
-        <option value="B-">B-</option>
-        <option value="AB+">AB+</option>
-        <option value="AB-">AB-</option>
-        <option value="O+">O+</option>
-        <option value="O-">O-</option>
-      </select>
-    </label>
+  <label>
+    <span>Blood Group</span>
+    <select name="group" required>
+      <option value>Select</option>
+      {% for group in groups %}
+      <option value="{{ group }}" {% if selected_group == group %}selected{% endif %}>{{ group }}</option>
+      {% endfor %}
+    </select>
+  </label>
 
-    <!-- <label>
-      <span>Urgency</span>
-      <select name="urgency">
-        <option value="Normal">Normal</option>
-        <option value="High">High</option>
-        <option value="Critical">Critical</option>
-      </select>
-    </label> -->
-
-    <button class="btn" type="submit">Search</button>
-  </form>
+  <button class="btn" type="submit">Search</button>
+</form>
 
   <!-- Donor Results -->
-    <div class="list mt-4">
+  <div class="list mt-4">
     {% if donors %}
     {% for donor in donors %}
     <article class="list__item card">
