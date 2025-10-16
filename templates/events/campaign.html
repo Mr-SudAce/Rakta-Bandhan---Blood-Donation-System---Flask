@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='campaign.css') }}">
+
+<section class="campaigns-section">
+    <div class="campaigns-header">
+        <h1>🩸 Blood Donation Campaigns</h1>
+        <p>Be part of something bigger — donate blood, save lives!</p>
+    </div>
+
+    <div class="campaigns-grid">
+        {% for c in campaigns %}
+        <div class="campaign-card">
+            <div class="card-header">
+                <h3>{{ c.title }}</h3>
+            </div>
+            <div class="card-body">
+                <p><strong>📍 Location:</strong> {{ c.location }}</p>
+                <p><strong>📅 Date:</strong> {{ c.date.strftime('%B %d, %Y') }}</p>
+                <p class="desc">{{ c.description }}</p>
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn-join">Join Now</a>
+            </div>
+        </div>
+        {% else %}
+        <p class="no-campaigns">No campaigns available right now.</p>
+        {% endfor %}
+    </div>
+
+    <div class="add-campaign">
+        <a href="{{ url_for('add_campaign') }}" class="butonUI">+ Add New Campaign</a>
+    </div>
+</section>
+{% endblock %}

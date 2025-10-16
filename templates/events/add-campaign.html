@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section id="add-campaign" class="panel">
+  <div class="panel__header">
+    <h2>🩸 Add New Blood Donation Campaign</h2>
+    <p class="muted">Plan your next life-saving event here.</p>
+  </div>
+
+  <form method="POST" class="form form--stacked">
+    <label>
+      <span>Title</span>
+      <input type="text" name="title" placeholder="e.g., Kathmandu Blood Drive 2025" required>
+    </label>
+
+    <label>
+      <span>Location</span>
+      <input type="text" name="location" placeholder="e.g., Bhatbhateni Hall, Kathmandu" required>
+    </label>
+
+    <label>
+      <span>Date</span>
+      <input type="date" name="date" required>
+    </label>
+
+    <label>
+      <span>Organizer</span>
+      <input type="text" name="organizer" placeholder="e.g., Red Cross Society">
+    </label>
+
+    <label>
+      <span>Description</span>
+      <textarea name="description" rows="4" placeholder="Brief details about the campaign..."></textarea>
+    </label>
+
+    <label>
+      <span>Image URL (optional)</span>
+      <input type="text" name="image" placeholder="e.g., /static/uploads/campaign.jpg">
+    </label>
+
+    <button type="submit" class="btn">Add Campaign</button>
+  </form>
+</section>
+
+{% endblock %}

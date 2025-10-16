@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}
+  Find Blood
+{% endblock %}
+
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='find_blood.css') }}">
 
@@ -40,8 +44,6 @@
     {% for donor in donors %}
     <article class="list__item card">
       <div class="card-body">
-        <p class="text-light m-0">ID: {{ donor.id }}</p>
-        <p class="text-light m-0">User ID: {{ donor.user_id }}</p>
         <h3 class="text-light">{{ donor.name }} ({{ donor.blood_type }})</h3>
         <p class="muted m-0">{{ donor.address }}</p>
         <p class="muted m-0">{{ donor.gender }}</p>

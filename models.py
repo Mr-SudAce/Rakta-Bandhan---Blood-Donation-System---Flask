@@ -52,3 +52,15 @@ class DonationHistory(db.Model):
     donor_id = db.Column(db.Integer, db.ForeignKey('donors.id'), nullable=False)
     request_id = db.Column(db.Integer, db.ForeignKey('blood_requests.id'), nullable=True)
     date = db.Column(db.Date, nullable=False)
+    
+
+
+class Campaign(db.Model):
+    __tablename__ = "campaigns"
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    location = db.Column(db.String(100), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    organizer = db.Column(db.String(100), nullable=True)
+    description = db.Column(db.Text, nullable=True)
+    image = db.Column(db.String(255), nullable=True)

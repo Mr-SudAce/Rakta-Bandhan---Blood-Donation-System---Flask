@@ -49,6 +49,7 @@ select:focus {
 
 .list {
     display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: .8rem;
     margin-top: 1rem
 }

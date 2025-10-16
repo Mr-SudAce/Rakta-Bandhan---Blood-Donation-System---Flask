@@ -3,6 +3,7 @@ from app import app, db
 from models import *
 from forms import RegisterForm, LoginForm
 from sqlalchemy.exc import IntegrityError
+from datetime import datetime
 from flask_login import login_user, logout_user, login_required, current_user
 from models import User
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -33,6 +34,8 @@ def contact():
 @login_required
 def about():
     return render_template("common/about.html")
+
+
 
 
 # ==============================
@@ -132,6 +135,64 @@ def donor_register_event():
 def my_donations():
     return render_template("donor/my_donation.html")
 
+# ==============================
+# Campaigns
+# ==============================
+
+@app.route("/campaigns")
+def campaigns():
+    # # Show only campaigns that are today or in the future
+    # upcoming_campaigns = Campaign.query.filter(Campaign.date >= date.today()).order_by(Campaign.date.asc()).all()
+    
+    all_campaigns = Campaign.query.order_by(Campaign.date.desc()).all()
+    return render_template("events/campaign.html", campaigns=all_campaigns)
+
+
+@app.route("/campaigns/add_campaign", methods=["GET", "POST"])
+def add_campaign():
+    if request.method == "POST":
+        try:
+            title = request.form.get("title", "").strip()
+            location = request.form.get("location", "").strip()
+            date_str = request.form.get("date", "")
+            description = request.form.get("description", "").strip()
+
+            # 🚨 Basic validation
+            if not title or not location or not date_str:
+                flash("❌ Title, Location, and Date are required fields.")
+                return render_template("events/add-campaign.html")
+
+            # 🧠 Convert date safely
+            try:
+                campaign_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+            except ValueError:
+                flash("❌ Invalid date format. Please use YYYY-MM-DD.")
+                return render_template("events/add-campaign.html")
+
+            # 🚀 Create and save campaign
+            new_campaign = Campaign(
+                title=title,
+                location=location,
+                date=campaign_date,
+                description=description
+            )
+
+            db.session.add(new_campaign)
+            db.session.commit()
+
+            flash("✅ Campaign added successfully!")
+            return redirect(url_for("campaigns"))
+
+        except Exception as e:
+            db.session.rollback()
+            flash(f"❌ Error adding campaign: {e}")
+            return render_template("events/add-campaign.html")
+
+    # If GET request, just show the form
+    return render_template("events/add-campaign.html")
+
+
+
 
 # ==============================
 # Recipient
@@ -163,7 +224,7 @@ def find_blood():
     groups = sorted({donor.blood_type for donor in donation_data if donor.blood_type})
 
     # Get search params
-    selected_city = request.args.get("city")
+    selected_city = request.args.get("blood_type")
     selected_group = request.args.get("group")
     
     # base query
@@ -202,6 +263,43 @@ def my_requests():
 def events():
     return render_template("events/events.html")
 
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 #
 #
 #

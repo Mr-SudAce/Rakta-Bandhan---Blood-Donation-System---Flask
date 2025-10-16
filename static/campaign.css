@@ -1,0 +1,172 @@
+/* Campaign */
+
+/* Campaign Page UI */
+.campaigns-section {
+  padding: 3rem 2rem;
+  /* background: linear-gradient(135deg, var(--surface-2), var(--surface)); */
+  min-height: 100vh;
+  text-align: center;
+  color: #222;
+}
+
+.campaigns-header h1 {
+  font-size: 2.4rem;
+  color: #d62828;
+  margin-bottom: 0.5rem;
+}
+
+.campaigns-header p {
+  color: var(--muted);
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem;
+}
+
+.campaigns-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.8rem;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.campaign-card {
+  background: var(--surface-2);
+  border-radius: 18px;
+  padding: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.campaign-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.card-header {
+  background: #d62828;
+  color: #fff;
+  padding: 1rem;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.card-body {
+  padding: 1.2rem;
+  text-align: left;
+}
+
+.card-body p {
+  margin: 0.5rem 0;
+  color: var(--muted);
+}
+
+.card-body .desc {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.card-footer {
+  padding: 1rem;
+  margin-top: 10px;
+  border-top: 1px solid #eee;
+  text-align: right;
+}
+
+.btn-join {
+  background: #d62828;
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.btn-join:hover {
+  background: #b71c1c;
+}
+
+.no-campaigns {
+  grid-column: 1 / -1;
+  color: #888;
+  font-style: italic;
+}
+
+.add-campaign {
+  margin-top: 3rem;
+}
+
+
+
+
+
+
+
+
+
+/* Add_Campaign */
+section.panel {
+    max-width: 600px;
+    margin: 2rem auto;
+    background: #1e1e1e;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.1);
+    color: #fff;
+}
+
+.panel__header h2 {
+    color: #ff4d4d;
+    margin-bottom: 0.5rem;
+}
+
+.form--stacked label {
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.form--stacked span {
+    display: block;
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 0.3rem;
+}
+
+.form--stacked input,
+.form--stacked textarea {
+    width: 100%;
+    padding: 0.6rem;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background: #2b2b2b;
+    color: #fff;
+}
+
+.form--stacked input:focus,
+.form--stacked textarea:focus {
+    border: 1px solid #ff4d4d;
+}
+
+.btn {
+    background: #ff4d4d;
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.2rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn:hover {
+    background: #ff1f1f;
+}

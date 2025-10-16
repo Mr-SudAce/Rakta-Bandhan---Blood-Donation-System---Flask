@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='blood_type.css') }}">
 
 <section id="donate" class="panel donate-section" aria-labelledby="donate-title">
     <div class="panel__header">
@@ -61,7 +62,7 @@
             </label>
         </div>
 
-        <label class="checkbox">
+        <label class="checkbox d-flex align-items-center gap-3 flex-row">
             <input type="checkbox" required>
             <span>I agree to be contacted for donation requests.</span>
         </label>

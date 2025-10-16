@@ -137,7 +137,8 @@ body {
     background-color: var(--surface-2);
     max-width: 150px;
     width: 100%;
-    padding: 10px 5px;
+    padding: 10px;
+    text-decoration: none;
     color: white;
     border: var(--surface);
     border-radius: 10px;
