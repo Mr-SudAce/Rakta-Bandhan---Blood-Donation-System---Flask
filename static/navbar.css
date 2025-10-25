@@ -114,7 +114,6 @@
     right: 0px;
     border: 1px solid var(--primary);
     background-color: var(--surface);
-    /* min-width: 150px; */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     padding: 10px;
@@ -124,13 +123,13 @@
 .dropdown-content p,
 .dropdown-content a {
     margin: 5px 0;
-    color: #333;
+    color: var(--text);
     text-decoration: none;
     font-size: 14px;
 }
 
 .dropdown-content a:hover {
-    color: #007bff;  /* optional hover color */
+    color: var(--primary);  /* optional hover color */
 }
 
 .profile-dropdown:hover .dropdown-content {

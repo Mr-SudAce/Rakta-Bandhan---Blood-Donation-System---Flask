@@ -3,7 +3,7 @@ from functools import wraps
 from werkzeug.utils import secure_filename
 from flask import current_app, redirect, url_for, flash
 from flask_login import current_user
-
+from models import *
 
 # Role-based access control decorator
 def role_required(*roles):
@@ -19,9 +19,9 @@ def role_required(*roles):
 
 
 
-# Save profile picture helper function
-def save_profile_picture(form_picture):
-    folder = os.path.join(current_app.root_path, "static/profile_pics")
+# Save picture helper function
+def save_picture(form_picture, foldername):
+    folder = os.path.join(current_app.root_path, "static", foldername)
     os.makedirs(folder, exist_ok=True)
 
     filename = secure_filename(form_picture.filename)
@@ -29,3 +29,11 @@ def save_profile_picture(form_picture):
     form_picture.save(picture_path)
 
     return filename
+
+
+# fuction to log activities
+def log_activity(action):
+    user_id = current_user.id if current_user.is_authenticated else None
+    activity = RecentActivity(user_id=user_id, action=action)
+    db.session.add(activity)
+    db.session.commit()

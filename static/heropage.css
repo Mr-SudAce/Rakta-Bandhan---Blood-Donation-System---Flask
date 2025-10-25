@@ -60,7 +60,7 @@
     width: 220px;
     height: 220px;
     border-radius: 60% 40% 50% 50% / 60% 40% 60% 40%;
-    background: radial-gradient(circle at 30% 30%, #ff3b62, #a80a2e);
+    background: radial-gradient(circle at 30% 30%, var(--primary), var(--primary));
     box-shadow: 0 25px 60px rgba(232, 24, 73, .35), inset 0 8px 18px rgba(255, 255, 255, .15);
     animation: float 6s ease-in-out infinite;
 }

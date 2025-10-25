@@ -106,6 +106,7 @@ def donate_blood():
             )
             db.session.add(new_donation)
             db.session.commit()
+            log_activity(f"Added new donor: {donor.name} ({donor.blood_type})")
 
             flash(f"✅ Donation successfully registered for {name}! 🩸", "success")
             return redirect(url_for("home"))
@@ -143,55 +144,51 @@ def my_donations():
 def campaigns():
     # # Show only campaigns that are today or in the future
     # upcoming_campaigns = Campaign.query.filter(Campaign.date >= date.today()).order_by(Campaign.date.asc()).all()
-    
-    all_campaigns = Campaign.query.order_by(Campaign.date.desc()).all()
-    return render_template("events/campaign.html", campaigns=all_campaigns)
+    paginations = request.args.get('page', 1, type=int)
+    all_campaigns = Campaign.query.order_by(Campaign.date.asc()).paginate(page=paginations, per_page=9)
+    return render_template("events/campaign.html", campaigns=all_campaigns, paginations=paginations)
 
+# campaign detail route
+@app.route('/campaign/<int:campaign_id>')
+def campaign_detail(campaign_id):
+    campaign = Campaign.query.get_or_404(campaign_id)
+    return render_template('events/campaign_detail.html', campaign=campaign)
 
 @app.route("/campaigns/add_campaign", methods=["GET", "POST"])
 def add_campaign():
     if request.method == "POST":
-        try:
-            title = request.form.get("title", "").strip()
-            location = request.form.get("location", "").strip()
-            date_str = request.form.get("date", "")
-            description = request.form.get("description", "").strip()
+        title = request.form.get("title")
+        location = request.form.get("location")
+        date = request.form.get("date")
+        organizer = request.form.get("organizer")
+        description = request.form.get("description")
+        
+        date_obj = datetime.strptime(date, "%Y-%m-%d").date()
+        
+        # Handle image file upload
+        image_file = request.files.get("camp_img")
+        camp_img = None
 
-            # 🚨 Basic validation
-            if not title or not location or not date_str:
-                flash("❌ Title, Location, and Date are required fields.")
-                return render_template("events/add-campaign.html")
+        if image_file and image_file.filename != "":
+            camp_img = save_picture(image_file, "campaigns")
 
-            # 🧠 Convert date safely
-            try:
-                campaign_date = datetime.strptime(date_str, "%Y-%m-%d").date()
-            except ValueError:
-                flash("❌ Invalid date format. Please use YYYY-MM-DD.")
-                return render_template("events/add-campaign.html")
+        new_campaign = Campaign(
+            title=title,
+            location=location,
+            date=date_obj,
+            organizer=organizer,
+            description=description,
+            camp_img=camp_img
+        )
 
-            # 🚀 Create and save campaign
-            new_campaign = Campaign(
-                title=title,
-                location=location,
-                date=campaign_date,
-                description=description
-            )
+        db.session.add(new_campaign)
+        db.session.commit()
 
-            db.session.add(new_campaign)
-            db.session.commit()
+        log_activity(f"Campaign added: {title}")
+        flash("Campaign added successfully!", "success")
+        return redirect(url_for("campaigns"))  # or wherever you want
 
-            flash("✅ Campaign added successfully!")
-            return redirect(url_for("campaigns"))
-
-        except Exception as e:
-            db.session.rollback()
-            flash(f"❌ Error adding campaign: {e}")
-            return render_template("events/add-campaign.html")
-
-    # If GET request, just show the form
     return render_template("events/add-campaign.html")
-
-
 
 
 # ==============================
@@ -493,7 +490,7 @@ def register():
 
             try:
                 filename = (
-                    save_profile_picture(form.profile_picture.data)
+                    save_picture(form.profile_picture.data, "profile_pics")
                     if form.profile_picture.data
                     else "{{ url_for('static', filename='profile_pics/admin_dflt.jpg') }}"
                 )

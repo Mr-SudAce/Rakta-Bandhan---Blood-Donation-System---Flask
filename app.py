@@ -53,7 +53,8 @@ def utility_processor():
     return dict(flash_categories=flash_categories)
 
 
-from routes import *
+from routes.routes import *
+from routes.dashboard_routes import *
 
 
 if __name__ == '__main__':

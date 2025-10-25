@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
+<link rel="stylesheet" href="{{ url_for('static', filename='campaign.css') }}">
+
 <section id="add-campaign" class="panel">
   <div class="panel__header">
     <h2>🩸 Add New Blood Donation Campaign</h2>
     <p class="muted">Plan your next life-saving event here.</p>
   </div>
 
-  <form method="POST" class="form form--stacked">
+  <form method="POST" enctype="multipart/form-data" class="form form--stacked">
     <label>
       <span>Title</span>
       <input type="text" name="title" placeholder="e.g., Kathmandu Blood Drive 2025" required>
@@ -34,8 +36,8 @@
     </label>
 
     <label>
-      <span>Image URL (optional)</span>
-      <input type="text" name="image" placeholder="e.g., /static/uploads/campaign.jpg">
+      <span>Image (optional)</span>
+      <input type="file" name="camp_img" accept="image/*">
     </label>
 
     <button type="submit" class="btn">Add Campaign</button>

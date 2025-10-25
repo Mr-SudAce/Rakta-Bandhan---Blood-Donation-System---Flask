@@ -1,9 +1,6 @@
 /* Campaign */
-
-/* Campaign Page UI */
 .campaigns-section {
   padding: 3rem 2rem;
-  /* background: linear-gradient(135deg, var(--surface-2), var(--surface)); */
   min-height: 100vh;
   text-align: center;
   color: #222;
@@ -11,7 +8,7 @@
 
 .campaigns-header h1 {
   font-size: 2.4rem;
-  color: #d62828;
+  color: var(--primary);
   margin-bottom: 0.5rem;
 }
 
@@ -30,10 +27,11 @@
 }
 
 .campaign-card {
+  width: 21rem;
   background: var(--surface-2);
   border-radius: 18px;
   padding: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   transition: all 0.3s ease;
   display: flex;
@@ -43,17 +41,20 @@
 
 .campaign-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .card-header {
-  background: #d62828;
-  color: #fff;
+  border-bottom: var(--primary) 2px solid;
+  /* border-left: var(--primary) 2px solid; */
+  border-right: var(--primary) 2px solid;
+  /* background: var(--primary); */
   padding: 1rem;
 }
 
 .card-header h3 {
   margin: 0;
+  color: var(--primary);
   font-size: 1.3rem;
 }
 
@@ -62,20 +63,15 @@
   text-align: left;
 }
 
-.card-body p {
-  margin: 0.5rem 0;
-  color: var(--muted);
-}
-
-.card-body .desc {
-  font-size: 0.95rem;
-  color: #666;
-  line-height: 1.5;
+.card-body img {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 12px;
 }
 
 .card-footer {
   padding: 1rem;
-  margin-top: 10px;
   border-top: 1px solid #eee;
   text-align: right;
 }
@@ -114,59 +110,134 @@
 
 /* Add_Campaign */
 section.panel {
-    max-width: 600px;
-    margin: 2rem auto;
-    background: #1e1e1e;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.1);
-    color: #fff;
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #1e1e1e;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.1);
+  color: #fff;
 }
 
 .panel__header h2 {
-    color: #ff4d4d;
-    margin-bottom: 0.5rem;
+  color: #ff4d4d;
+  margin-bottom: 0.5rem;
 }
 
 .form--stacked label {
-    display: block;
-    margin-bottom: 1rem;
+  display: block;
+  margin-bottom: 1rem;
 }
 
 .form--stacked span {
-    display: block;
-    font-size: 0.9rem;
-    color: #aaa;
-    margin-bottom: 0.3rem;
+  display: block;
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 0.3rem;
 }
 
 .form--stacked input,
 .form--stacked textarea {
-    width: 100%;
-    padding: 0.6rem;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-    background: #2b2b2b;
-    color: #fff;
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: #2b2b2b;
+  color: #fff;
 }
 
 .form--stacked input:focus,
 .form--stacked textarea:focus {
-    border: 1px solid #ff4d4d;
+  border: 1px solid #ff4d4d;
 }
 
 .btn {
-    background: #ff4d4d;
-    color: #fff;
-    border: none;
-    padding: 0.7rem 1.2rem;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
+  background: #ff4d4d;
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
 }
 
 .btn:hover {
-    background: #ff1f1f;
+  background: #ff1f1f;
+}
+
+
+
+
+/* Campaign Detail Css */
+.campaignImg {
+  text-align: center;
+  padding: 1rem;
+  margin: 1.5rem 0;
+}
+
+.campaignImg img {
+  width: 100%;
+  height: 30rem;
+  object-fit: contain;
+}
+
+
+.del-btn {
+  position: absolute;
+  top: 0;
+  font-size: 1.2em;
+  right: 10px;
+  color: var(--primary);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Pagignation */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    font-family: 'Poppins', sans-serif;
+    flex-wrap: wrap;
+}
+
+.page-btn {
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    /* box-shadow: 0 3px 10px rgba(230, 57, 70, 0.3); */
+}
+
+.page-btn:hover {
+    background: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(230, 57, 70, 0.5);
+}
+
+.page-info {
+    color: #333;
+    font-weight: 500;
+    background: #f7f7f7;
+    padding: 8px 16px;
+    display: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 600px) {
+    .pagination {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    .page-info {
+        font-size: 0.9rem;
+    }
 }

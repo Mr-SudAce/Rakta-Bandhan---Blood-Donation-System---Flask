@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}
+Campaigns
+{% endblock %}
+
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='campaign.css') }}">
 
@@ -16,21 +20,38 @@
                 <h3>{{ c.title }}</h3>
             </div>
             <div class="card-body">
-                <p><strong>📍 Location:</strong> {{ c.location }}</p>
-                <p><strong>📅 Date:</strong> {{ c.date.strftime('%B %d, %Y') }}</p>
-                <p class="desc">{{ c.description }}</p>
+                {% if c.camp_img %}
+                <img src="{{ url_for('static', filename='campaigns/' + c.camp_img) }}" alt="{{ c.title }}">
+                {% else %}
+                <img src="{{ url_for('static', filename='defaultImg/noimage.jpg') }}" alt="Default Image">
+                {% endif %}
             </div>
+
             <div class="card-footer">
-                <a href="#" class="btn-join">Join Now</a>
+                <a href="{{ url_for('campaign_detail', campaign_id=c.id) }}" class="btn-join">More details</a>
             </div>
         </div>
         {% else %}
         <p class="no-campaigns">No campaigns available right now.</p>
         {% endfor %}
     </div>
+    <div class="pagination">
+        {% if campaigns.has_prev %}
+        <a href="{{ url_for('campaigns', page=campaigns.prev_num) }}" class="page-btn prev">← Prev</a>
+        {% endif %}
 
+
+        <span class="page-info {% if campaigns.pages > 1 %}d-block{% endif %}">Page {{ campaigns.page }} of {{ campaigns.pages }}</span>
+
+        {% if campaigns.has_next %}
+        <a href="{{ url_for('campaigns', page=campaigns.next_num) }}" class="page-btn next">Next →</a>
+        {% endif %}
+    </div>
+
+    {% if current_user.role == "superadmin" %}
     <div class="add-campaign">
         <a href="{{ url_for('add_campaign') }}" class="butonUI">+ Add New Campaign</a>
     </div>
+    {% endif %}
 </section>
 {% endblock %}

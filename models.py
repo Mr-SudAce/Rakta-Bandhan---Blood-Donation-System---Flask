@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
-
-
+from datetime import datetime
 
 
 db = SQLAlchemy()
@@ -15,7 +14,7 @@ class User(db.Model, UserMixin):
     phone = db.Column(db.String(20), nullable=False, unique=True)
     blood_grp = db.Column(db.String(5), nullable=False)
     address = db.Column(db.String(200), nullable=False) 
-    profile_picture = db.Column(db.String(200), default='profile_pics/default.jpg')
+    profile_picture = db.Column(db.String(200), default='defaultImg/default.jpg')
     role = db.Column(db.String(20), nullable=False)
 
     # one-to-one relationship with Donor
@@ -59,8 +58,19 @@ class Campaign(db.Model):
     __tablename__ = "campaigns"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
+    camp_img = db.Column(db.String(255), nullable=True)
     location = db.Column(db.String(100), nullable=False)
     date = db.Column(db.Date, nullable=False)
     organizer = db.Column(db.String(100), nullable=True)
     description = db.Column(db.Text, nullable=True)
-    image = db.Column(db.String(255), nullable=True)
+    
+
+class RecentActivity(db.Model):
+    __tablename__ = "recent_activities"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    action = db.Column(db.String(255), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<Activity {self.action}>"

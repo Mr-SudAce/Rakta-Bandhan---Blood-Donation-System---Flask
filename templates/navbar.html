@@ -13,9 +13,7 @@
 
       <a href="{{ url_for('donate_blood') }}">Donate</a>
       <a href="{{ url_for('find_blood') }}">Find Blood</a>
-      {% if current_user.role == "superadmin" %}
       <a href="{{ url_for('campaigns') }}">Campaigns</a>
-      {% endif %}
       <a href="{{ url_for('about') }}">About</a>
       {% if current_user.is_authenticated %}
       <div class="profile-dropdown">
@@ -23,10 +21,11 @@
           {% if current_user.role == 'recipient' or current_user.role == 'donor' %}
           <img class="profile_image" src="{{ url_for('static', filename='profile_pics/' + current_user.profile_picture) }}" alt="Profile Picture">
           {% elif current_user.role == 'admin' %}
-          <img class="profile_image" src="{{ url_for('static', filename='profile_pics/admin_dflt.jpg') }}" alt="Profile Picture">
+          <img class="profile_image" src="{{ url_for('static', filename='defaultImg/admin_dflt.jpg') }}" alt="Profile Picture">
           {% else %}
-          <img class="profile_image" src="{{ url_for('static', filename='profile_pics/default.png') }}" alt="Profile Picture">
+          <img class="profile_image" src="{{ url_for('static', filename='defaultImg/default.png') }}" alt="Profile Picture">
           {% endif %}
+          <!-- <img class="profile_image" src="{{ url_for('static', filename='defaultImg/default.png') }}" alt="Profile Picture"> -->
         </div>
         <div class="profile_info">
           <p class="user_name">{{ current_user.username }} {{ current_user.id}}</p>
