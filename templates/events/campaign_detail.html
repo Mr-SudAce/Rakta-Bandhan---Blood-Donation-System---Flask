@@ -11,7 +11,14 @@
     {% endif %}
 </div>
 <p><strong>Description:</strong> {{ campaign.description }}</p>
+
 <p><strong>Location:</strong> {{ campaign.location }}</p>
 <p><strong>Date:</strong> {{ campaign.date.strftime('%d %b, %Y') }}</p>
 <p><strong>Organizer:</strong> {{ campaign.organizer }}</p>
+
+<div>
+    <form action="{{ url_for('join_campaign', campaign_id=campaign.id) }}" method="post">
+        <button type="submit" class="butonUI">Join</button>
+    </form>
+</div>
 {% endblock %}

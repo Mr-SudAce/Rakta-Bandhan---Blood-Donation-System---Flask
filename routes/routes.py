@@ -154,6 +154,25 @@ def campaign_detail(campaign_id):
     campaign = Campaign.query.get_or_404(campaign_id)
     return render_template('events/campaign_detail.html', campaign=campaign)
 
+@app.route('/campaign/<int:campaign_id>/join', methods=['POST', 'GET'])
+@login_required
+def join_campaign(campaign_id):
+    campaign = Campaign.query.get_or_404(campaign_id)
+    
+    # Check if user already joined
+    existing = Participant.query.filter_by(user_id=current_user.id, campaign_id=campaign.id).first()
+    if existing:
+        flash("You’ve already joined this campaign!", "warning")
+        return redirect(url_for('campaign_detail', campaign_id=campaign.id))
+
+    # Add new participant
+    participant = Participant(user_id=current_user.id, campaign_id=campaign.id)
+    db.session.add(participant)
+    db.session.commit()
+
+    flash("Successfully joined the campaign!", "success")
+    return redirect(url_for('campaign_detail', campaign_id=campaign.id))
+
 @app.route("/campaigns/add_campaign", methods=["GET", "POST"])
 def add_campaign():
     if request.method == "POST":
@@ -448,9 +467,6 @@ def login():
 
 
 
-
-
-
 @app.route("/logout")
 @login_required
 def logout():
@@ -476,6 +492,10 @@ def register():
 
                 if User.query.filter_by(email=form.email.data).first():
                     flash("❌ Email already registered.")
+                    return redirect(url_for("register"))
+                
+                if User.query.filter_by(phone=form.phone.data).first():
+                    flash("❌ Phone number already registered.")
                     return redirect(url_for("register"))
 
             except Exception as e:
@@ -508,10 +528,10 @@ def register():
                 profile_picture=filename,
                 role=form.role.data,
             )
-
             try:
                 db.session.add(user)
                 db.session.commit()
+                log_activity(f"New user registered: {user.username} ({user.role})")
             except IntegrityError:
                 db.session.rollback()
                 flash("⚠️ Registration failed. Please check your data.")

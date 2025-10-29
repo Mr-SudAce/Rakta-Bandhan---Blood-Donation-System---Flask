@@ -47,7 +47,7 @@ Admin Dashboard
     <hr>
     <h4 class="mt-4">Quick Actions</h4>
     <div class="btn-group" role="group">
-        <a href="#" class="btn btn-primary">Manage Events</a>
+        <a href="{{ url_for('admin_events') }}" class="btn btn-primary">Manage Events</a>
         <a href="#" class="btn btn-success">Manage Inventory</a>
         <a href="#" class="btn btn-info">View Reports</a>
     </div>
@@ -57,7 +57,7 @@ Admin Dashboard
         {% if recent_activities %}
         {% for activity in recent_activities %}
         <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span class="text-dark">{{ activity.action }}</span>
+            <span class="text-dark">{{ activity.action|safe }}</span>
             <small class="text-muted">{{ activity.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
         </li>
         {% endfor %}

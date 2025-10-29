@@ -63,6 +63,16 @@ class Campaign(db.Model):
     date = db.Column(db.Date, nullable=False)
     organizer = db.Column(db.String(100), nullable=True)
     description = db.Column(db.Text, nullable=True)
+    participants = db.relationship("Participant", backref="event", lazy=True)
+
+class Participant(db.Model): 
+    __tablename__ = 'participants'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    campaign_id = db.Column(db.Integer, db.ForeignKey('campaigns.id'), nullable=False)  
+    campaign = db.relationship("Campaign", backref="participant_list")
+    
     
 
 class RecentActivity(db.Model):
