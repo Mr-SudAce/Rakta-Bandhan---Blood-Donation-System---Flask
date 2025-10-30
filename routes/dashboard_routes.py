@@ -1,6 +1,7 @@
 from app import app
 from flask import render_template, redirect, url_for, request, flash
 from models import *
+from helper_func.helperfunction import * 
 from flask_login import login_required, current_user
 
 @app.route('/dashboard')
@@ -30,28 +31,6 @@ def dashboard():
         inventory_status=inventoryStatus,
         recent_activities=recent_activities
     )
-
-
-
-# @app.route("/admin/events")
-# @login_required
-# def admin_events_detail():
-#     if current_user.role not in ["admin", "superadmin"]:
-#         return render_template("error/403.html"), 403
-
-#     events = Campaign.query.all()
-#     return render_template("admin/events/events.html", events=events)
-
-
-# @app.route("/admin/events/edit/<int:event_id>")
-# @login_required
-# def edit_admin_event_detail(event_id):
-#     if current_user.role not in ["admin", "superadmin"]:
-#         return render_template("error/403.html"), 403
-
-#     event = Campaign.query.get_or_404(event_id)
-#     return render_template("admin/events/event_detail.html", event=event)
-
 
 
 # View all events
@@ -105,6 +84,44 @@ def admin_edit_event(event_id):
         return redirect(url_for("admin_events"))
 
     return render_template("admin/events/edit_event.html", event=event, participant_count=participant_count)
+
+# Add a new event
+@app.route("/campaigns/add_campaign", methods=["GET", "POST"])
+def add_campaign():
+    if request.method == "POST":
+        title = request.form.get("title")
+        location = request.form.get("location")
+        date = request.form.get("date")
+        organizer = request.form.get("organizer")
+        description = request.form.get("description")
+        
+        date_obj = datetime.strptime(date, "%Y-%m-%d").date()
+        
+        # Handle image file upload
+        image_file = request.files.get("camp_img")
+        camp_img = None
+
+        if image_file and image_file.filename != "":
+            camp_img = save_picture(image_file, "campaigns")
+
+        new_campaign = Campaign(
+            title=title,
+            location=location,
+            date=date_obj,
+            organizer=organizer,
+            description=description,
+            camp_img=camp_img
+        )
+
+        db.session.add(new_campaign)
+        db.session.commit()
+
+        log_activity(f"Campaign added: {title}")
+        flash("Campaign added successfully!", "success")
+        return redirect(url_for("campaigns"))  # or wherever you want
+
+    return render_template("events/add-campaign.html")
+
 
 
 # Delete an event

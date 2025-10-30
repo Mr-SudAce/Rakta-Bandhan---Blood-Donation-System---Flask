@@ -19,8 +19,9 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
 }
 
-/* messages */
-
+.body-content{
+    margin: 2rem 1rem;
+}
 
 /* Container for all flash messages */
 .flash-container {
@@ -134,7 +135,7 @@ body {
 
 
 .butonUI {
-    background-color: var(--surface-2);
+    background-color: var(--primary);
     max-width: 150px;
     width: 100%;
     padding: 10px;
@@ -142,4 +143,11 @@ body {
     color: white;
     border: var(--surface);
     border-radius: 10px;
+}
+
+.butonUI:hover {
+    background-color: var(--surface);
+    color: var(--primary);
+    font-size: 0.9em;
+    border: var(--primary) 0.5px solid;
 }

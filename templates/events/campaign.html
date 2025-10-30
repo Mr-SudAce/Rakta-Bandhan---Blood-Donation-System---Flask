@@ -14,11 +14,6 @@ Campaigns
             <h1>🩸 Blood Donation Campaigns</h1>
             <p>Be part of something bigger — donate blood, save lives!</p>
         </div>
-        {% if current_user.role == "superadmin" %}
-        <div class="add-campaign">
-            <a href="{{ url_for('add_campaign') }}" class="butonUI">+ Add New Campaign</a>
-        </div>
-        {% endif %}
     </div>
 
     <div class="campaigns-grid">
