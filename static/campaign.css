@@ -6,7 +6,7 @@
   color: #222;
 }
 
-.campaigns-header{
+.campaigns-header {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -24,7 +24,7 @@
   margin-bottom: 2.5rem;
 }
 
-.campaigns-header-container{
+.campaigns-header-container {
   display: flex;
   justify-content: center;
 }
@@ -108,7 +108,7 @@
 }
 
 .add-campaign {
-  margin:3rem;
+  margin: 3rem;
 }
 
 
@@ -128,6 +128,13 @@ section.panel {
   border-radius: 12px;
   box-shadow: 0 0 20px rgba(255, 0, 0, 0.1);
   color: #fff;
+}
+
+
+.daatee {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px
 }
 
 .panel__header h2 {
@@ -207,48 +214,49 @@ section.panel {
 
 /* Pagignation */
 .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 2rem;
-    font-family: 'Poppins', sans-serif;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  font-family: 'Poppins', sans-serif;
+  flex-wrap: wrap;
 }
 
 .page-btn {
-    background: var(--primary);
-    color: #fff;
-    padding: 10px 18px;
-    border-radius: 12px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    /* box-shadow: 0 3px 10px rgba(230, 57, 70, 0.3); */
+  background: var(--primary);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  /* box-shadow: 0 3px 10px rgba(230, 57, 70, 0.3); */
 }
 
 .page-btn:hover {
-    background: var(--primary);
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(230, 57, 70, 0.5);
+  background: var(--primary);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(230, 57, 70, 0.5);
 }
 
 .page-info {
-    color: #333;
-    font-weight: 500;
-    background: #f7f7f7;
-    padding: 8px 16px;
-    display: none;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  color: #333;
+  font-weight: 500;
+  background: #f7f7f7;
+  padding: 8px 16px;
+  display: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 @media (max-width: 600px) {
-    .pagination {
-        flex-direction: column;
-        gap: 0.8rem;
-    }
-    .page-info {
-        font-size: 0.9rem;
-    }
+  .pagination {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .page-info {
+    font-size: 0.9rem;
+  }
 }

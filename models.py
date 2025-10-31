@@ -61,16 +61,17 @@ class Campaign(db.Model):
     camp_img = db.Column(db.String(255), nullable=True)
     location = db.Column(db.String(100), nullable=False)
     date = db.Column(db.Date, nullable=False)
+    exp_date = db.Column(db.Date, nullable=False)
     organizer = db.Column(db.String(100), nullable=True)
     description = db.Column(db.Text, nullable=True)
-    participants = db.relationship("Participant", backref="event", lazy=True)
+    participants = db.relationship("Participant", backref="event", lazy=True, cascade="all, delete-orphan")
 
 class Participant(db.Model): 
     __tablename__ = 'participants'
     
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    campaign_id = db.Column(db.Integer, db.ForeignKey('campaigns.id'), nullable=False)  
+    campaign_id = db.Column(db.Integer, db.ForeignKey('campaigns.id'), nullable=True)  
     campaign = db.relationship("Campaign", backref="participant_list")
     
     
@@ -84,3 +85,16 @@ class RecentActivity(db.Model):
 
     def __repr__(self):
         return f"<Activity {self.action}>"
+    
+
+class BloodInventory(db.Model):
+    __tablename__ = 'blood_inventory'
+    id = db.Column(db.Integer, primary_key=True)
+    blood_group = db.Column(db.String(5), nullable=False)
+    component = db.Column(db.String(50), nullable=False)
+    quantity = db.Column(db.Integer, default=0)
+    collection_date = db.Column(db.Date, nullable=False)
+    expiry_date = db.Column(db.Date, nullable=False)
+
+    def __repr__(self):
+        return f"<BloodInventory {self.blood_group} ({self.component})>"

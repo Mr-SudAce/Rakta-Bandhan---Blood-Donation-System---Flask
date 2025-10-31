@@ -39,7 +39,7 @@ Admin Dashboard
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">Blood Inventory</h5>
-                    <p class="card-text">{{ inventory_status }}</p>
+                    <p class="card-text" style="color: {% if inventory_status == 'Stable' %}green{% elif inventory_status == 'Low' %}orange{% else %}red{% endif %};">{{ inventory_status }}</p>
                 </div>
             </div>
         </div>
@@ -48,8 +48,8 @@ Admin Dashboard
     <h4 class="mt-4">Quick Actions</h4>
     <div class="btn-group" role="group">
         <a href="{{ url_for('admin_events') }}" class="btn btn-primary">Manage Events</a>
-        <a href="#" class="btn btn-success">Manage Inventory</a>
-        <a href="#" class="btn btn-info">View Reports</a>
+        <a href="{{ url_for('manage_inventory') }}" class="btn btn-success">Manage Inventory</a>
+        <a href="{{ url_for('view_reports') }}" class="btn btn-info">View Reports</a>
     </div>
     <hr>
     <h4 class="mt-4">Recent Activity</h4>

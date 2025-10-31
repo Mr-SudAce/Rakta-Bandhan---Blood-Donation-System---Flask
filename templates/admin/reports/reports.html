@@ -3,7 +3,7 @@
 <div class="mt-4">
     <h2>Reports</h2>
     <div class="mb-3">
-        <form method="get" action="{% url 'admin_reports' %}">
+        <form method="get" action="#">
             <div class="row">
                 <div class="col-md-4">
                     <label for="report_type" class="form-label">Select Report Type</label>
@@ -45,8 +45,9 @@
                 {% endfor %}
             </tbody>
         </table>
-        <a href="{% url 'admin_download_report' %}?report_type={{ request.GET.report_type }}&date_range={{ request.GET.date_range }}" class="btn btn-success mt-2">Download Report</a>
+        <a href="{{ url_for('admin_download_report') }}?report_type={{ request.GET.report_type }}&date_range={{ request.GET.date_range }}" class="btn btn-success mt-2">Download Report</a>
     {% else %}
         <p>No report data available. Please select criteria and generate a report.</p>
     {% endif %}
 </div>
+{% endblock %}

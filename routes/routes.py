@@ -142,8 +142,6 @@ def my_donations():
 
 @app.route("/campaigns")
 def campaigns():
-    # # Show only campaigns that are today or in the future
-    # upcoming_campaigns = Campaign.query.filter(Campaign.date >= date.today()).order_by(Campaign.date.asc()).all()
     paginations = request.args.get('page', 1, type=int)
     all_campaigns = Campaign.query.order_by(Campaign.date.asc()).paginate(page=paginations, per_page=9)
     return render_template("events/campaign.html", campaigns=all_campaigns, paginations=paginations)
@@ -162,7 +160,7 @@ def join_campaign(campaign_id):
     # Check if user already joined
     existing = Participant.query.filter_by(user_id=current_user.id, campaign_id=campaign.id).first()
     if existing:
-        flash("You’ve already joined this campaign!", "warning")
+        flash("You've already joined this campaign!", "warning")
         return redirect(url_for('campaign_detail', campaign_id=campaign.id))
 
     # Add new participant

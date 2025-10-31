@@ -4,6 +4,9 @@
 <header class="nav">
   <div class="nav__wrap container">
     <a class="brand" href="{{ url_for('home') }}">🩸 Rakta Bandhan</a>
+    {% if current_user.role == "superadmin" %}
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    {% endif %}
     <nav class="menu" aria-label="Primary">
       <!-- {% if current_user.role == 'donor' %}
       <a href="{{ url_for('donate_blood') }}">Donate</a>
