@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='campaign.css') }}">
+<h1>{{ campaign.title }}</h1>
+<div class="campaignImg">
+    {% if campaign.camp_img %}
+    <img src="{{ url_for('static', filename='campaigns/' + campaign.camp_img) }}" alt="{{ campaign.title }}">
+    {% else %}
+    <img src="{{ url_for('static', filename='static_images/noimage.jpg') }}" alt="{{ campaign.title }}">
+    {% endif %}
+</div>
+<p><strong>Description:</strong> {{ campaign.description }}</p>
+
+<p><strong>Location:</strong> {{ campaign.location }}</p>
+<p><strong>Date:</strong> {{ campaign.date.strftime('%d %b, %Y') }}</p>
+<p><strong>Expiry Date:</strong> {{ campaign.exp_date.strftime('%d %b, %Y') }}</p>
+<p><strong>Organizer:</strong> {{ campaign.organizer }}</p>
+
+<div>
+    <form action="{{ url_for('user.join_campaign', campaign_id=campaign.id) }}" method="post">
+        <button type="submit" class="butonUI">Join</button>
+    </form>
+</div>
+{% endblock %}

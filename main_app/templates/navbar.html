@@ -1,0 +1,52 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/navbar.css') }}">
+
+{% if current_user.is_authenticated %}
+<header class="nav">
+  <div class="nav__wrap container">
+    <a class="brand" href="{{ url_for('user.home') }}">🩸 Rakta Bandhan</a>
+    {% if current_user.role == "superadmin" %}
+    <a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a>
+    {% endif %}
+    <nav class="menu" aria-label="Primary">
+
+      <a href="{{ url_for('user.donate_blood') }}">Donate</a>
+      <a href="{{ url_for('user.find_blood') }}">Find Blood</a>
+      <a href="{{ url_for('user.campaigns') }}">Campaigns</a>
+      <a href="{{ url_for('user.about') }}">About</a>
+      {% if current_user.is_authenticated %}
+      <div class="profile-dropdown">
+        <div class="profile_pic">
+          {% if current_user %}
+          {% if current_user.role == 'recipient' %}
+          <img class="profile_image"
+            src="{{ url_for('static', filename=current_user.profile_picture) }}"
+            alt="Recipient Profile">
+          {% elif current_user.role == 'donor' %}
+          <img class="profile_image"
+            src="{{ url_for('static', filename=current_user.profile_picture) }}"
+            alt="Donor Picture">
+          {% elif current_user.role == 'superadmin' %}
+          <img class="profile_image"
+            src="{{ url_for('static', filename='static_images/admin_dflt.jpg') }}"
+            alt="Admin Picture">
+          {% else %}
+          <img class="profile_image"
+            src="{{ url_for('static', filename='static_images/default.png') }}"
+            alt="Default Picture">
+          {% endif %}
+          {% endif %}
+        </div>
+        <div class="profile_info">
+          <p class="user_name">{{ current_user.username }} {{ current_user.id}}</p>
+          <p class="user-role m-0">{{ current_user.role }}</p>
+        </div>
+        <div class="dropdown-content">
+          <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </div>
+      </div>
+      {% endif %}
+    </nav>
+    <button class="hamburger" aria-label="Open Menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+{% endif %}

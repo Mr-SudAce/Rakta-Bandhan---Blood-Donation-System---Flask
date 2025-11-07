@@ -1,0 +1,120 @@
+
+/* Background wrapper */
+.login-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+/* Card */
+.login-card {
+    background: var(--surface-2);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 430px;
+    box-shadow: var(--shadow);
+    color: var(--text);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-card:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .5);
+}
+
+/* Heading */
+.login-card h2 {
+    font-weight: 600;
+    color: var(--primary);
+}
+/* placeholder */
+.login-card .form-control::placeholder {
+    color: var(--muted);
+    font-size: small;
+    opacity: 1; /* Override default opacity */
+}
+/* Input fields */
+.login-card .form-control {
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--muted);
+    color: var(--text);
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-card .form-control:focus {
+    border-color: var(--primary);
+    box-shadow: var(--ring);
+    outline: none;
+}
+
+/* Checkbox */
+.login-card .form-check-label {
+    color: var(--muted);
+}
+
+/* Button */
+.login-card .btn-primary {
+    background: var(--primary);
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.login-card .btn-primary:hover {
+    background: var(--primary-600);
+}
+
+/* Links */
+.login-card a {
+    color: var(--primary);
+    font-weight: 500;
+    text-decoration: none;
+}
+.login-card a:hover {
+    text-decoration: underline;
+}
+
+
+/* RESPONSIVENESS */
+@media (max-width: 768px) {
+    .login-wrapper {
+        padding: 1.5rem;
+    }
+    .login-card {
+        padding: 2rem;
+        max-width: 380px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-card {
+        padding: 1.5rem;
+        width: 90%;
+        max-width: 340px;
+    }
+    .login-card h2 {
+        font-size: 1.5rem;
+    }
+    .login-card .form-control {
+        font-size: 0.9rem;
+        padding: 0.65rem 0.9rem;
+    }
+    .login-card .btn-primary {
+        padding: 0.65rem;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .login-card {
+        padding: 1rem;
+        width: 95%;
+    }
+    .login-card h2 {
+        font-size: 1.25rem;
+    }
+}

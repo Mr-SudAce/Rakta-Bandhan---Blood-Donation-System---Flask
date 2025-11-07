@@ -1,0 +1,75 @@
+import os
+from functools import wraps
+from werkzeug.utils import secure_filename
+from flask import current_app, redirect, url_for, flash
+from flask_login import current_user
+from main_app.models import *
+from datetime import datetime, timedelta
+
+# Role-based access control decorator
+def role_required(*roles):
+    def wrapper(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if current_user.role not in roles:
+                flash("Access denied!", "danger")
+                return redirect(url_for("user.home"))
+            return f(*args, **kwargs)
+        return decorated_function
+    return wrapper
+
+
+
+# Save picture helper function
+def save_picture(form_picture, foldername):
+    # Define full folder path inside the static directory
+    folder_path = os.path.join(current_app.root_path, "main_app/static/uploads/", foldername)
+    os.makedirs(folder_path, exist_ok=True)
+
+    filename = secure_filename(form_picture.filename)
+    picture_path = os.path.join(folder_path, filename)
+
+    # Save the actual image file to disk
+    form_picture.save(picture_path)
+    print(f"Saved picture to: {picture_path}")
+
+    # ✅ Return relative path (browser-friendly)
+    return f"{foldername}/{filename}"
+
+
+def log_activity(action):
+    """Add a new log entry for the current user."""
+    user_id = current_user.id if current_user.is_authenticated else None
+    activity = RecentActivity(user_id=user_id, action=action)
+    db.session.add(activity)
+    db.session.commit()
+    return activity.id  # optional: return the log ID if needed
+
+# ----------------------------
+# Delete a specific log
+# ----------------------------
+def delete_log_activity(activity_id):
+    """Delete a specific log entry by its ID."""
+    activity = RecentActivity.query.get(activity_id)
+    if activity:
+        db.session.delete(activity)
+        db.session.commit()
+        return True
+    return False
+
+# ----------------------------
+# Expire old logs automatically
+# ----------------------------
+def expire_log_activity(days_old=30):
+    """
+    Delete logs older than 'days_old' days.
+    Default: logs older than 30 days.
+    """
+    cutoff_date = datetime.utcnow() - timedelta(days=days_old)
+    old_logs = RecentActivity.query.filter(RecentActivity.timestamp < cutoff_date).all()
+    
+    for log in old_logs:
+        db.session.delete(log)
+    
+    db.session.commit()
+    return len(old_logs)  # returns number of deleted logs

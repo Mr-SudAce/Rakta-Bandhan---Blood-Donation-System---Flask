@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Campaigns
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/campaign.css') }}">
+
+<section class="campaigns-section">
+    <div class="campaigns-header-container">
+
+        <div class="campaigns-header">
+            <h1>🩸 Blood Donation Campaigns</h1>
+            <p>Be part of something bigger — donate blood, save lives!</p>
+        </div>
+    </div>
+
+    <div class="campaigns-grid">
+        {% for c in campaigns %}
+        <div class="campaign-card">
+            <div class="card-header">
+                <h3>{{ c.title }}</h3>
+            </div>
+            <div class="card-body">
+                {% if c.camp_img %}
+                <img src="{{ url_for('static', filename='uploads/' + c.camp_img) }}" alt="{{ c.title }}">
+                {% else %}
+                <img src="static/static_images/noimage.jpg" alt="Default Image">
+                {% endif %}
+            </div>
+
+            <div class="card-footer">
+                <a href="{{ url_for('user.campaign_detail', campaign_id=c.id) }}" class="btn-join">More details</a>
+            </div>
+        </div>
+        {% else %}
+        <p class="no-campaigns">No campaigns available right now.</p>
+        {% endfor %}
+    </div>
+    <div class="pagination">
+        {% if campaigns.has_prev %}
+        <a href="{{ url_for('campaigns', page=campaigns.prev_num) }}" class="page-btn prev">← Prev</a>
+        {% endif %}
+
+        <span class="page-info {% if campaigns.pages > 1 %}d-block{% endif %}">Page {{ campaigns.page }} of {{ campaigns.pages }}</span>
+
+        {% if campaigns.has_next %}
+        <a href="{{ url_for('campaigns', page=campaigns.next_num) }}" class="page-btn next">Next →</a>
+        {% endif %}
+    </div>
+
+</section>
+{% endblock %}

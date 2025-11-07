@@ -1,0 +1,121 @@
+/* ========== Forms & Lists ========== */
+.form {
+    display: grid;
+    gap: 1rem
+}
+
+.form--inline {
+    grid-template-columns: 1.3fr 1fr 1fr auto;
+    align-items: end
+}
+
+.form label {
+    display: grid;
+    gap: .4rem
+}
+
+.no-data {
+    width: 100%;
+    justify-content: center;
+    display: flex;
+}
+
+input,
+select {
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 12px;
+    padding: .7rem .8rem;
+    outline: none;
+}
+
+input:focus,
+select:focus {
+    box-shadow: var(--ring);
+    border-color: transparent
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: .6rem
+}
+
+.checkbox input {
+    width: 18px;
+    height: 18px
+}
+
+.list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .8rem;
+    margin-top: 1rem
+}
+
+.donor_info {
+    width: 100px;
+}
+
+.bloodtyp {
+    font-size: 4rem;
+    font-weight: 700;
+    transform: rotate3d(1, 1, 1, -35deg);
+    text-shadow: -8px 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.det {
+    width: 180px;
+    display: block;
+    justify-items: center;
+}
+
+.list__item {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    background: linear-gradient(124deg, black 51%, var(--primary) 80%);
+    padding: 1rem;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, .06)
+}
+
+.list__item h3 {
+    margin: .2rem 0
+}
+
+.list__item .card-body {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+
+.profile_image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #eee;
+}
+
+.profile_image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+@media (max-width:900px) {
+    .form--inline {
+        grid-template-columns: 1fr
+    }
+
+    .list__item {
+        flex-direction: column;
+        align-items: flex-start
+    }
+
+}

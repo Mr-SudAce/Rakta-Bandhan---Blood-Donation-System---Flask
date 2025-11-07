@@ -1,0 +1,18 @@
+
+<!-- RIGHT SIDE: Inventory Display -->
+<div class="inventory-display-container card p-4">
+    <h5 class="mb-3">💉 Current Blood Stock Overview</h5>
+    <div class="inventory-display">
+        {% for inventory_data in inventory %}
+        <div class="inventory-item">
+            <div class="blood-tag">{{ inventory_data.blood_group }}</div>
+            <div class="blood-details">
+                <p>{{ inventory_data.component }}</p>
+                <p class="quantity">{{ inventory_data.quantity }} units available</p>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-center text-muted">No inventory data found.</p>
+        {% endfor %}
+    </div>
+</div>

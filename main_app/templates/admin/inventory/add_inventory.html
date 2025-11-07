@@ -1,0 +1,54 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/admin/inventory.css') }}">
+<!-- LEFT SIDE: Form Section -->
+<div class="add-inventory card p-4">
+    <button class="btn btn-add mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#addStockForm">
+        + Add New Inventory Item
+    </button>
+
+    <div class="collapse" id="addStockForm">
+        <form action="{{ url_for('dashboard.manage_inventory') }}" method="POST" class="mt-3">
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <label>Blood Group</label>
+                    <select name="blood_group" class="form-control" required>
+                        <option value>Select</option>
+                        <option>A+</option><option>A-</option>
+                        <option>B+</option><option>B-</option>
+                        <option>AB+</option><option>AB-</option>
+                        <option>O+</option><option>O-</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label>Component</label>
+                    <select name="component" class="form-control" required>
+                        <option value>Select</option>
+                        <option>Whole Blood</option>
+                        <option>Plasma</option>
+                        <option>Platelets</option>
+                        <option>RBCs</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <label>Quantity</label>
+                    <input type="number" name="quantity" class="form-control" min="1" required>
+                </div>
+                <div class="col-md-6">
+                    <label>Collection Date</label>
+                    <input type="date" name="collection_date" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-md-12">
+                    <label>Expiry Date</label>
+                    <input type="date" name="expiry_date" class="form-control" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-add mt-3">Add Stock</button>
+        </form>
+    </div>
+</div>
