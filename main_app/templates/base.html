@@ -10,6 +10,9 @@
         <link rel="shortcut icon" href="{{ url_for('static', filename='static_images/logo.ico') }}" type="image/x-icon">
 
         <title>{% block title %}{% endblock %} | Blood Donation System</title>
+
+        <script src="{{ url_for('static', filename='/JS/main.js') }}"></script>
+
         {% if current_user.role == "donor" %}
         <!-- site2.css -->
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/site2.css')}}" />

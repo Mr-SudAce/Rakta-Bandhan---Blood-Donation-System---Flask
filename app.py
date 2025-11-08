@@ -15,7 +15,7 @@ HARDCODED_BLOOD_GRP = "--"
 HARDCODED_DOB = "2000-01-01"
 HARDCODED_GENDER = "None"
 HARDCODED_ADDRESS = "Admin Address"
-HARDCODED_PROFILE_PIC = "profile_pics/static_images/admin_dflt.jpg"
+HARDCODED_PROFILE_PIC = "/static_images/admin_dflt.jpg"
 HARDCODED_ROLE = "superadmin"
 
 # ------------------- FLASH CATEGORY MAPPING -------------------

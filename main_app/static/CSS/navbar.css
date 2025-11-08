@@ -1,121 +1,103 @@
-/* ========== Nav ========== */
+/* ===== Nav Base ===== */
 .nav {
     position: sticky;
     top: 0;
     z-index: 50;
     backdrop-filter: blur(8px);
-    background: rgba(14, 15, 19, .6);
-    border-bottom: 1px solid rgba(255, 255, 255, .06);
+    background: rgba(14, 15, 19, 0.6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .nav__wrap {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.9rem 0;
+    padding: 0.9rem 1rem;
 }
 
+/* Brand */
 .brand {
     color: var(--text);
     text-decoration: none;
     font-weight: 700;
-    letter-spacing: .2px
+    font-size: 1.2rem;
 }
 
+/* Menu Links */
 .menu {
     display: flex;
     gap: 1rem;
-    align-items: center
+    align-items: center;
 }
 
 .menu a {
-    color: var(--muted);
     text-decoration: none;
-    padding: .5rem .8rem;
-    border-radius: 12px
+    padding: 0.5rem 0.8rem;
+    border-radius: 12px;
+    color: var(--muted);
 }
 
 .menu a:hover {
     color: var(--text);
-    background: var(--surface)
+    background: var(--surface);
 }
 
-.btn--ghost {
-    border: 1px solid rgba(255, 255, 255, .1)
-}
-
-.hamburger {
-    display: none;
-    background: none;
-    border: none;
-    font-size: 1.3rem;
-    color: var(--text)
-}
-
-.profile_info {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-.user_name,
-.user-role {
-    color: var(--text);
-    font-weight: 500;
-    margin: 0px;
-}
-
-.user-role {
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 400;
-}
-
-
-
+/* Profile Dropdown */
 .profile-dropdown {
     position: relative;
     display: flex;
     gap: 10px;
     align-items: center;
     cursor: pointer;
-    justify-content: center;
-    align-items: center;
     padding: 1px 5px;
     border: 1px solid var(--primary);
     border-radius: 8px;
 }
 
-.profile_pic {
-    display: flex;
-}
-
 .profile_pic img {
-    width: 50px;
-    height: 50px;
-    object-fit: contain;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
     border-radius: 50%;
     border: 1px solid var(--primary);
 }
 
+.profile_info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user_name {
+    font-weight: 500;
+    color: var(--text);
+    margin: 0;
+}
+
+.user-role {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--muted);
+    margin: 0;
+}
 
 .dropdown-content {
     display: none;
     position: absolute;
-    top: 54.5px;
-    right: 0px;
+    top: 50px;
+    right: 0;
+    background: var(--surface);
     border: 1px solid var(--primary);
-    background-color: var(--surface);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     padding: 10px;
     z-index: 1000;
 }
 
-.dropdown-content p,
 .dropdown-content a {
-    margin: 5px 0;
+    display: block;
     color: var(--text);
     text-decoration: none;
+    margin: 5px 0;
     font-size: 14px;
 }
 
@@ -127,61 +109,55 @@
     display: block;
 }
 
-
-
-/* ================= Responsive tweaks ================= */
-@media (max-width: 1024px) {
-    .menu {
-        gap: 0.5rem;
-    }
+/* Hamburger button */
+.menu-toggle {
+    display: none;
 }
 
-@media (max-width: 768px) {
+.hamburger {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text);
+}
 
-    /* Menu becomes a vertical fixed panel */
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+    .hamburger {
+        display: block;
+    }
+
     .menu {
         position: fixed;
-        inset: 64px 0 0 0;
-        display: none;
+        top: 64px;
+        left: 0;
+        right: 0;
         flex-direction: column;
+        display: none;
         background: var(--surface);
         padding: 1rem;
         box-shadow: var(--shadow);
         z-index: 55;
     }
 
-    .menu.menu--open {
+    /* Toggle menu when checkbox is checked */
+    .menu-toggle:checked + .hamburger + .menu {
         display: flex;
-    }
-
-    .hamburger {
-        display: block;
-        position: relative;
-        z-index: 60;
-        padding: 0.5rem 1rem;
-        cursor: pointer;
-        transition: transform 0.3s ease;
-    }
-
-    .hamburger:active {
-        transform: scale(0.95);
     }
 }
 
-/* Ultra-small devices (mobile) */
-@media (max-width: 400px) {
-
-    .nav__wrap {
-        padding: 0.7rem 0.8rem;
+/* Desktop */
+@media (min-width: 901px) {
+    .menu {
+        display: flex;
+        flex-direction: row;
+        position: static;
+        background: transparent;
+        padding: 0;
+        box-shadow: none;
     }
 
     .hamburger {
-        padding: 0.5rem 0.8rem;
-        font-size: 1.2rem;
-    }
-
-    .profile_pic img {
-        width: 40px;
-        height: 40px;
+        display: none;
     }
 }

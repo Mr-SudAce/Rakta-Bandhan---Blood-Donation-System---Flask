@@ -19,9 +19,26 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
 }
 
+
+
 .container {
-    width: 1200px !important;
-    margin-inline: auto
+    width: 97%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding: 0 1rem;
+}
+
+
+@media (min-width: 100px) and (max-width: 810px) {
+    .container {
+        width: 97%;
+    }
+}
+
+@media (min-width: 811px) {
+    .container {
+        width: 100%;
+    }
 }
 
 .body-content {
@@ -119,8 +136,8 @@ body {
 
 
 /* responsive tweaks */
-@media (max-width: 810px){
-    
+@media (max-width: 810px) {
+
     .grid--3 {
         grid-template-columns: 1fr
     }
@@ -133,7 +150,7 @@ body {
         grid-template-columns: repeat(2, 1fr)
     }
 
-    
+
 }
 
 
