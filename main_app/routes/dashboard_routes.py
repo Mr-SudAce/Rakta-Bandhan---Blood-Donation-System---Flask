@@ -38,14 +38,10 @@ def dashboard():
             inventoryStatus = "Moderate"
         else:
             inventoryStatus = "Stable"
-
-        
-       
             
     totalDonor = donation_requests
     totalRecipient = User.query.filter_by(role='recipient').count()
     upcomingEvents = Campaign.query.count()
-    # Recent activities
     recent_activities = RecentActivity.query.order_by(RecentActivity.timestamp.desc()).limit(10).all()
 
     return render_template(
@@ -174,26 +170,49 @@ def admin_delete_event(event_id):
 
 
 # manage inventory
-
 @dashboard_bp.route('/manage_inventory', methods=['GET', 'POST'])
 def manage_inventory():
+    inventory_data = BloodInventory.query.order_by(BloodInventory.blood_group).all()
+    total_units = sum([item.quantity for item in inventory_data])
+
+    return render_template(
+        'admin/inventory/inventory.html',
+        inventory=inventory_data,
+        total_units=total_units
+    )
+
+@dashboard_bp.route('/add/inventory', methods=['GET', 'POST'])
+def add_inventory():
     if request.method == 'POST':
         # Get form data
         blood_group = request.form.get('blood_group')
         component = request.form.get('component')
-        quantity = int(request.form.get('quantity', 0))
+        quantity = request.form.get('quantity')
         collection_date = request.form.get('collection_date')
         expiry_date = request.form.get('expiry_date')
 
-        # Convert dates from string to date objects
+        # Basic validation
+        if not blood_group or not component or not quantity or not collection_date or not expiry_date:
+            flash("All fields are required.", "warning")
+            return redirect(url_for('dashboard.add_inventory'))
+
+        try:
+            quantity = int(quantity)
+            if quantity <= 0:
+                flash("Quantity must be greater than 0.", "warning")
+                return redirect(url_for('dashboard.add_inventory'))
+        except ValueError:
+            flash("Invalid quantity value.", "danger")
+            return redirect(url_for('dashboard.add_inventory'))
+
         try:
             collection_date = datetime.strptime(collection_date, '%Y-%m-%d').date()
             expiry_date = datetime.strptime(expiry_date, '%Y-%m-%d').date()
         except ValueError:
             flash("Invalid date format. Use YYYY-MM-DD.", "danger")
-            return redirect(url_for('manage_inventory'))
+            return redirect(url_for('dashboard.add_inventory'))
 
-        # Create new inventory entry
+        # Save new inventory record
         new_item = BloodInventory(
             blood_group=blood_group,
             component=component,
@@ -201,46 +220,79 @@ def manage_inventory():
             collection_date=collection_date,
             expiry_date=expiry_date
         )
-        log_activity(f"New blood inventory added: {blood_group} - {component}, Qty: {quantity}")
         db.session.add(new_item)
         db.session.commit()
+        log_activity(f"Added new inventory: {blood_group} - {component}, Qty: {quantity}")
+
         flash("New blood inventory added successfully!", "success")
         return redirect(url_for('dashboard.manage_inventory'))
-
-    # GET request — show inventory
-    inventory_data = BloodInventory.query.order_by(BloodInventory.blood_group).all()
-    total_units = sum([item.quantity for item in inventory_data])
-    
-    critical_units = [item for item in inventory_data if item.quantity < 5]
-    low_units = [item for item in inventory_data if 5 <= item.quantity < 15]
-    stable_units = [item for item in inventory_data if item.quantity >= 15]
-
-    inventory_status = "Critical" if len(critical_units) > 0 else (
-        "Low" if len(low_units) > 0 else "Stable"
-    )
-
-    return render_template(
-        'admin/inventory/inventory.html',
-        inventory=inventory_data,
-        total_units=total_units,
-        inventory_status=inventory_status
-    )
-
-@dashboard_bp.route('/add/inventory', methods=['GET', 'POST'])
-def add_inventory():
-    if request.method == 'POST':
-        blood_group = request.form['blood_group']
-        quantity = int(request.form['quantity'])
-        
-        new_inventory = BloodInventory(blood_group=blood_group, quantity=quantity)
-        log_activity(f"Added inventory: {blood_group}, Qty: {quantity}")
-        db.session.add(new_inventory)
-        db.session.commit()
-        
-        flash('Inventory added successfully!', 'success')
-        return redirect(url_for('manage_inventory'))
     return render_template('admin/inventory/add_inventory.html')
     
+
+
+@dashboard_bp.route('/sell/inventory/', methods=['GET', 'POST'])
+def sell_inventory():
+    if request.method == 'POST':
+        blood_group = request.form.get('blood_group')
+        component = request.form.get('component')
+        quantity = int(request.form.get('quantity', 0))  # convert to int
+        
+          # Validate inputs
+        if not blood_group or not component or not quantity:
+            flash("All fields are required.", "warning")
+            return redirect(url_for('dashboard.sell_inventory'))
+
+        
+        try:
+            quantity = int(quantity)
+            if quantity <= 0:
+                flash("Quantity must be greater than 0.", "warning")
+                return redirect(url_for('dashboard.sell_inventory'))
+        except ValueError:
+            flash("Invalid quantity value.", "danger")
+            return redirect(url_for('dashboard.sell_inventory'))
+
+        # Find inventory item
+        inventory_item = BloodInventory.query.filter_by(
+            blood_group=blood_group, component=component
+        ).first()
+        
+        if not inventory_item:
+            flash(f"No inventory found for {blood_group} ({component}).", "danger")
+            return redirect(url_for('dashboard.sell_inventory'))
+        
+        
+         # Check stock
+        if inventory_item.quantity < quantity:
+            flash(f"Not enough stock! Only {inventory_item.quantity} unit(s) available.", "danger")
+            return redirect(url_for('dashboard.manage_inventory'))
+        
+        
+        
+        if inventory_item:
+            # Deduct sold quantity
+            inventory_item.quantity -= quantity
+            new_quantity = inventory_item.quantity  # store new value
+
+            # Delete if quantity is zero
+            if new_quantity == 0:
+                db.session.delete(inventory_item)
+
+            db.session.commit()
+            print(f"{inventory_item.component} ({inventory_item.blood_group}) new quantity: {new_quantity}")
+        else:
+            print(f"No inventory found for {blood_group} ({component})")
+            
+        
+ 
+
+        return redirect(url_for('dashboard.manage_inventory'))
+
+    # GET request — show form
+    inventory_list = BloodInventory.query.all()
+    return render_template('admin/inventory/blood_transaction.html', inventory=inventory_list)
+
+
 
 # View reports
 @dashboard_bp.route('/view_reports')

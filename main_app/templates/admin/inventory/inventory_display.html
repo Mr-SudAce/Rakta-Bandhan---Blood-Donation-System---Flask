@@ -2,8 +2,11 @@
 <!-- RIGHT SIDE: Inventory Display -->
 <div class="inventory-display-container card p-4">
     <h5 class="mb-3">💉 Current Blood Stock Overview</h5>
+    <!-- plasma -->
     <div class="inventory-display">
+        <p class="m-0 label">Plasma</p>
         {% for inventory_data in inventory %}
+        {% if inventory_data.component|lower == 'plasma' %}
         <div class="inventory-item">
             <div class="blood-tag">{{ inventory_data.blood_group }}</div>
             <div class="blood-details">
@@ -11,8 +14,65 @@
                 <p class="quantity">{{ inventory_data.quantity }} units available</p>
             </div>
         </div>
+        {% endif %}
         {% else %}
-        <p class="text-center text-muted">No inventory data found.</p>
+        <p class="text-center text-light">No inventory data found.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Whole Blood -->
+    <div class="inventory-display">
+        <p class="m-0 label">Whole Blood</p>
+
+        {% for inventory_data in inventory %}
+        {% if inventory_data.component|lower == 'whole blood' %}
+        <div class="inventory-item">
+            <div class="blood-tag">{{ inventory_data.blood_group }}</div>
+            <div class="blood-details">
+                <p>{{ inventory_data.component }}</p>
+                <p class="quantity">{{ inventory_data.quantity }} units available</p>
+            </div>
+        </div>
+        {% endif %}
+        {% else %}
+        <p class="text-center text-light">No inventory data found.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Platelets -->
+    <div class="inventory-display">
+        <p class="m-0 label">Platelets</p>
+        {% for inventory_data in inventory %}
+        {% if inventory_data.component|lower == 'platelets' %}
+        <div class="inventory-item">
+            <div class="blood-tag">{{ inventory_data.blood_group }}</div>
+            <div class="blood-details">
+                <p>{{ inventory_data.component }}</p>
+                <p class="quantity">{{ inventory_data.quantity }} units available</p>
+            </div>
+        </div>
+        {% endif %}
+        {% else %}
+        <p class="text-center text-light">No inventory data found.</p>
+        {% endfor %}
+    </div>
+    
+    <!-- RBC's -->
+    <div class="inventory-display">
+        <p class="m-0">RBC's</p>
+
+        {% for inventory_data in inventory %}
+        {% if inventory_data.component|lower == 'RBC' %}
+        <div class="inventory-item">
+            <div class="blood-tag">{{ inventory_data.blood_group }}</div>
+            <div class="blood-details">
+                <p>{{ inventory_data.component }}</p>
+                <p class="quantity">{{ inventory_data.quantity }} units available</p>
+            </div>
+        </div>
+        {% endif %}
+        {% else %}
+        <p class="text-center text-light">No inventory data found.</p>
         {% endfor %}
     </div>
 </div>

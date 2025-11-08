@@ -1,12 +1,12 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='CSS/admin/inventory.css') }}">
 <!-- LEFT SIDE: Form Section -->
 <div class="add-inventory card p-4">
-    <button class="btn btn-add mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#addStockForm">
+    <button class="btn btn-add" type="button" data-bs-toggle="collapse" data-bs-target="#addStockForm">
         + Add New Inventory Item
     </button>
 
     <div class="collapse" id="addStockForm">
-        <form action="{{ url_for('dashboard.manage_inventory') }}" method="POST" class="mt-3">
+        <form action="{{ url_for('dashboard.add_inventory') }}" method="POST" class="mt-3">
             <div class="row mb-2">
                 <div class="col-md-6">
                     <label>Blood Group</label>

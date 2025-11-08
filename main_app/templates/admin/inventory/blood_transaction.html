@@ -1,12 +1,39 @@
 
-    <div class="blood-transaction card p-4">
-        <button class="btn btn-add mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#transactStockForm">
-            Sell Blood Unit
-        </button>
+<div class="blood-transaction card p-4">
+    <button class="btn btn-add" type="button" data-bs-toggle="collapse" data-bs-target="#transactStockForm">
+        Sell Blood Unit
+    </button>
 
-        <div class="collapse" id="transactStockForm">
-            <form action="#" method="POST" class="mt-3">
-                <button type="submit" class="btn btn-add mt-3">Sell</button>
-            </form>
-        </div>
+    <div class="collapse" id="transactStockForm">
+        <form action="{{ url_for('dashboard.sell_inventory') }}" method="POST" class="mt-3">
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <label>Blood Group</label>
+                    <select name="blood_group" class="form-control" required>
+                        <option value>Select</option>
+                        {% for item in inventory %}
+                        <option value="{{ item.blood_group }}">{{ item.blood_group }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label>Component</label>
+                    <select name="component" class="form-control" required>
+                        <option value>Select</option>
+                        {% for item in inventory|unique(attribute='component') %}
+                        <option value="{{ item.component }}">{{ item.component }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <label>Quantity</label>
+                        <input type="number" name="quantity" class="form-control" min="1" required>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-add mt-3">Sell</button>
+        </form>
     </div>
+</div>

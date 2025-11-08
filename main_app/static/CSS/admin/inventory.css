@@ -10,7 +10,8 @@
 .add-inventory {
     max-width: 600px;
     width: 100%;
-    align-self: flex-start; /* prevents height syncing with right side */
+    align-self: flex-start;
+    /* prevents height syncing with right side */
     position: sticky;
     top: 20px;
 }
@@ -22,6 +23,10 @@
     width: 100%;
     overflow-y: auto;
     max-height: 80vh;
+}
+
+.label {
+    font-size: larger;
 }
 
 /* Card styling */
@@ -38,6 +43,7 @@
     color: #fff;
     border-radius: 30px;
     padding: 6px 20px;
+    margin: 2px 0;
     font-weight: 500;
     transition: 0.3s;
     border: none;
@@ -72,18 +78,25 @@ form label {
     font-weight: 500;
     margin-bottom: 4px;
 }
+
 /* Inventory summary container */
 .inventory-display-container {
     background-color: var(--surface);
     border-radius: 16px;
     padding: 20px;
+    gap: 10px;
     margin-bottom: 30px;
     box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
+}
+
+.inventory-display-container>h5 {
+    color: var(--text) !important;
 }
 
 /* Grid layout */
 .inventory-display {
     display: grid;
+
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 16px;
 }
@@ -94,7 +107,7 @@ form label {
     align-items: center;
     gap: 12px;
     padding: 12px 15px;
-    background-color: var( --surface);
+    background-color: var(--surface);
     border-radius: 12px;
     transition: 0.3s;
     border: 1px solid #333;
@@ -136,11 +149,11 @@ form label {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-     .inventory-wrapper {
+    .inventory-wrapper {
         flex-direction: row;
         gap: 20px;
     }
-    
+
 }
 
 @media (min-width: 1025px) {
@@ -149,4 +162,3 @@ form label {
         gap: 25px;
     }
 }
-

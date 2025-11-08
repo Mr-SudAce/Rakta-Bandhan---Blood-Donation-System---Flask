@@ -22,8 +22,8 @@
 
 
 .container {
-    width: 97%;
-    max-width: 1200px;
+    width: 90% !important;
+    max-width: 100% !important;
     margin-inline: auto;
     padding: 0 1rem;
 }
@@ -31,13 +31,13 @@
 
 @media (min-width: 100px) and (max-width: 810px) {
     .container {
-        width: 97%;
+        width: 97% !important;
     }
 }
 
 @media (min-width: 811px) {
     .container {
-        width: 100%;
+        width: 100% !important;
     }
 }
 
