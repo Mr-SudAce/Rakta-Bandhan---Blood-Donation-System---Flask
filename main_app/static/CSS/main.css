@@ -41,9 +41,6 @@
     }
 }
 
-.body-content {
-    margin: 2rem 1rem;
-}
 
 /* Container for all flash messages */
 .flash-container {
@@ -102,7 +99,10 @@
     box-shadow: none;
 }
 
-/* messages */
+.body-content {
+    margin: 2rem 1rem;
+}
+
 
 body {
     margin: 0;
@@ -110,7 +110,6 @@ body {
     background: linear-gradient(180deg, #0e0f13, #10131a 40%, #0e0f13);
     color: var(--text);
     line-height: 1.6;
-    padding: 5px;
     position: relative;
 }
 

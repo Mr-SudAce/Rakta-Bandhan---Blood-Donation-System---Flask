@@ -211,20 +211,31 @@ def add_inventory():
         except ValueError:
             flash("Invalid date format. Use YYYY-MM-DD.", "danger")
             return redirect(url_for('dashboard.add_inventory'))
-
-        # Save new inventory record
-        new_item = BloodInventory(
-            blood_group=blood_group,
-            component=component,
-            quantity=quantity,
-            collection_date=collection_date,
-            expiry_date=expiry_date
-        )
-        db.session.add(new_item)
-        db.session.commit()
-        log_activity(f"Added new inventory: {blood_group} - {component}, Qty: {quantity}")
-
-        flash("New blood inventory added successfully!", "success")
+        
+        
+        existing_item = BloodInventory.query.filter_by(
+            blood_group = blood_group,
+            component = component
+        ).first()
+        
+        if existing_item:
+            existing_item.quantity += quantity
+            existing_item.expiry_date = expiry_date
+            db.session.commit()
+        
+        else:
+            # Save new inventory record
+            new_item = BloodInventory(
+                blood_group=blood_group,
+                component=component,
+                quantity=quantity,
+                collection_date=collection_date,
+                expiry_date=expiry_date
+            )
+            db.session.add(new_item)
+            db.session.commit()
+            log_activity(f"Added new inventory: {blood_group} - {component}, Qty: {quantity}")
+            flash("New blood inventory added successfully!", "success")
         return redirect(url_for('dashboard.manage_inventory'))
     return render_template('admin/inventory/add_inventory.html')
     
