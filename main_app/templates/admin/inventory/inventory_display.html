@@ -1,36 +1,28 @@
-
-<div class="">
-    <h5 class="mb-3">💉 Current Blood Stock Overview</h5>
+<div class="stock-section-container">
+    <h5 class="stock-section-title">💉 Current Blood Stock Overview</h5>
 
     {% set components = ['Plasma', 'Whole Blood', 'Platelets', "RBC's"] %}
 
     {% for comp in components %}
-    <div class="">
-        <div>
-            <p class="">{{ comp }}</p>
-        </div>
-        <div class="">
+        {% set items = inventory | selectattr('component', 'equalto', comp) | list %}
+        {% if items %}
+            <div class="stock-component-block">
+                <div class="stock-component-header">
+                    <p class="stock-component-name">{{ comp }}</p>
+                </div>
 
-            {% set has_items = false %}
-            {% for item in inventory %}
-            {% if item.component.lower() == comp.lower() %}
-            {% set has_items = true %}
-            {% endif %}
-            {% endfor %}
-            {% for item in inventory %}
-            {% if item.component.lower() == comp.lower() %}
-            {% set has_items = true %}
-            <div class="">
-                <div class="blood-tag">{{ item.blood_group }}</div>
-                <div class="blood-details">
-                    <p>{{ item.component }}</p>
-                    <p class="quantity">{{ item.quantity }} units available</p>
+                <div class="stock-items-container">
+                    {% for item in items %}
+                        <div class="stock-item-card">
+                            <div class="stock-blood-group">{{ item.blood_group }}</div>
+                            <div class="stock-item-details">
+                                <p class="stock-item-component">{{ item.component }}</p>
+                                <p class="stock-item-quantity">{{ item.quantity }} units available</p>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
-            {% endif %}
-            {% endfor %}
-
-        </div>
-        {% endfor %}
-    </div>
+        {% endif %}
+    {% endfor %}
 </div>

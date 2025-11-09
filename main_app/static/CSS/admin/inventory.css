@@ -1,21 +1,30 @@
-/* add_inventory.html */
+/* inventory.html */
+
+.inventory-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+}
+
+
+
+/* add_inventory.html and blood_transaction.html */
 .add-inv-section-container, .transact-inv-section-container {
-    background: var(--surface);
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
+    background: var(--surface-2);
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    margin: 10px 0;
 }
 
 .add-inv-section-container:hover, .transact-inv-section-container:hover {
-    transform: scale(1.01);
+    transform: scale(1);
 }
 
 .add-inv-toggle-btn, .transact-inv-toggle-btn {
     background-color: var(--primary);
     color: var(--text);
     border: none;
-    padding: 10px 16px;
+    padding: 10px 5px;
     border-radius: 6px;
     font-weight: 600;
     transition: background-color 0.2s ease, transform 0.2s ease;
@@ -27,7 +36,8 @@
 }
 
 .add-inv-form, .transact-inv-form {
-    margin-top: 15px;
+    /* margin-top: 15px; */
+    padding: 10px;
 }
 
 .add-inv-row, .transact-row {
@@ -88,3 +98,95 @@
     background-color: var(--primary);
     transform: translateY(-1px);
 }
+
+
+
+/* inventory_display.html */
+.stock-section-container {
+    background: var(--surface);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.stock-section-title {
+    font-weight: 600;
+    margin-bottom: 18px;
+    color: var(--text);
+}
+
+.stock-component-block {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.stock-component-header {
+    margin-bottom: 10px;
+}
+
+.stock-component-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin: 0;
+}
+
+.stock-items-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.stock-item-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--surface-2);
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    padding: 10px 14px;
+    min-width: 220px;
+    transition: all 0.2s ease;
+}
+
+.stock-item-card:hover {
+    background-color: var(--surface);
+    transform: scale(1.01);
+}
+
+.stock-blood-group {
+    background-color: var(--primary );
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 6px;
+    padding: 6px 10px;
+    text-align: center;
+    min-width: 45px;
+}
+
+.stock-item-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stock-item-component {
+    margin: 0;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.stock-item-quantity {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text);
+}
+
+.stock-no-data {
+    color: #777;
+    font-size: 0.9rem;
+    margin: 5px 0 10px 5px;
+}
+

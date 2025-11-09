@@ -3,8 +3,16 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='CSS/admin/inventory.css') }}">
 
 <div class="inventory-wrapper">
-    {% include "admin/inventory/add_inventory.html" %} 
-    {% include "admin/inventory/blood_transaction.html" %} 
+    <div>
+
+        
+        {% include "admin/inventory/add_inventory.html" %} 
+        {% include "admin/inventory/blood_transaction.html" %}
+    </div>
+    <div>
+
+        {% include "admin/inventory/inventory_display.html" %}
+    </div>
     
 
 </div>
