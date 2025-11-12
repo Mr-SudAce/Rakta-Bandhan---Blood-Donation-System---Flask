@@ -25,7 +25,7 @@
         <div class="profile_pic">
           {% if current_user.profile_picture %}
           <img class="profile_image"
-               src="{{ url_for('static', filename=current_user.profile_picture) }}"
+               src="{{ url_for('static', filename='uploads/' + current_user.profile_picture) }}"
                alt="Profile">
           {% else %}
           <img class="profile_image"

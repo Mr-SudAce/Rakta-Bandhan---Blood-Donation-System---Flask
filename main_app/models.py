@@ -26,17 +26,33 @@ class User(db.Model, UserMixin):
 
 class Donor(db.Model):
     __tablename__ = "donors"
+    __table_args__ = (
+        db.UniqueConstraint('user_id', name='unique_user_donor'),
+        db.CheckConstraint(
+            "blood_type IN ('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-')",
+            name='valid_blood_type'
+        ),
+    )
+
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
     name = db.Column(db.String(100), nullable=False)
     blood_type = db.Column(db.String(5), nullable=False)
-    address = db.Column(db.String(100), nullable=True)
-    phone = db.Column(db.String(20), nullable=True)
-    DOB = db.Column(db.Date, nullable=True)
-    gender = db.Column(db.String(10), nullable=True)
-    email = db.Column(db.String(120), nullable=True)
-    last_donation = db.Column(db.Date, nullable=True)
+    address = db.Column(db.String(100))
+    phone = db.Column(db.String(20))
+    DOB = db.Column(db.Date)
+    gender = db.Column(db.String(10))
+    email = db.Column(db.String(120))
+    last_donation = db.Column(db.Date)
+    is_active = db.Column(db.Boolean, default=True)  # optional but useful for deactivating donors
+
+    # Relationship with DonationHistory
     donations = db.relationship('DonationHistory', backref='donor', lazy=True)
+
+    def __repr__(self):
+        return f"<Donor {self.name} ({self.blood_type})>"
+    
+    
 
 class BloodRequest(db.Model):
     __tablename__ = "blood_requests"

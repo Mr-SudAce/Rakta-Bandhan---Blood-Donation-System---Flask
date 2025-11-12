@@ -46,6 +46,7 @@ def create_app():
     app.config['SECRET_KEY'] = 'supersecretkey'
     app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(INSTANCE_FOLDER, 'rakta_bandhan.db')}"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_ECHO'] = True
 
     # ------------------- INITIALIZE EXTENSIONS -------------------
     db.init_app(app)
@@ -81,12 +82,21 @@ def create_app():
             print("Superadmin already exists. Skipping creation.")
             
     # ------------------- USER LOADER -------------------
+    # @login_manager.user_loader
+    # def load_user(user_id):
+    #     if not user_id or user_id == "None":
+    #         return None
+    #     try:
+    #         return User.query.get(int(user_id))
+    #     except ValueError:
+    #         return None
+    
     @login_manager.user_loader
     def load_user(user_id):
         if not user_id or user_id == "None":
             return None
         try:
-            return User.query.get(int(user_id))
+            return db.session.get(User, int(user_id))  # <-- modern SQLAlchemy 2.x way
         except ValueError:
             return None
 

@@ -38,6 +38,8 @@ Campaigns
         <p class="no-campaigns">No campaigns available right now.</p>
         {% endfor %}
     </div>
+
+    {% if campaigns and campaigns.items|length > 0 %}
     <div class="pagination">
         {% if campaigns.has_prev %}
         <a href="{{ url_for('campaigns', page=campaigns.prev_num) }}" class="page-btn prev">← Prev</a>
@@ -49,6 +51,7 @@ Campaigns
         <a href="{{ url_for('campaigns', page=campaigns.next_num) }}" class="page-btn next">Next →</a>
         {% endif %}
     </div>
+    {% endif %}
 
 </section>
 {% endblock %}

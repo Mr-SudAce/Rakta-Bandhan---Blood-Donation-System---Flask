@@ -60,24 +60,28 @@ def donate_blood():
 
             dob_date = datetime.strptime(DOB, '%Y-%m-%d').date() if DOB else None
 
-            # ✅ Step 1: Get the current user's donor (if exists)
-            existing_donor = Donor.query.filter_by(user_id=current_user.id).first()
+            # Get existing donor by user_id
+            donor = Donor.query.filter_by(user_id=current_user.id).first()
 
-            # ✅ Step 2: Check if the submitted data matches current_user
-            data_changed = (
-                name != current_user.username
-                or email != current_user.email
-                or (existing_donor and (
-                    phone != existing_donor.phone or
-                    address != existing_donor.address or
-                    blood_type != existing_donor.blood_type or
-                    gender != existing_donor.gender or
-                    dob_date != existing_donor.DOB
-                ))
-            )
-
-            # ✅ Step 3: If data changed → create a new donor record
-            if data_changed or not existing_donor:
+            if donor:
+                # Check if they already donated today
+                last_donation = donor.last_donation
+                today = datetime.utcnow().date()
+                if last_donation == today:
+                    flash("❌ You have already donated blood today!", "warning")
+                    return redirect(url_for("user.donate_blood"))
+                
+                # Update existing donor
+                donor.name = name
+                donor.email = email
+                donor.phone = phone
+                donor.address = address
+                donor.blood_type = blood_type
+                donor.DOB = dob_date
+                donor.gender = gender
+                donor.last_donation = datetime.utcnow().date()
+            else:
+                # Create new donor (if somehow user_id is not in DB yet)
                 donor = Donor(
                     user_id=current_user.id,
                     name=name,
@@ -87,24 +91,20 @@ def donate_blood():
                     blood_type=blood_type,
                     DOB=dob_date,
                     gender=gender,
-                    last_donation=datetime.utcnow().date()
+                    last_donation=datetime.utcnow().date(),
+                    is_active=True
                 )
                 db.session.add(donor)
                 db.session.flush()
-            else:
-                donor = existing_donor
-                donor.last_donation = datetime.utcnow().date()
 
-            # ✅ Step 4: Record donation history
+            # Record donation history
             new_donation = DonationHistory(
                 donor_id=donor.id,
                 request_id=0,
                 date=datetime.utcnow().date()
             )
-            log_activity(f"New donation recorded for donor ID: {donor.id} on {new_donation.date}")
             db.session.add(new_donation)
             db.session.commit()
-            log_activity(f"Added new donor: {donor.name} ({donor.blood_type})")
 
             flash(f"✅ Donation successfully registered for {name}! 🩸", "success")
             return redirect(url_for("user.home"))
@@ -114,12 +114,7 @@ def donate_blood():
             flash(f"❌ Something went wrong: {e}", "danger")
             return redirect(url_for("user.donate_blood"))
 
-    # ✅ Pre-fill form with user's data
-    return render_template(
-        "donor/donate_blood.html",
-        user=current_user
-    )
-
+    return render_template("donor/donate_blood.html", user=current_user)
 
 @user_bp.route("/donor/register-event")
 @login_required
@@ -159,7 +154,7 @@ def join_campaign(campaign_id):
     existing = Participant.query.filter_by(user_id=current_user.id, campaign_id=campaign.id).first()
     if existing:
         flash("You've already joined this campaign!", "warning")
-        return redirect(url_for('campaign_detail', campaign_id=campaign.id))
+        return redirect(url_for('user.campaign_detail', campaign_id=campaign.id))
 
     # Add new participant
     participant = Participant(user_id=current_user.id, campaign_id=campaign.id)
@@ -168,7 +163,7 @@ def join_campaign(campaign_id):
     db.session.commit()
 
     flash("Successfully joined the campaign!", "success")
-    return redirect(url_for('campaign_detail', campaign_id=campaign.id))
+    return redirect(url_for('user.campaign_detail', campaign_id=campaign.id))
 
 
 

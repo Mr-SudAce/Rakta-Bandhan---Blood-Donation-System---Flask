@@ -1,53 +1,72 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <div class="mt-4">
     <h2>Reports</h2>
+
     <div class="mb-3">
-        <form method="get" action="#">
+        <form method="get" action="{{ url_for('dashboard.view_reports') }}">
             <div class="row">
+                <!-- Report Type -->
                 <div class="col-md-4">
                     <label for="report_type" class="form-label">Select Report Type</label>
                     <select id="report_type" name="report_type" class="form-select">
-                        <option value="donations">Donations</option>
-                        <option value="inventory">Inventory</option>
-                        <option value="events">Events</option>
-                        <option value="feedback">Feedback</option>
+                        <option value="">-- Select --</option>
+                        <option value="donations" {% if report_type == 'donations' %}selected{% endif %}>Donations</option>
+                        <option value="inventory" {% if report_type == 'inventory' %}selected{% endif %}>Inventory</option>
+                        <option value="events" {% if report_type == 'events' %}selected{% endif %}>Events</option>
                     </select>
                 </div>
-                <div class="col-md-4">
-                    <label for="date_range" class="form-label">Date Range</label>
-                    <input type="text" id="date_range" name="date_range" class="form-control" placeholder="YYYY-MM-DD to YYYY-MM-DD">
+
+                <!-- Date Filters -->
+                <div class="col-md-4 d-flex gap-3">
+                    <div>
+                        <label for="start_date" class="form-label">Start Date</label>
+                        <input type="date" id="start_date" name="start_date" class="form-control" value="{{ start_date }}">
+                    </div>
+                    <div>
+                        <label for="last_date" class="form-label">Last Date</label>
+                        <input type="date" id="last_date" name="last_date" class="form-control" value="{{ last_date }}">
+                    </div>
                 </div>
+
+                <!-- Submit -->
                 <div class="col-md-4 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary">Generate Report</button>
                 </div>
             </div>
         </form>
     </div>
+
     <hr>
-    <h4 class="mt-4">Report Results</h4>
+
     {% if report_data %}
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                {% for header in report_headers %}
-                <th>{{ header }}</th>
+        <h4 class="mt-4">{{ title }} Result</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    {% for header in report_headers %}
+                        <th>{{ header }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in report_data %}
+                    <tr>
+                        {% for cell in row %}
+                            <td>{{ cell }}</td>
+                        {% endfor %}
+                    </tr>
                 {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in report_data %}
-            <tr>
-                {% for item in row %}
-                <td>{{ item }}</td>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <a href="{{ url_for('admin_download_report') }}?report_type={{ request.GET.report_type }}&date_range={{ request.GET.date_range }}" class="btn btn-success mt-2">Download Report</a>
+            </tbody>
+        </table>
+
+        <a href="{{ url_for('dashboard.admin_download_report') }}?report_type={{ report_type }}&start_date={{ start_date }}&last_date={{ last_date }}" 
+           class="btn btn-success mt-2">
+            Download Report
+        </a>
     {% else %}
-    <p>No report data available. Please select criteria and generate a report.</p>
+        <p class="text-muted mt-3">No data available for the selected filters.</p>
     {% endif %}
 </div>
 {% endblock %}

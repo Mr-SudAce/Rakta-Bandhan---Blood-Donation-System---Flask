@@ -1,9 +1,10 @@
 
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, app, render_template, redirect, url_for, request, flash, Response
 from main_app.models import *
-from main_app.helper_func.helperfunction import * 
+from io import StringIO
+import csv
+from main_app.helper_func.helperfunction import *
 from flask_login import login_required, current_user
-# from sqlalchemy import func
 
 dashboard_bp = Blueprint('dashboard', __name__, template_folder='templates', static_folder='static', url_prefix='')
 
@@ -15,7 +16,7 @@ def dashboard():
 
     
     total_capacity = BloodInventory.query.with_entities(db.func.sum(BloodInventory.quantity)).scalar() or 0
-    donation_requests = User.query.filter(User.role == "donor").count()
+    donation_requests = Donor.query.count()
     
     if total_capacity == 0:
         inventoryStatus = "No Data"
@@ -181,6 +182,7 @@ def manage_inventory():
         total_units=total_units
     )
 
+# add inventory
 @dashboard_bp.route('/add/inventory', methods=['GET', 'POST'])
 def add_inventory():
     if request.method == 'POST':
@@ -238,9 +240,8 @@ def add_inventory():
             flash("New blood inventory added successfully!", "success")
         return redirect(url_for('dashboard.manage_inventory'))
     return render_template('admin/inventory/add_inventory.html')
-    
 
-
+# sell inventory
 @dashboard_bp.route('/sell/inventory/', methods=['GET', 'POST'])
 def sell_inventory():
     if request.method == 'POST':
@@ -306,9 +307,184 @@ def sell_inventory():
 
 
 # View reports
-@dashboard_bp.route('/view_reports')
+@dashboard_bp.route('/view_reports', methods=['GET'])
 def view_reports():
-    
+    report_type = request.args.get('report_type')
+    start_date = request.args.get('start_date')
+    last_date = request.args.get('last_date')
+
+    report_data = []
+    report_headers = []
+    title = "Reports"
+
+    try:
+        start_date_obj = datetime.strptime(start_date, '%Y-%m-%d') if start_date else None
+        last_date_obj = datetime.strptime(last_date, '%Y-%m-%d') if last_date else None
+    except ValueError:
+        start_date_obj = None
+        last_date_obj = None
+
+    # ==================== DONATION REPORT ====================
+    if report_type == 'donations':
+        title = "Donation Report"
+
+        donation_query = DonationHistory.query.join(Donor, DonationHistory.donor_id == Donor.id)
+
+        if start_date_obj:
+            donation_query = donation_query.filter(DonationHistory.date >= start_date_obj)
+        if last_date_obj:
+            donation_query = donation_query.filter(DonationHistory.date <= last_date_obj)
+
+        donation_list = donation_query.all()
+
+        report_headers = ['Donor Name', 'Blood Type', 'Donation Date']
+        for donation in donation_list:
+            donor_name = donation.donor.name if donation.donor else 'N/A'
+            blood_type = donation.donor.blood_type if donation.donor else 'N/A'
+            donation_date = donation.date.strftime('%Y-%m-%d') if donation.date else 'N/A'
+            report_data.append([donor_name, blood_type, donation_date])
+
+    # ==================== INVENTORY REPORT ====================
+    elif report_type == 'inventory':
+        title = "Inventory Report"
+
+        inventory_query = BloodInventory.query
+
+        if start_date_obj:
+            inventory_query = inventory_query.filter(BloodInventory.collection_date >= start_date_obj)
+        if last_date_obj:
+            inventory_query = inventory_query.filter(BloodInventory.collection_date <= last_date_obj)
+
+        inventory_list = inventory_query.all()
+
+        report_headers = ['Blood Group', 'Component', 'Quantity', 'Collection Date', 'Expiry Date']
+        for item in inventory_list:
+            report_data.append([
+                item.blood_group,
+                item.component,
+                item.quantity,
+                item.collection_date.strftime('%Y-%m-%d') if item.collection_date else 'N/A',
+                item.expiry_date.strftime('%Y-%m-%d') if item.expiry_date else 'N/A'
+            ])
+
+    # ==================== CAMPAIGN REPORT ====================
+    elif report_type == 'events':
+        title = "Campaign Report"
+
+        campaign_query = Campaign.query
+
+        if start_date_obj:
+            campaign_query = campaign_query.filter(Campaign.date >= start_date_obj)
+        if last_date_obj:
+            campaign_query = campaign_query.filter(Campaign.date <= last_date_obj)
+
+        campaign_list = campaign_query.all()
+
+        report_headers = ['Title', 'Location', 'Start Date', 'End Date', 'Organizer', 'Total Participants']
+        for camp in campaign_list:
+            participants_count = len(camp.participants) if camp.participants else 0
+            report_data.append([
+                camp.title,
+                camp.location,
+                camp.date.strftime('%Y-%m-%d') if camp.date else 'N/A',
+                camp.exp_date.strftime('%Y-%m-%d') if camp.exp_date else 'N/A',
+                camp.organizer or 'N/A',
+                participants_count
+            ])
+
+    # ==================== UNKNOWN REPORT TYPE ====================
+    else:
+        title = "Reports"
+
+    # Render the report
     return render_template(
-        'admin/reports/reports.html'
+        'admin/reports/reports.html',
+        report_type=report_type,
+        report_headers=report_headers,
+        report_data=report_data,
+        start_date=start_date_obj.strftime('%Y-%m-%d') if start_date_obj else "",
+        last_date=last_date_obj.strftime('%Y-%m-%d') if last_date_obj else "",
+        title=title
     )
+
+# 📥 CSV Download Route
+@dashboard_bp.route('/admin/download_report')
+def admin_download_report():
+    report_type = request.args.get('report_type')
+    start_date = request.args.get('start_date')
+    last_date = request.args.get('last_date')
+
+    # Convert dates safely
+    try:
+        if start_date:
+            start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        if last_date:
+            last_date = datetime.strptime(last_date, '%Y-%m-%d')
+    except ValueError:
+        start_date = last_date = None
+
+    report_headers = []
+    report_data = []
+
+    # ===== Donations Report =====
+    if report_type == 'donations':
+        query = DonationHistory.query
+        if start_date:
+            query = query.filter(DonationHistory.date >= start_date)
+        if last_date:
+            query = query.filter(DonationHistory.date <= last_date)
+        results = query.all()
+
+        report_headers = ['Donor Name', 'Blood Type', 'Date', 'Quantity']
+        report_data = [
+            [r.donor_name, r.blood_group, r.date.strftime('%Y-%m-%d'), r.quantity]
+            for r in results
+        ]
+
+    # ===== Inventory Report =====
+    elif report_type == 'inventory':
+        query = BloodInventory.query
+        if start_date:
+            query = query.filter(BloodInventory.collection_date >= start_date)
+        if last_date:
+            query = query.filter(BloodInventory.collection_date <= last_date)
+        results = query.all()
+
+        report_headers = ['Blood Group', 'Component', 'Quantity', 'Collection Date']
+        report_data = [
+            [r.blood_group, r.component, r.quantity, r.collection_date.strftime('%Y-%m-%d')]
+            for r in results
+        ]
+
+    # ===== Events Report =====
+    elif report_type == 'events':
+        query = Campaign.query
+        if start_date:
+            query = query.filter(Campaign.date >= start_date)
+        if last_date:
+            query = query.filter(Campaign.date <= last_date)
+        results = query.all()
+
+        report_headers = ['Event Name', 'Date', 'Location', 'Participants']
+        report_data = [
+            [r.event_name, r.date.strftime('%Y-%m-%d'), r.location, r.participants]
+            for r in results
+        ]
+
+    # ===== Generate CSV =====
+    si = StringIO()
+    cw = csv.writer(si)
+    cw.writerow(report_headers)
+    cw.writerows(report_data)
+
+    output = si.getvalue()
+    si.close()
+
+    return Response(
+        output,
+        mimetype='text/csv',
+        headers={"Content-Disposition": f"attachment; filename={report_type}_report.csv"}
+    )
+
+if __name__ == '__main__':
+    app.run(debug=True)
