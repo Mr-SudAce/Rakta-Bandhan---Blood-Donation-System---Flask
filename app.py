@@ -1,9 +1,10 @@
 # ------------------- IMPORTS & CONSTANTS -------------------
-from flask import Flask
-from flask_login import current_user
+from flask import Flask, session
+from flask_login import current_user, logout_user
 import os
 from extensions import db, migrate, login_manager
 from main_app.models import User
+from datetime import timedelta, datetime
 from werkzeug.security import generate_password_hash
 
 # ------------------- HARD-CODED SUPERADMIN -------------------
@@ -15,7 +16,7 @@ HARDCODED_BLOOD_GRP = "--"
 HARDCODED_DOB = "2000-01-01"
 HARDCODED_GENDER = "None"
 HARDCODED_ADDRESS = "Admin Address"
-HARDCODED_PROFILE_PIC = "/static_images/admin_dflt.jpg"
+HARDCODED_PROFILE_PIC = "static_images/admin_dflt.jpg"
 HARDCODED_ROLE = "superadmin"
 
 # ------------------- FLASH CATEGORY MAPPING -------------------
@@ -47,7 +48,41 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(INSTANCE_FOLDER, 'rakta_bandhan.db')}"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_ECHO'] = True
+    app.config['SESSION_PERMANENT'] = True
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(seconds=10)
+    app.config['REMEMBER_COOKIE_DURATION'] = timedelta(seconds=10)
+    
+    
+      # =====================================================
+    # 🚀 AUTO-LOGOUT AFTER INACTIVITY
+    # =====================================================
+    @app.before_request
+    def check_session_timeout():
+        if current_user.is_authenticated:
+            now = datetime.utcnow()
+            last = session.get("last_active")
 
+            if last:
+                last_time = datetime.strptime(last, "%Y-%m-%d %H:%M:%S")
+                if (now - last_time).total_seconds() > 10:
+                    # Time expired → logout
+                    logout_user()
+                    session.clear()
+                    return "Session expired — please login again.", 401
+
+            # Update activity
+            session["last_active"] = now.strftime("%Y-%m-%d %H:%M:%S")
+
+
+     # =====================================================
+    # 🔒 Prevent Browser Caching (Fix back button issue)
+    # =====================================================
+    @app.after_request
+    def add_header(response):
+        response.cache_control.no_store = True
+        return response
+    
+    
     # ------------------- INITIALIZE EXTENSIONS -------------------
     db.init_app(app)
     migrate.init_app(app, db)

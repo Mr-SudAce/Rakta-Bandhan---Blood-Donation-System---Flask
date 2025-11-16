@@ -30,8 +30,6 @@ def login():
             if not username or not password:
                 flash("❌ Please fill out all fields.", "error")
                 return render_template("login.html", form=form)
-            
-            
 
             # =========================================
             # --- HARDCODED LOGIN CHECK ---
@@ -39,10 +37,14 @@ def login():
             if username == HARDCODED_USER and password == HARDCODED_PASS:
                 user = User.query.filter_by(username=HARDCODED_USER).first()
                 if user:
-                    login_user(user, remember=form.remember_me.data)
+                    login_user(user, remember=False)
+
+                    # 🔥 Auto logout timer here
+                    session.permanent = True
+                    session["last_active"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+
                     flash(f"✅ Logged in successfully as {user.role.capitalize()}!", "success")
                     return redirect(url_for("user.home"))
-
 
             # --- Database login ---
             user = User.query.filter_by(username=username).first()
@@ -54,7 +56,11 @@ def login():
                 flash("❌ Incorrect password.", "error")
                 return render_template("login.html", form=form)
 
-            login_user(user, remember=form.remember_me.data)
+            login_user(user, remember=False)
+
+            session.permanent = True
+            session["last_active"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+
             flash(f"✅ Logged in successfully as {user.role.capitalize()}!", "success")
             return redirect(url_for("user.home"))
 
@@ -63,6 +69,7 @@ def login():
     except Exception as e:
         flash(f"⚠️ Unexpected error: {e}", "error")
         return render_template("login.html", form=form)
+
 
 
 @auth_bp.route("/logout")

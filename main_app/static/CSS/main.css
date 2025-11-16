@@ -1,11 +1,9 @@
-/* ========== Base Recipient ========== */
 :root {
     --primary: #e81224;
-    /* --primary: #8a0303; */
     --bg: var(--primary);
-    --surface: #0f1015;
-    --surface-2: #1b1e29;
-    --text: #e7e9ee;
+    --surface: #002aff;
+    --surface-2: #ff7b00;
+    --text: #ffffff;
     --muted: #9aa1ae;
     /* crimson */
     --ring: 0 0 0 2px rgba(225, 29, 72, 0.35);
@@ -17,6 +15,7 @@
     box-sizing: border-box;
     color: var(--text);
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+    /* background-color: white; */
 }
 
 
@@ -100,7 +99,9 @@
 }
 
 .body-content {
-    margin: 2rem 1rem;
+    /* margin: 2rem 1rem; */
+    min-height: 24em;
+    background: var(--surface);
 }
 
 
@@ -159,6 +160,7 @@ body {
     max-width: 150px;
     width: 100%;
     padding: 10px;
+    margin: 20px 0 0 0;
     text-decoration: none;
     color: white;
     border: var(--surface);

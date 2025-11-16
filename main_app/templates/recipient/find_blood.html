@@ -1,82 +1,75 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Find Blood
-{% endblock %}
+{% block title %}Find Blood{% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='CSS/find_blood.css') }}">
 
 <section id="find" class="panel" aria-labelledby="find-title">
-  <div class="panel__header">
+  <div class="panel__header text-center">
     <h2 id="find-title">Find Blood</h2>
     <p class="muted">Search nearby donors by location, blood group, and urgency.</p>
   </div>
 
-  <!-- Search Form -->
-  <form class="form form--inline" action="{{ url_for('user.find_blood') }}" method="get">
-    <label>
-      <span>City/District</span>
-      <select name="blood_type" required>
-        <option value>Select</option>
-        {% for city in cities %}
-        <option value="{{ city }}" {% if selected_city == city %}selected{% endif %}>
-          {{ city }}
-        </option>
-        {% endfor %}
-      </select>
-    </label>
+  <div class="py-4">
+    <div class="find-container">
+      <!-- Left: Form -->
+      <div class="find-left">
+        <form class="form" action="{{ url_for('user.find_blood') }}" method="get">
+          <h3 class="form-title">Search Donors</h3>
 
-    <label>
-      <span>Blood Group</span>
-      <select name="group" required>
-        <option value>Select</option>
-        {% for group in groups %}
-        <option value="{{ group }}" {% if selected_group == group %}selected{% endif %}>{{ group }}</option>
-        {% endfor %}
-      </select>
-    </label>
-    <button class="butonUI" type="submit">Search</button>
-  </form>
+          <label>
+            <span>City/District</span>
+            <select name="city" required>
+              <option value>Select</option>
+              {% for city in cities %}
+              <option value="{{ city }}" {% if selected_city == city %}selected{% endif %}>{{ city }}</option>
+              {% endfor %}
+            </select>
+          </label>
 
-  <!-- Donor Results -->
-  <div class="list mt-4">
-    {% if donors %}
-    {% for donor in donors %}
-    <article class="list__item card">
-      <div class="card-body p-0">
-        <div class="det">
+          <label>
+            <span>Blood Group</span>
+            <select name="group" required>
+              <option value>Select</option>
+              {% for group in groups %}
+              <option value="{{ group }}" {% if selected_group == group %}selected{% endif %}>{{ group }}</option>
+              {% endfor %}
+            </select>
+          </label>
 
-          {% if donor.user.profile_picture %}
-          <div class="profile_image">
-            <img src="{{ url_for('static', filename='profile_pics/' + donor.user.profile_picture) }}" alt="{{ donor.name }}">
-          </div>
-          {% else %}
-          <div class="profile_image">
-            <img src="{{ url_for('static', filename='profile_pics/default.jpg') }}" alt="No Image">
-          </div>
-          {% endif %}
-          <h3 class="text-light">{{ donor.name }}</h3>
-        </div>
-        <div class="donor_info">
-          <p class="muted m-0">{{ donor.gender }}</p>
-          <p class="muted m-0">{{ donor.address }}</p>
-        </div>
-        <a href="tel:{{ donor.phone }}" class="btn btn--ghost text-light">📞 Contact</a>
-        <p class="muted m-0 bloodtyp">{{ donor.blood_type }}</p>
+          <button class="btn-submit" type="submit">Search</button>
+        </form>
       </div>
-    </article>
-    {% endfor %}
-    {% elif city or group or urgency %}
-    <div class="no-data">
-      <p>No donors found matching your search.</p>
-    </div>
-    {% else %}
-    <div class="no-data">
-      <p>No search data provided.</p>
-    </div>
-    {% endif %}
-  </div>
 
+      <!-- Right: Results -->
+      <div class="find-right">
+        {% if donors %}
+        {% for donor in donors %}
+        <div class="donor-card">
+          <div class="donor-profile">
+            {% if donor.user.profile_picture %}
+            <img src="{{ url_for('static', filename='uploads/' + donor.user.profile_picture) }}" alt="{{ donor.name }}">
+            {% else %}
+            <img src="{{ url_for('static', filename='static_images/default.png') }}" alt="No Image">
+            {% endif %}
+          </div>
+          <div class="donor-info">
+            <h3>{{ donor.name }}</h3>
+            <p class="muted">{{ donor.gender }} | {{ donor.address }}</p>
+            <p class="blood-type">{{ donor.blood_type }}</p>
+            <a href="tel:{{ donor.phone }}" class="btn-contact">📞 Contact</a>
+          </div>
+        </div>
+        {% endfor %}
+        {% elif selected_city or selected_group %}
+        <p class="no-data">No donors found matching your search.</p>
+        {% else %}
+        <p class="no-data">Use the form to search for donors.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </section>
+
 {% endblock %}

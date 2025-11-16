@@ -1,118 +1,146 @@
-.donate-section {
-    max-width: 1000px;
-    margin: 3rem auto;
-    background: var(--surface);
-    border-radius: 1rem;
-    padding: 2rem;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    animation: fadeIn 0.6s ease-in-out;
+/* Page container */
+.donate-container {
+    display: flex;
+    /* height: 100vh; */
+    background: #fff;
+    overflow: hidden;
 }
 
-.panel__header {
-    text-align: center;
-    margin-bottom: 2rem;
+/* Left form side */
+.donate-left {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #fff;
 }
 
-.panel__header h2 {
-    font-size: 1.8rem;
-    color: var(--text);
-}
-
-.muted {
-    color: var(--muted);
-    font-size: 0.95rem;
-}
-
-/* Grid layout for form fields */
-.grid {
+.donateblood-form{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1.2rem;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
 }
 
-@media (max-width: 768px) {
-    .grid {
-        grid-template-columns: 1fr;
-    }
+.donate-left h1 {
+    font-size: 2.2rem;
+    color: #b30000;
+    margin-bottom: 10px;
 }
 
-/* Form Labels */
+.donate-left p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+/* Form styling */
+.form-group {
+    margin-bottom: 20px;
+}
+
 label {
-    display: flex;
-    gap: 15px;
-    flex-direction: row;
-    align-items: center;
-    color: var(--text);
-    font-size: 0.95rem;
-}
-
-/* Input fields */
-input,
-select {
-    margin-top: 0.5rem;
-    width: 200px;
-    padding: 0.7rem 1rem;
-    background: var(--surface-2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 0.5rem;
-    color: var(--text);
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
-}
-
-input:focus,
-select:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.3);
-}
-
-/* Checkbox styling */
-.checkbox {
-    display: flex;
-    align-items: center;
-    margin: 1.5rem 0;
-    gap: 0.6rem;
-}
-
-.checkbox input {
-    width: 18px;
-    margin: 0;
-    height: 18px;
-    accent-color: var(--primary);
-}
-
-/* Button styling */
-.donate-btn {
-    width: 100%;
-    background: var(--primary);
-    color: white;
+    display: block;
     font-weight: 600;
-    font-size: 1.1rem;
-    padding: 0.9rem;
-    border: none;
-    border-radius: 0.6rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    margin-bottom: 6px;
+    color: #444;
 }
 
-.donate-btn:hover {
-    background: var(--primary-600);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(225, 29, 72, 0.3);
+input, select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s ease;
+}
+
+input:focus, select:focus {
+    border-color: #b30000;
+}
+
+/* Button */
+.btn {
+    background: #b30000;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn:hover {
+    background: #8a0000;
+}
+
+/* Right image side */
+.donate-right {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.donate-right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: relative;
+    z-index: 0;
+}
+
+/* Overlay gradient */
+.donate-right::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(179, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
+    z-index: 1;
+}
+
+/* Overlay text */
+.overlay-text {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    color: #fff;
+    font-size: 1.5rem;
+    z-index: 2;
+    text-shadow: 0 3px 6px rgba(0,0,0,0.5);
 }
 
 /* Animation */
-@keyframes fadeIn {
+@keyframes fadeSlideIn {
     from {
         opacity: 0;
-        transform: translateY(15px);
+        transform: translateY(30px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .donate-container {
+        flex-direction: column;
+    }
+
+    .donate-left {
+        padding: 40px 30px;
+    }
+
+    .donate-right {
+        height: 40vh;
+    }
+
+
+    .overlay-text {
+        bottom: 20px;
+        left: 20px;
+        font-size: 1.2rem;
     }
 }
