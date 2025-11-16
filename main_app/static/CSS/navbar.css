@@ -13,6 +13,10 @@
     padding: 0.9rem 1rem;
 }
 
+.active {
+    background-color: var(--surface);
+}
+
 /* Brand */
 .brand {
     color: var(--text);
@@ -35,6 +39,8 @@
     border-radius: 12px;
     color: var(--muted);
     transition: 0.3s;
+    width: 100px;
+    text-align: center;
 }
 
 .menu a:hover {
@@ -89,13 +95,13 @@
     background: var(--surface);
     border: 1px solid var(--primary);
     border-radius: 8px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     padding: 10px;
     z-index: 1000;
 }
 
 .dropdown-content a {
-    color: var(--text);
+    color: var(--muted);
     text-decoration: none;
     margin: 5px 0;
     font-size: 14px;

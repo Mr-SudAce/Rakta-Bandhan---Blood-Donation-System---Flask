@@ -3,7 +3,7 @@
     --bg: var(--primary);
     --surface: #373a46;
     --surface-2: #505050;
-    --text: #ffffff;
+    --text: #000000;
     --muted: #9aa1ae;
     /* crimson */
     --ring: 0 0 0 2px rgba(225, 29, 72, 0.35);
@@ -18,7 +18,21 @@
     /* background-color: white; */
 }
 
+.body-content {
+    width: 100%;
+    padding: 0 10px;
+    height: 42em;
+    background: var(--surface);
+}
 
+body {
+    margin: 0;
+    font-family: Inter, system-ui, Segoe UI, Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, #0e0f13, #10131a 40%, #0e0f13);
+    color: var(--text);
+    line-height: 1.6;
+    position: relative;
+}
 
 .container {
     width: 90% !important;
@@ -26,7 +40,6 @@
     margin-inline: auto;
     padding: 0 1rem;
 }
-
 
 @media (min-width: 100px) and (max-width: 810px) {
     .container {
@@ -39,7 +52,6 @@
         width: 100% !important;
     }
 }
-
 
 /* Container for all flash messages */
 .flash-container {
@@ -98,23 +110,6 @@
     box-shadow: none;
 }
 
-.body-content {
-    /* margin: 2rem 1rem; */
-    min-height: 24em;
-    background: var(--surface);
-}
-
-
-body {
-    margin: 0;
-    font-family: Inter, system-ui, Segoe UI, Arial, Helvetica, sans-serif;
-    background: linear-gradient(180deg, #0e0f13, #10131a 40%, #0e0f13);
-    color: var(--text);
-    line-height: 1.6;
-    position: relative;
-}
-
-
 
 /* ========== Layout Helpers ========== */
 .grid {
@@ -152,8 +147,6 @@ body {
 
 
 }
-
-
 
 .butonUI {
     background-color: var(--primary);

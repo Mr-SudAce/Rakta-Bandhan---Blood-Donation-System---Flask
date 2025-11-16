@@ -1,7 +1,7 @@
 /* Page container */
 .donate-container {
     display: flex;
-    /* height: 100vh; */
+    height: 42em;
     background: #fff;
     overflow: hidden;
 }

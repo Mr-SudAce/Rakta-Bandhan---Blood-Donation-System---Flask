@@ -17,10 +17,16 @@
 
   <!-- Menu -->
   <nav class="menu" aria-label="Primary">
-    <a href="{{ url_for('user.donate_blood') }}">Donate</a>
-    <a href="{{ url_for('user.find_blood') }}">Find Blood</a>
-    <a href="{{ url_for('user.campaigns') }}">Campaigns</a>
-    <a href="{{ url_for('user.about') }}">About</a>
+    {% set nav_links = [
+    ('Donate', 'user.donate_blood'),
+    ('Find Blood', 'user.find_blood'),
+    ('Campaigns', 'user.campaigns'),
+    ('About', 'user.about')
+    ] %}
+
+    {% for label, endpoint in nav_links %}
+    <a href="{{ url_for(endpoint) }}" class="{% if request.endpoint == endpoint %}active{% endif %}">{{ label }}</a>
+    {% endfor %}
 
     {% if current_user.is_authenticated %}
     <div class="profile-dropdown">
