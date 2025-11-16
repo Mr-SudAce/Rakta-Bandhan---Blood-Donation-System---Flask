@@ -49,11 +49,11 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_ECHO'] = True
     app.config['SESSION_PERMANENT'] = True
-    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(seconds=10)
-    app.config['REMEMBER_COOKIE_DURATION'] = timedelta(seconds=10)
-    
-    
-      # =====================================================
+    app.config['SESSION_PERMANENT'] = True
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=1)
+    app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=7)
+
+    # =====================================================
     # 🚀 AUTO-LOGOUT AFTER INACTIVITY
     # =====================================================
     @app.before_request
@@ -64,14 +64,15 @@ def create_app():
 
             if last:
                 last_time = datetime.strptime(last, "%Y-%m-%d %H:%M:%S")
-                if (now - last_time).total_seconds() > 10:
-                    # Time expired → logout
+                # Auto-logout based on PERMANENT_SESSION_LIFETIME
+                if (now - last_time).total_seconds() > app.permanent_session_lifetime.total_seconds():
                     logout_user()
                     session.clear()
                     return "Session expired — please login again.", 401
 
-            # Update activity
+            # Update activity timestamp
             session["last_active"] = now.strftime("%Y-%m-%d %H:%M:%S")
+
 
 
      # =====================================================
