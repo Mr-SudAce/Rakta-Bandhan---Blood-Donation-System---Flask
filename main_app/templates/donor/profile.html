@@ -1,53 +1,113 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="mt-4">
 
-    {% if current_user.role == 'donor' %}
-    <h2>Donor Profile</h2>
-    <div class="card mb-4">
+<link rel="stylesheet" href="{{url_for('static', filename='CSS/profile.css')}}">
+
+<div class="container py-4">
+
+    <!-- Profile Header -->
+    <div class="text-center mb-4">
+        <img src="{{ url_for('static', filename='uploads/' + current_user.profile_picture) }}"
+            alt="Profile Picture"
+            class="rounded-circle shadow mb-3"
+            style="width:140px; height:140px; object-fit:cover;">
+        <h3 class="fw-bold mb-0">{{ current_user.username }}</h3>
+        <p class="text-muted">{{ current_user.email }}</p>
+    </div>
+
+    <!-- Donor / Recipient Section -->
+    <div class="card shadow-sm mb-4 border-0">
         <div class="card-body">
-            <img src="{{ url_for('static', filename='profile_pics/' + current_user.profile_picture) }}"
-                alt="Profile Picture"
-                class="img-fluid mb-3"
-                style="max-width: 150px;">
-            <p class="card-text"> <strong>Title:</strong> {{ current_user.username }}</p>
-            <p class="card-text"><strong>Email:</strong> {{ current_user.email | default("N/A") }}</p>
-            <p class="card-text"><strong>Phone:</strong> {{ current_user.phone | default("N/A") }}</p>
-            <p class="card-text"><strong>Blood Type:</strong> {{ current_user.blood_type | default("N/A") }}</p>
-            <p class="card-text"><strong>Last Donation:</strong> {{ current_user.last_donation | default("N/A") }}</p>
-            <p class="card-text"><strong>Eligibility:</strong> {{ current_user.eligibility | default("N/A") }}</p>
+
+            {% if current_user.role == 'donor' %}
+            <h5 class="fw-bold mb-3">Donor Information</h5>
+
+            <div class="row mb-2">
+                <div class="col-6"><strong>Phone:</strong></div>
+                <div class="col-6 text-end">{{ current_user.phone | default("N/A") }}</div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-6"><strong>DOB:</strong></div>
+                <div class="col-6 text-end">{{ current_user.DOB | default("N/A") }}</div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-6"><strong>Blood Type:</strong></div>
+                <div class="col-6 text-end">{{ current_user.blood_grp | default("N/A") }}</div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-6"><strong>Age:</strong></div>
+                <div class="col-6 text-end">{{ age_year | default("N/A") }}</div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-6"><strong>Last Donation:</strong></div>
+                <div class="col-6 text-end">{{ current_user.donor.last_donation | default("No donation") }}</div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-6"><strong>Eligibility:</strong></div>
+                <div class="col-6 text-end">
+                    {% if eligibility %}
+                    <span class="text-success fw-bold">✔ Eligible</span>
+                    {% else %}
+                    <span class="text-danger fw-bold">❌ Not Eligible</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% elif current_user.role == 'recipient' %}
+            <h5 class="fw-bold mb-3">Recipient Information</h5>
+
+            <div class="row mb-2">
+                <div class="col-6"><strong>Phone:</strong></div>
+                <div class="col-6 text-end">{{ current_user.phone | default("N/A") }}</div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-6"><strong>Blood Needed:</strong></div>
+                <div class="col-6 text-end">{{ current_user.required_blood | default("N/A") }}</div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-6"><strong>Urgency:</strong></div>
+                <div class="col-6 text-end">{{ current_user.urgency | default("N/A") }}</div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-6"><strong>Hospital:</strong></div>
+                <div class="col-6 text-end">{{ current_user.hospital | default("N/A") }}</div>
+            </div>
+
+            {% endif %}
         </div>
     </div>
-    {% elif current_user.role == 'recipient' %}
-    <h2>Recipient Profile</h2>
-    <div class="card mb-4">
+
+    <!-- Certificates -->
+    <div class="card shadow-sm border-0">
         <div class="card-body">
-            <img src="{{ url_for('static', filename='profile_pics/' + current_user.profile_picture) }}"
-                alt="Profile Picture"
-                class="img-fluid mb-3"
-                style="max-width: 150px;">
-            <p class="card-text"> <strong>Title:</strong> {{ current_user.username }}</p>
-            <p class="card-text"><strong>Email:</strong> {{ current_user.email | default("N/A") }}</p>
-            <p class="card-text"><strong>Phone:</strong> {{ current_user.phone | default("N/A") }}</p>
-            <p class="card-text"><strong>Blood Type Needed:</strong> {{ current_user.required_blood | default("N/A") }}</p>
-            <p class="card-text"><strong>Urgency:</strong> {{ current_user.urgency | default("N/A") }}</p>
-            <p class="card-text"><strong>Hospital:</strong> {{ current_user.hospital | default("N/A") }}</p>
+            <h5 class="fw-bold mb-3">Donation Certificates</h5>
+
+            {% if certificates %}
+            <ul class="list-group list-group-flush">
+                {% for certificate in certificates %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>
+                        {{ certificate.date | default("Unknown Date") }} —
+                        {{ certificate.event_name | default("Event") }}
+                    </span>
+                    <a href="{{ certificate.download_url }}" class="btn btn-sm btn-primary">Download</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">No certificates available.</p>
+            {% endif %}
         </div>
     </div>
-    {% endif %}
 
-    <h4>Donation Certificates</h4>
-    <ul class="list-group">
-        {% if certificates %}
-        {% for certificate in certificates %}
-        <li class="list-group-item">
-            {{ certificate.date | default("Unknown Date") }} - {{ certificate.event_name | default("Unnamed Event") }}
-            <a href="{{ certificate.download_url | default('#') }}" class="btn btn-sm btn-success float-end">Download</a>
-        </li>
-        {% endfor %}
-        {% else %}
-        <li class="list-group-item">No certificates available.</li>
-        {% endif %}
-    </ul>
 </div>
+
 {% endblock %}

@@ -31,28 +31,35 @@
     {% if current_user.is_authenticated %}
     <div class="profile-dropdown">
       <div class="profile_pic">
-        {% if current_user.role == 'donor' or current_user.role == 'recipient' %}
-        {% if current_user.profile_picture %}
+        {% set pic = current_user.profile_picture %}
+
+        {% if pic.startswith('profile_pics/') %}
+        <!-- UPLOADED IMAGE -->
         <img class="profile_image"
-          src="{{ url_for('static', filename='uploads/' ~ current_user.profile_picture) }}"
+          src="{{ url_for('static', filename='uploads/' ~ pic) }}"
           alt="Profile">
-        {% else %}
+
+        {% elif pic.startswith('static_images/') %}
+        <!-- SYSTEM DEFAULT IMAGE -->
         <img class="profile_image"
           src="{{ url_for('static', filename='static_images/default.png') }}"
-          alt="Default">
-        {% endif %}
+          alt="Profile">
+
         {% else %}
+        <!-- HARD-CODED IMAGE (like admin_dflt.jpg) -->
         <img class="profile_image"
-          src="{{ url_for('static', filename='static_images/default.png') }}"
-          alt="Default">
+          src="{{ url_for('static', filename='static_images/' ~ pic) }}"
+          alt="Profile">
         {% endif %}
 
       </div>
+
       <div class="profile_info">
         <p class="user_name">{{ current_user.username }}</p>
         <p class="user-role">{{ current_user.role }}</p>
       </div>
       <div class="dropdown-content">
+        <a href="{{ url_for('user.profile')}}">Profile</a>
         <a href="{{ url_for('auth.logout') }}">Logout </a>
       </div>
     </div>

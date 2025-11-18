@@ -41,14 +41,36 @@ def about():
 @user_bp.route("/profile")
 @login_required
 def profile():
-    return render_template("donor/profile.html")
+    user = current_user  # or however you fetch your user
+
+    age_year, age_month, age_day = count____age(user)
+    eligibility = check__eligibility(age_year)
+
+    return render_template(
+        "donor/profile.html",
+        age_year=age_year,
+        age_month=age_month,
+        age_day=age_day,
+        eligibility=eligibility
+    )
 
 
 @user_bp.route("/donate-blood", methods=["GET", "POST"])
 @login_required
 @role_required('donor')
 def donate_blood():
+    user = current_user
+
+    # Age + eligibility from your helper functions
+    age_year, age_month, age_day = count____age(user)
+    eligibility = check__eligibility(age_year)
+
     if request.method == "POST":
+        # Prevent bypassing the UI
+        if not eligibility:
+            flash("❌ You are not eligible to donate at the moment.", "danger")
+            return redirect(url_for("user.donate_blood"))
+
         try:
             name = request.form.get("name").strip()
             phone = request.form.get("phone").strip()
@@ -60,18 +82,12 @@ def donate_blood():
 
             dob_date = datetime.strptime(DOB, '%Y-%m-%d').date() if DOB else None
 
-            # Get existing donor by user_id
-            donor = Donor.query.filter_by(user_id=current_user.id).first()
+            donor = Donor.query.filter_by(user_id=user.id).first()
 
+            today = datetime.utcnow().date()
+
+            # update donor
             if donor:
-                # Check if they already donated today
-                last_donation = donor.last_donation
-                today = datetime.utcnow().date()
-                if last_donation == today:
-                    flash("❌ You have already donated blood today!", "warning")
-                    return redirect(url_for("user.donate_blood"))
-                
-                # Update existing donor
                 donor.name = name
                 donor.email = email
                 donor.phone = phone
@@ -79,11 +95,10 @@ def donate_blood():
                 donor.blood_type = blood_type
                 donor.DOB = dob_date
                 donor.gender = gender
-                donor.last_donation = datetime.utcnow().date()
+                donor.last_donation = today
             else:
-                # Create new donor (if somehow user_id is not in DB yet)
                 donor = Donor(
-                    user_id=current_user.id,
+                    user_id=user.id,
                     name=name,
                     email=email,
                     phone=phone,
@@ -91,30 +106,34 @@ def donate_blood():
                     blood_type=blood_type,
                     DOB=dob_date,
                     gender=gender,
-                    last_donation=datetime.utcnow().date(),
+                    last_donation=today,
                     is_active=True
                 )
                 db.session.add(donor)
                 db.session.flush()
 
-            # Record donation history
             new_donation = DonationHistory(
                 donor_id=donor.id,
                 request_id=0,
-                date=datetime.utcnow().date()
+                date=today
             )
             db.session.add(new_donation)
-            db.session.commit()
 
-            flash(f"✅ Donation successfully registered for {name}! 🩸", "success")
+            db.session.commit()
+            flash("✅ Donation successfully registered!", "success")
             return redirect(url_for("user.home"))
 
         except Exception as e:
             db.session.rollback()
-            flash(f"❌ Something went wrong: {e}", "danger")
+            flash(f"❌ Error: {e}", "danger")
             return redirect(url_for("user.donate_blood"))
 
-    return render_template("donor/donate_blood.html", user=current_user)
+    return render_template(
+        "donor/donate_blood.html",
+        eligibility=eligibility,
+        age_year=age_year
+    )
+
 
 @user_bp.route("/donor/register-event")
 @login_required

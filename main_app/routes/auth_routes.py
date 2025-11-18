@@ -115,14 +115,13 @@ def register():
                 return render_template("register.html", form=form)
 
             try:
-                filename = (
-                    save_picture(form.profile_picture.data, "profile_pics")
-                    if form.profile_picture.data
-                    else "{{ url_for('static', filename='static_images/admin_dflt.jpg') }}"
-                )
+                if form.profile_picture.data:
+                    filename = save_picture(form.profile_picture.data, "profile_pics")
+                else:
+                    filename = "static_images/default.png"
             except Exception as e:
                 flash(f"⚠️ Profile picture upload failed: {e}")
-                filename = "{{ url_for('static', filename='static_images/admin_dflt.jpg') }}"
+                filename = "static_images/default.png"
 
             user = User(
                 username=form.username.data,

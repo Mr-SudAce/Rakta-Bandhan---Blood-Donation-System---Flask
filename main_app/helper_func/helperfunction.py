@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 from flask import current_app, redirect, url_for, flash
 from flask_login import current_user
 from main_app.models import *
-from datetime import datetime, timedelta
+from datetime import datetime, date, timedelta
 
 # Role-based access control decorator
 def role_required(*roles):
@@ -73,3 +73,32 @@ def expire_log_activity(days_old=30):
     
     db.session.commit()
     return len(old_logs)  # returns number of deleted logs
+
+
+# Count Age
+def count____age(user):
+    today = date.today()
+    dob = user.DOB
+
+    year = today.year - dob.year
+    month = today.month - dob.month
+    day = today.day - dob.day
+
+    # Fix day
+    if day < 0:
+        month -= 1
+        last_month_date = today.replace(day=1) - timedelta(days=1)
+        day += last_month_date.day
+
+    # Fix month
+    if month < 0:
+        year -= 1
+        month += 12
+
+    return year, month, day
+
+# Check eligibility
+def check__eligibility(getUser_year):
+    return getUser_year >= 18
+
+

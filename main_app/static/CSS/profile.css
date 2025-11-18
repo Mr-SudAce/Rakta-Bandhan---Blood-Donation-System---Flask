@@ -1,0 +1,102 @@
+/* === Layout Spacing === */
+.profile-container {
+    padding: 40px 20px;
+}
+
+/* === Profile Header === */
+.profile-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-header img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    margin-bottom: 15px;
+}
+
+.profile-header h3 {
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.profile-header p {
+    color: #6c757d;
+    margin: 0;
+}
+
+/* === Card Styles === */
+.profile-card, 
+.certificate-card {
+    border: none;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+.profile-card .card-body,
+.certificate-card .card-body {
+    padding: 25px;
+}
+
+.profile-title {
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* === Row Data Styling === */
+.profile-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px dashed #eaeaea;
+}
+
+.profile-row:last-child {
+    border-bottom: none;
+}
+
+.profile-row strong {
+    font-weight: 600;
+}
+
+/* === Eligibility Colors === */
+.eligible {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.not-eligible {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+/* === Certificate List === */
+.certificate-card ul li {
+    padding: 12px 5px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.certificate-card ul li:last-child {
+    border-bottom: none;
+}
+
+.certificate-card .btn {
+    padding: 4px 12px;
+    font-size: 14px;
+}
+
+/* === Responsive === */
+@media (max-width: 576px) {
+    .profile-row {
+        flex-direction: column;
+        text-align: left;
+    }
+
+    .profile-row div {
+        margin-bottom: 5px;
+    }
+}
