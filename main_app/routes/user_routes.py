@@ -55,6 +55,45 @@ def profile():
     )
 
 
+@user_bp.route("profile/edit/")
+@login_required
+def edit_profile():
+    user = current_user
+    return render_template("donor/edit_profile.html", user=user)
+
+
+@user_bp.route("/profile/update/", methods=["POST"])
+@login_required
+def update_profile():
+    user = current_user
+
+    # Get form data
+    name = request.form.get("name").strip()
+    phone = request.form.get("phone").strip()
+    address = request.form.get("address").strip()
+    profile_picture = request.files.get("profile_picture")
+
+    # Update user fields
+    user.name = name
+    user.phone = phone
+    user.address = address
+
+   # Handle profile picture upload using your helper function
+    if profile_picture and profile_picture.filename != "":
+        filename = save_picture(profile_picture, "profile_pics")
+        user.profile_picture = filename
+
+    # Commit changes
+    try:
+        db.session.commit()
+        flash("✅ Profile updated successfully!", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"⚠️ Error updating profile: {str(e)}", "danger")
+
+    return redirect(url_for("user.profile"))
+
+
 @user_bp.route("/donate-blood", methods=["GET", "POST"])
 @login_required
 @role_required('donor')

@@ -23,6 +23,11 @@
     margin-bottom: 5px;
 }
 
+.edit_button{
+    background-color: #dc3545;
+    border-radius: 100% ;
+}
+
 .profile-header p {
     color: #6c757d;
     margin: 0;

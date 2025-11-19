@@ -1,5 +1,41 @@
 {% extends 'base.html' %}
 
+{% block title %}About Us{% endblock %}
 {% block content %}
-<h1>{% block title %} Welcome to your About page! {% endblock %}</h1>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/aboutUs.css') }}">
+
+
+<section class="about-hero">
+  <div class="overlay"></div>
+  <div class="about-content">
+    <h1>About Our Blood Donation System</h1>
+    <p>Connecting donors and saving lives — one drop at a time.</p>
+  </div>
+</section>
+
+<section class="about-section">
+  <div class="about-container">
+
+    <div class="about-text">
+      <h2>Who We Are</h2>
+      <p>
+        Our Blood Donation System was built to close the gap between people who need help
+        and the heroes willing to donate. With smart matching, real-time availability, and 
+        instant communication, we make the entire process simple, fast, and transparent.
+      </p>
+
+      <p>
+        Every donation counts. By bringing donors, recipients, and hospitals together under one platform, 
+        we’re working to save lives, strengthen communities, and inspire a movement of compassion.
+      </p>
+    </div>
+
+    <div class="about-image">
+      <img src="{{ url_for('static', filename='static_images/hero_blood.jpg') }}" alt="Blood Donation">
+    </div>
+
+  </div>
+</section>
+
 {% endblock %}

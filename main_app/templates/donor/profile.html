@@ -7,19 +7,60 @@
 
     <!-- Profile Header -->
     <div class="text-center mb-4">
-        <img src="{{ url_for('static', filename='uploads/' + current_user.profile_picture) }}"
-            alt="Profile Picture"
-            class="rounded-circle shadow mb-3"
-            style="width:140px; height:140px; object-fit:cover;">
+
+        {% set pic = current_user.profile_picture %}
+
+        {% if pic.startswith('profile_pics/') %}
+        <div class=" position-relative">
+
+            <!-- UPLOADED IMAGE -->
+            <img class="profile_image"
+                src="{{ url_for('static', filename='uploads/' ~ pic) }}"
+                alt="Profile" class="rounded-circle shadow mb-3"
+                style="width:140px; height:140px; object-fit:cover; border: 1px solid var(--primary); border-radius: 100%;">
+
+            <span onclick="window.location.href='{{ url_for('user.edit_profile') }}'" style="cursor:pointer;" class="edit_button">
+                <li class="bi bi-pencil"></li>
+            </span>
+        </div>
+
+        {% elif pic.startswith('static_images/') %}
+        <div class=" position-relative">
+
+            <!-- SYSTEM DEFAULT IMAGE -->
+            <img class="profile_image"
+                src="{{ url_for('static', filename='static_images/default.png') }}"
+                alt="Profile" class="rounded-circle shadow mb-3"
+                style="width:140px; height:140px; object-fit:cover; border: 1px solid var(--primary); border-radius: 100%;">
+
+            <span onclick="window.location.href='{{ url_for('user.edit_profile') }}'" style="cursor:pointer;" class="edit_button">
+                <li class="bi bi-pencil"></li>
+            </span>
+        </div>
+        {% else %}
+        <div class=" p-2 position-relative">
+            <!-- HARD-CODED IMAGE (like admin_dflt.jpg) -->
+            <img class="profile_image"
+                src="{{ url_for('static', filename='static_images/' ~ pic) }}"
+                alt="Profile" class="rounded-circle shadow mb-3"
+                style="width:140px; height:140px; object-fit:cover; border: 1px solid var(--primary); border-radius: 100%;">
+
+            <span onclick="window.location.href='{{ url_for('user.edit_profile') }}'" style="cursor:pointer;" class="edit_button">
+                <li class="bi bi-pencil"></li>
+            </span>
+
+        </div>
+        {% endif %}
+
         <h3 class="fw-bold mb-0">{{ current_user.username }}</h3>
-        <p class="text-muted">{{ current_user.email }}</p>
+        <p class>{{ current_user.email }}</p>
     </div>
 
     <!-- Donor / Recipient Section -->
     <div class="card shadow-sm mb-4 border-0">
         <div class="card-body">
 
-            {% if current_user.role == 'donor' %}
+            {% if current_user.role in ['donor', 'recipient', 'superadmin'] %}
             <h5 class="fw-bold mb-3">Donor Information</h5>
 
             <div class="row mb-2">

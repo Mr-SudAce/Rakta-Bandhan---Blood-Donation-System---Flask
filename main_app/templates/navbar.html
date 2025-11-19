@@ -25,7 +25,7 @@
     ] %}
 
     {% for label, endpoint in nav_links %}
-    <a href="{{ url_for(endpoint) }}" class="{% if request.endpoint == endpoint %}active{% endif %}">{{ label }}</a>
+    <a href="{{ url_for(endpoint) }}" id="{% if request.endpoint == endpoint %}active{% endif %}" class="{% if request.endpoint == endpoint %}active{% endif %}">{{ label }}</a>
     {% endfor %}
 
     {% if current_user.is_authenticated %}

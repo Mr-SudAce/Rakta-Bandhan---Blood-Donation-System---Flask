@@ -13,9 +13,6 @@
     padding: 0.9rem 1rem;
 }
 
-.active {
-    background-color: var(--surface);
-}
 
 /* Brand */
 .brand {
@@ -44,9 +41,15 @@
 }
 
 .menu a:hover {
-    color: var(--text);
     background: var(--surface);
 }
+
+#active{
+    color: var(--primary);
+    background-color: var(--surface);
+}
+
+
 
 /* Profile Dropdown */
 .profile-dropdown {
