@@ -44,7 +44,7 @@ def login():
                     session["last_active"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
                     flash(f"✅ Logged in successfully as {user.role.capitalize()}!", "success")
-                    return redirect(url_for("user.home"))
+                    return redirect(url_for("dashboard.dashboard"))
 
             # --- Database login ---
             user = User.query.filter_by(username=username).first()

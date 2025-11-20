@@ -61,7 +61,16 @@
         <div class="card-body">
 
             {% if current_user.role in ['donor', 'recipient', 'superadmin'] %}
-            <h5 class="fw-bold mb-3">Donor Information</h5>
+            <h5 class="fw-bold mb-3 head_5">
+                {% if current_user.role == 'donor' %}
+                  
+                Donor 
+                {% elif current_user.role == 'recipient' %}
+                Recipient
+                {% elif current_user.role == 'superadmin' %}
+                Superadmin
+                {% endif %}
+                Information</h5>
 
             <div class="row mb-2">
                 <div class="col-6"><strong>Phone:</strong></div>
@@ -89,7 +98,7 @@
             </div>
 
             <div class="row mb-2">
-                <div class="col-6"><strong>Eligibility:</strong></div>
+                <div class="col-6 "><strong>Eligibility:</strong></div>
                 <div class="col-6 text-end">
                     {% if eligibility %}
                     <span class="text-success fw-bold">✔ Eligible</span>
@@ -98,30 +107,9 @@
                     {% endif %}
                 </div>
             </div>
-
-            {% elif current_user.role == 'recipient' %}
-            <h5 class="fw-bold mb-3">Recipient Information</h5>
-
-            <div class="row mb-2">
-                <div class="col-6"><strong>Phone:</strong></div>
-                <div class="col-6 text-end">{{ current_user.phone | default("N/A") }}</div>
-            </div>
-
-            <div class="row mb-2">
-                <div class="col-6"><strong>Blood Needed:</strong></div>
-                <div class="col-6 text-end">{{ current_user.required_blood | default("N/A") }}</div>
-            </div>
-
-            <div class="row mb-2">
-                <div class="col-6"><strong>Urgency:</strong></div>
-                <div class="col-6 text-end">{{ current_user.urgency | default("N/A") }}</div>
-            </div>
-
-            <div class="row mb-2">
-                <div class="col-6"><strong>Hospital:</strong></div>
-                <div class="col-6 text-end">{{ current_user.hospital | default("N/A") }}</div>
-            </div>
-
+            
+            {% else %}
+            <h5 class="fw-bold mb-3 head_5">No Information Available</h5>
             {% endif %}
         </div>
     </div>
@@ -129,7 +117,7 @@
     <!-- Certificates -->
     <div class="card shadow-sm border-0">
         <div class="card-body">
-            <h5 class="fw-bold mb-3">Donation Certificates</h5>
+            <h5 class="fw-bold mb-3 head_5">Donation Certificates</h5>
 
             {% if certificates %}
             <ul class="list-group list-group-flush">
@@ -144,7 +132,7 @@
                 {% endfor %}
             </ul>
             {% else %}
-            <p class="text-muted">No certificates available.</p>
+            <p>No certificates available.</p>
             {% endif %}
         </div>
     </div>

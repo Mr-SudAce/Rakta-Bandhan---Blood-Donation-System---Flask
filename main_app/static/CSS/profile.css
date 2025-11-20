@@ -34,6 +34,16 @@
 }
 
 /* === Card Styles === */
+.card-body{
+    background-color: var(--surface);
+    border: 1px solid var(--primary);
+    border-radius: 10px;
+}
+
+.head_5{
+    color: var(--primary);
+}
+
 .profile-card, 
 .certificate-card {
     border: none;

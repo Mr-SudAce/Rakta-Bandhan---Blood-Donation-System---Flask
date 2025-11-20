@@ -44,7 +44,10 @@
 
         <!-- Alert Message -->
 
+        {% if current_user.role in ['donor', 'recipient'] %}
+          
         {% include "navbar.html" %}
+        {% endif %}
 
         <div class="body-content">
 
@@ -54,7 +57,9 @@
 
         </div>
 
+        {% if current_user.role in ['donor', 'recipient'] %}
         {% include "footer.html" %}
+        {% endif %}
     </body>
     <script>
         const msg = document.querySelector('.alert');

@@ -8,7 +8,11 @@ Admin Dashboard
 <link rel="stylesheet" href="{{ url_for ('static', filename='CSS/admin/dashboard.css') }}">
 
 <div class="mt-4">
-    <h2>Admin Dashboard</h2>
+    <div class="d-flex gap-2" >
+        
+        <h2>Admin Dashboard</h2>
+        <a href="{{ url_for('auth.logout') }}" style="align-content: center;">Logout </a>
+    </div>
     <div class="row mt-3">
         <div class="col-md-3">
             <div class="card text-center">
