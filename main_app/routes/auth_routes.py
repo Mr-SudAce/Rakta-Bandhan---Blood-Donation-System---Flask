@@ -26,6 +26,11 @@ def login():
             username = form.username.data.strip()
             password = form.password.data.strip()
 
+
+            if any(char.isdigit() for char in username):
+                flash('🚫 Username cannot contain numbers.')
+                return render_template('register.html', form=form)
+            
             # Empty fields check
             if not username or not password:
                 flash("❌ Please fill out all fields.", "error")
@@ -55,6 +60,8 @@ def login():
             if not check_password_hash(user.password, password):
                 flash("❌ Incorrect password.", "error")
                 return render_template("login.html", form=form)
+            
+            
 
             login_user(user, remember=False)
 
@@ -99,10 +106,18 @@ def register():
                 if User.query.filter_by(email=form.email.data).first():
                     flash("❌ Email already registered.")
                     return redirect(url_for("auth.register"))
+                
+                if not form.email.data.endswith("@gmail.com"):
+                    flash("❌ Only Gmail addresses are allowed.")
+                    return redirect(url_for("auth.register"))
 
                 if User.query.filter_by(phone=form.phone.data).first():
                     flash("❌ Phone number already registered.")
                     return redirect(url_for("auth.register"))
+                
+                if any(char.isdigit() for char in form.username.data):
+                    flash('🚫 Username cannot contain numbers.')
+                    return render_template('register.html', form=form)
 
             except Exception as e:
                 flash(f"⚠️ Database error while checking duplicates: {e}")

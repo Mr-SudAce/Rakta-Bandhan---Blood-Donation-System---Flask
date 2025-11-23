@@ -4,12 +4,6 @@
   padding: 0 10px;
   flex-wrap: wrap;
 }
-
-#find {
-  padding-top: 10px;
-
-}
-
 #find-title {
   color: var(--primary);
   font-weight: 900;

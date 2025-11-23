@@ -63,8 +63,8 @@
             {% if current_user.role in ['donor', 'recipient', 'superadmin'] %}
             <h5 class="fw-bold mb-3 head_5">
                 {% if current_user.role == 'donor' %}
-                  
-                Donor 
+
+                Donor
                 {% elif current_user.role == 'recipient' %}
                 Recipient
                 {% elif current_user.role == 'superadmin' %}
@@ -107,7 +107,7 @@
                     {% endif %}
                 </div>
             </div>
-            
+
             {% else %}
             <h5 class="fw-bold mb-3 head_5">No Information Available</h5>
             {% endif %}
@@ -118,13 +118,12 @@
     <div class="card shadow-sm border-0">
         <div class="card-body">
             <h5 class="fw-bold mb-3 head_5">Donation Certificates</h5>
-
             {% if certificates %}
             <ul class="list-group list-group-flush">
                 {% for certificate in certificates %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>
-                        {{ certificate.date | default("Unknown Date") }} —
+                        {{ certificate.date | default("Unknown Date") }} — 
                         {{ certificate.event_name | default("Event") }}
                     </span>
                     <a href="{{ certificate.download_url }}" class="btn btn-sm btn-primary">Download</a>
