@@ -12,7 +12,21 @@
                     <select name="blood_group" class="transact-input" required>
                         <option value>Select</option>
                         {% for item in inventory %}
-                        <option value="{{ item.blood_group }}">{{ item.blood_group }}</option>
+                        <option value="{{ item.blood_group }}">{{ item.blood_group }} / {{ item.component }} /
+
+                            {% set days_left = (item.expiry_date - current_date).days %}
+                            <p><strong>Expires in </strong>
+                                {% set days_left = (item.expiry_date - current_date).days %}
+                                {% if days_left < 0 %}
+                                <span class="expired">Expired</span>
+                                {% elif days_left <= 5 %}
+                                <span class="expiring">{{ days_left }} days left</span>
+                                {% else %}
+                                <span class="fresh">{{ days_left }} days</span>
+                                {% endif %}
+                            </p>
+
+                        </option>
                         {% endfor %}
                     </select>
                 </div>

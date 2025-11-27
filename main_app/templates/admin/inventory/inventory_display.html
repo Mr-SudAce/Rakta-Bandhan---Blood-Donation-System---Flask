@@ -4,25 +4,55 @@
     {% set components = ['Plasma', 'Whole Blood', 'Platelets', "RBC's"] %}
 
     {% for comp in components %}
-        {% set items = inventory | selectattr('component', 'equalto', comp) | list %}
-        {% if items %}
-            <div class="stock-component-block">
-                <div class="stock-component-header">
-                    <p class="stock-component-name">{{ comp }}</p>
+    {% set items = inventory | selectattr('component', 'equalto', comp) | list %}
+
+    {% if items %}
+    <div class="stock-component-block">
+        <div class="stock-component-header">
+            <p class="stock-component-name">{{ comp }}</p>
+        </div>
+
+        <div class="stock-items-container">
+
+            {% for item in items %}
+
+            <!-- CLICKABLE CARD -->
+            <div class="stock-item-card"
+                data-bs-toggle="collapse"
+                data-bs-target="#detail{{ item.id }}">
+
+                <div class="stock-blood-group">{{ item.blood_group }}</div>
+
+                <div class="stock-item-details">
+                    <p class="stock-item-component">{{ item.component }}</p>
+                    <p class="stock-item-quantity">{{ item.quantity }} units available</p>
                 </div>
 
-                <div class="stock-items-container">
-                    {% for item in items %}
-                        <div class="stock-item-card">
-                            <div class="stock-blood-group">{{ item.blood_group }}</div>
-                            <div class="stock-item-details">
-                                <p class="stock-item-component">{{ item.component }}</p>
-                                <p class="stock-item-quantity">{{ item.quantity }} units available</p>
-                            </div>
-                        </div>
-                    {% endfor %}
+                <div class="time-left-indicator">
+                    {% set days_left = (item.expiry_date - current_date).days %}
+                        {% if days_left < 0 %}
+                        <span class="expired">Expired</span>
+                        {% elif days_left <= 5 %}
+                        <span class="expiring">{{ days_left }} days left</span>
+                        {% else %}
+                        <span class="fresh">{{ days_left }} days</span>
+                        {% endif %}
                 </div>
             </div>
-        {% endif %}
+
+            <!-- DROPDOWN CONTENT -->
+            <!-- <div class="collapse stock-item-dropdown" id="detail{{ item.id }}">
+                <div class="stock-dropdown-content">
+                    <p><strong>Collection Date:</strong> {{ item.collection_date }}</p>
+                    <p><strong>Expiry Date:</strong> {{ item.expiry_date }}</p>
+
+                </div>
+            </div> -->
+
+            {% endfor %}
+
+        </div>
+    </div>
+    {% endif %}
     {% endfor %}
 </div>

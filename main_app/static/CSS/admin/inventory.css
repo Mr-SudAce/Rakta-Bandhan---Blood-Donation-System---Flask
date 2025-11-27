@@ -8,7 +8,8 @@
 
 
 /* add_inventory.html and blood_transaction.html */
-.add-inv-section-container, .transact-inv-section-container {
+.add-inv-section-container,
+.transact-inv-section-container {
     background: var(--surface-2);
     display: flex;
     flex-direction: column;
@@ -16,11 +17,13 @@
     margin: 10px 0;
 }
 
-.add-inv-section-container:hover, .transact-inv-section-container:hover {
+.add-inv-section-container:hover,
+.transact-inv-section-container:hover {
     transform: scale(1);
 }
 
-.add-inv-toggle-btn, .transact-inv-toggle-btn {
+.add-inv-toggle-btn,
+.transact-inv-toggle-btn {
     background-color: var(--primary);
     color: var(--text);
     border: none;
@@ -30,24 +33,28 @@
     transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.add-inv-toggle-btn:hover, .transact-inv-toggle-btn:hover {
+.add-inv-toggle-btn:hover,
+.transact-inv-toggle-btn:hover {
     background-color: var(--primary);
     transform: translateY(-2px);
 }
 
-.add-inv-form, .transact-inv-form {
+.add-inv-form,
+.transact-inv-form {
     /* margin-top: 15px; */
     padding: 10px;
 }
 
-.add-inv-row, .transact-row {
+.add-inv-row,
+.transact-row {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
     margin-bottom: 12px;
 }
 
-.add-inv-col, .transact-col {
+.add-inv-col,
+.transact-col {
     flex: 1 1 calc(50% - 16px);
     display: flex;
     flex-direction: column;
@@ -59,13 +66,15 @@
     flex-direction: column;
 }
 
-.add-inv-label, .transact-label {
+.add-inv-label,
+.transact-label {
     font-weight: 500;
     margin-bottom: 5px;
     color: var(--text);
 }
 
-.add-inv-input, .transact-input {
+.add-inv-input,
+.transact-input {
     border: 1px solid #ccc;
     border-radius: 6px;
     padding: 8px 10px;
@@ -74,16 +83,18 @@
     transition: border-color 0.2s ease;
 }
 
-.transact-input > option {
+.transact-input>option {
     color: black;
 }
 
-.add-inv-input:focus, .transact-input:focus {
+.add-inv-input:focus,
+.transact-input:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgba(214, 51, 108, 0.2);
 }
 
-.add-inv-submit-btn, .transact-submit-btn {
+.add-inv-submit-btn,
+.transact-submit-btn {
     background-color: var(--primary);
     color: var(--text);
     border: none;
@@ -94,7 +105,8 @@
     transition: all 0.2s ease;
 }
 
-.add-inv-submit-btn:hover, .transact-submit-btn:hover {
+.add-inv-submit-btn:hover,
+.transact-submit-btn:hover {
     background-color: var(--primary);
     transform: translateY(-1px);
 }
@@ -119,6 +131,7 @@
     margin-bottom: 20px;
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
+
 }
 
 .stock-component-header {
@@ -139,6 +152,7 @@
 }
 
 .stock-item-card {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -150,13 +164,26 @@
     transition: all 0.2s ease;
 }
 
+.time-left-indicator {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 20px;
+    background-color: #ccc;
+    font-size: 0.75rem;
+    margin: 0;
+    border-radius: 0 8px 0 8px;
+    padding: 1px 3px;
+}
+
+
 .stock-item-card:hover {
     background-color: var(--surface);
     transform: scale(1.01);
 }
 
 .stock-blood-group {
-    background-color: var(--primary );
+    background-color: var(--primary);
     color: #fff;
     font-weight: 700;
     font-size: 0.95rem;
@@ -190,3 +217,29 @@
     margin: 5px 0 10px 5px;
 }
 
+
+.stock-item-dropdown {
+    background: #f8f9fa;
+    padding: 0px 15px;
+    height: 100%;
+}
+
+.stock-dropdown-content p {
+    margin: 4px 0;
+    font-size: 0.7rem;
+}
+
+.expired {
+    color: red;
+    font-weight: bold;
+}
+
+.expiring {
+    color: #d97706;
+    font-weight: bold;
+}
+
+.fresh {
+    color: green;
+    font-weight: bold;
+}

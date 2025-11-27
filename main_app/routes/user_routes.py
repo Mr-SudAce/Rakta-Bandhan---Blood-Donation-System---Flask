@@ -166,6 +166,15 @@ def donate_blood():
             db.session.rollback()
             flash(f"❌ Error: {e}", "danger")
             return redirect(url_for("user.donate_blood"))
+        
+    donor = Donor.query.filter_by(user_id=user.id).first()
+    print("####################################################################")
+    if donor:
+        print("Last Donated:", donor.last_donation)
+        print("Last Donated:", donor.blood_type)
+    else:
+        print("No donation record found.")
+    print("####################################################################")
 
     return render_template(
         "donor/donate_blood.html",
@@ -278,6 +287,8 @@ def find_blood():
         selected_city=selected_city,
         selected_group=selected_group
     )
+
+
 
 
 @user_bp.route("/requests")

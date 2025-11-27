@@ -2,6 +2,7 @@
 from flask import Blueprint, app, render_template, redirect, url_for, request, flash, Response
 from main_app.models import *
 from io import StringIO
+from datetime import date
 import csv
 from main_app.helper_func.helperfunction import *
 from flask_login import login_required, current_user
@@ -179,7 +180,8 @@ def manage_inventory():
     return render_template(
         'admin/inventory/inventory.html',
         inventory=inventory_data,
-        total_units=total_units
+        total_units=total_units,
+        current_date=date.today()
     )
 
 # add inventory
@@ -193,8 +195,9 @@ def add_inventory():
         collection_date = request.form.get('collection_date')
         expiry_date = request.form.get('expiry_date')
 
+        
         # Basic validation
-        if not blood_group or not component or not quantity or not collection_date or not expiry_date:
+        if not blood_group or not component or not quantity:
             flash("All fields are required.", "warning")
             return redirect(url_for('dashboard.add_inventory'))
 
@@ -208,18 +211,30 @@ def add_inventory():
             return redirect(url_for('dashboard.add_inventory'))
 
         try:
-            collection_date = datetime.strptime(collection_date, '%Y-%m-%d').date()
-            expiry_date = datetime.strptime(expiry_date, '%Y-%m-%d').date()
+            collection_date = date.today()
         except ValueError:
             flash("Invalid date format. Use YYYY-MM-DD.", "danger")
             return redirect(url_for('dashboard.add_inventory'))
         
+        # ==== AUTO-SET EXPIRY BASED ON COMPONENT ====
+        if component == "Platelets":
+            expiry_date = collection_date + timedelta(days=5)
+        elif component == "Plasma":
+            expiry_date = collection_date + timedelta(days=365)
+        elif component == "Whole Blood":
+            expiry_date = collection_date + timedelta(days=35)
+        elif component == "RBC's":
+            expiry_date = collection_date + timedelta(days=42)
+        else:
+            expiry_date = collection_date + timedelta(days=42)
+        
         
         existing_item = BloodInventory.query.filter_by(
-            blood_group = blood_group,
-            component = component
-        ).first()
-        
+            blood_group=blood_group,
+            component=component,
+            collection_date=collection_date
+            ).first()
+                    
         if existing_item:
             existing_item.quantity += quantity
             existing_item.expiry_date = expiry_date
@@ -254,7 +269,6 @@ def sell_inventory():
             flash("All fields are required.", "warning")
             return redirect(url_for('dashboard.sell_inventory'))
 
-        
         try:
             quantity = int(quantity)
             if quantity <= 0:
