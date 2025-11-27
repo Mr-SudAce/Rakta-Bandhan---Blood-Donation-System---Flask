@@ -11,6 +11,7 @@ Admin Dashboard
     <div class="d-flex gap-2" >
         
         <h2>Admin Dashboard</h2>
+        
         <a href="{{ url_for('auth.logout') }}" style="align-content: center;">Logout </a>
     </div>
     <div class="row mt-3">
@@ -59,7 +60,7 @@ Admin Dashboard
     </div>
     <hr>
     <h4 class="mt-4">Recent Activity</h4>
-    <ul class="list-group">
+    <ul class="list-group recent_activity-item">
         {% if recent_activities %}
         {% for activity in recent_activities %}
         <li class="list-group-item d-flex justify-content-between align-items-center">

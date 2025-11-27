@@ -1,20 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="mt-4">
+<div class=" container">
+
+
 
     <i onclick="window.history.back()" class="bi bi-arrow-left-circle-fill" style="font-size: 2rem; cursor: pointer;"></i>
+    
+        <a href="{{ url_for('dashboard.dashboard') }}" style="align-content: center;">Dashboard </a>
+        <a href="{{ url_for('auth.logout') }}" style="align-content: center;">Logout </a>
 
     <h2>Reports</h2>
 
-    <div class="mb-3">
+    <div class="mb-3 lover">
         <form method="get" action="{{ url_for('dashboard.view_reports') }}">
             <div class="row">
                 <!-- Report Type -->
                 <div class="col-md-4">
                     <label for="report_type" class="form-label">Select Report Type</label>
                     <select id="report_type" name="report_type" class="form-select">
-                        <option value="">-- Select --</option>
+                        <option value>-- Select --</option>
                         <option value="donations" {% if report_type == 'donations' %}selected{% endif %}>Donations</option>
                         <option value="inventory" {% if report_type == 'inventory' %}selected{% endif %}>Inventory</option>
                         <option value="events" {% if report_type == 'events' %}selected{% endif %}>Events</option>
@@ -44,32 +49,32 @@
     <hr>
 
     {% if report_data %}
-        <h4 class="mt-4">{{ title }} Result</h4>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    {% for header in report_headers %}
-                        <th>{{ header }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in report_data %}
-                    <tr>
-                        {% for cell in row %}
-                            <td>{{ cell }}</td>
-                        {% endfor %}
-                    </tr>
+    <h4 class="mt-4">{{ title }} Result</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                {% for header in report_headers %}
+                <th>{{ header }}</th>
                 {% endfor %}
-            </tbody>
-        </table>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in report_data %}
+            <tr>
+                {% for cell in row %}
+                <td>{{ cell }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-        <a href="{{ url_for('dashboard.admin_download_report') }}?report_type={{ report_type }}&start_date={{ start_date }}&last_date={{ last_date }}" 
-           class="btn btn-success mt-2">
-            Download Report
-        </a>
+    <a href="{{ url_for('dashboard.admin_download_report') }}?report_type={{ report_type }}&start_date={{ start_date }}&last_date={{ last_date }}"
+        class="btn btn-success mt-2">
+        Download Report
+    </a>
     {% else %}
-        <p class="text-muted mt-3">No data available for the selected filters.</p>
+    <p class="text-muted mt-3">No data available for the selected filters.</p>
     {% endif %}
 </div>
 {% endblock %}

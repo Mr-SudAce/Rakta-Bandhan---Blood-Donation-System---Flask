@@ -2,19 +2,20 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='CSS/admin/inventory.css') }}">
 
-<i onclick="window.history.back()" class="bi bi-arrow-left-circle-fill" style="font-size: 2rem; cursor: pointer;"></i>
-<div class="inventory-wrapper">
+<i onclick="window.history.back()" class="bi bi-arrow-left-circle-fill" style="font-size: 2rem; cursor: pointer; padding: 0px 10px;"></i>
+<a href="{{ url_for('dashboard.dashboard') }}" style="align-content: center;">Dashboard </a>
+<a href="{{ url_for('auth.logout') }}" style="align-content: center;">Logout </a>
+<div class="inventory-wrapper container">
+
     <div>
 
-        
-        {% include "admin/inventory/add_inventory.html" %} 
+        {% include "admin/inventory/add_inventory.html" %}
         {% include "admin/inventory/blood_transaction.html" %}
     </div>
     <div>
 
         {% include "admin/inventory/inventory_display.html" %}
     </div>
-    
 
 </div>
 
