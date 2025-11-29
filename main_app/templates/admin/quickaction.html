@@ -1,0 +1,20 @@
+<div class="my-2">
+    <div class="btn-group gap-4 justify-content-between d-flex">
+
+        <div class="d-flex gap-4">
+
+            {% if request.path != '/dashboard' %}
+            <i onclick="window.history.back()" class="bi bi-arrow-left-circle-fill" style="font-size: 1.5rem; cursor: pointer;"></i>
+            {% endif %}
+            <a href="{{ url_for('dashboard.dashboard') }}" style="align-content: center; font-size: 1.5rem;"> <i class="bi bi-house-door-fill"></i> </a>
+        </div>
+        <a href="{{ url_for('auth.logout') }}" style="align-content: center; font-size: 1.5rem;"> <i class="bi bi-box-arrow-right"></i> </a>
+    </div>
+    <h4 class>Quick Actions</h4>
+    <div class="btn-group" role="group">
+        <a href="{{ url_for('dashboard.admin_events') }}" class="btn btn-primary">Manage Events</a>
+        <a href="{{ url_for('dashboard.manage_inventory') }}" class="btn btn-success">Manage Inventory</a>
+        <a href="{{ url_for('dashboard.view_reports') }}" class="btn btn-info">View Reports</a>
+    </div>
+</div>
+<hr>

@@ -7,12 +7,10 @@ Admin Dashboard
 {% block content %}
 <link rel="stylesheet" href="{{ url_for ('static', filename='CSS/admin/dashboard.css') }}">
 
-<div class="mt-4 mx-4">
-    <div class="d-flex gap-2" >
-        
+<div class="my-2 mx-4">
+    {% include "admin/quickaction.html" %}
+    <div class="d-flex gap-2 ">
         <h2>Admin Dashboard</h2>
-        
-        <a href="{{ url_for('auth.logout') }}" style="align-content: center;">Logout </a>
     </div>
     <div class="row mt-3">
         <div class="col-md-3">
@@ -50,13 +48,6 @@ Admin Dashboard
                 </div>
             </div>
         </div>
-    </div>
-    <hr>
-    <h4 class="mt-4">Quick Actions</h4>
-    <div class="btn-group" role="group">
-        <a href="{{ url_for('dashboard.admin_events') }}" class="btn btn-primary">Manage Events</a>
-        <a href="{{ url_for('dashboard.manage_inventory') }}" class="btn btn-success">Manage Inventory</a>
-        <a href="{{ url_for('dashboard.view_reports') }}" class="btn btn-info">View Reports</a>
     </div>
     <hr>
     <h4 class="mt-4">Recent Activity</h4>

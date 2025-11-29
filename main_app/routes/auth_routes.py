@@ -43,7 +43,6 @@ def login():
                 user = User.query.filter_by(username=HARDCODED_USER).first()
                 if user:
                     login_user(user, remember=False)
-
                     # 🔥 Auto logout timer here
                     session.permanent = True
                     session["last_active"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
