@@ -3,79 +3,88 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='CSS/donateblood.css') }}">
 
-<div class="donate-container">
-    <div class="donate-left">
-        <h1>Donate Blood. Save Lives.</h1>
-        <p class="mb-1">Your single act of kindness can give someone a lifetime.</p>
+<div class="container py-5">
+    <div class="card shadow-lg border-0 overflow-hidden">
+        <div class="row g-0">
+            
+            <!-- Form Side -->
+            <div class="col-lg-7 p-4 p-md-5">
+                <h1 class="fw-bold text-danger mb-2">Donate Blood. Save Lives.</h1>
+                <p class="text-muted mb-4">Your single act of kindness can give someone a lifetime.</p>
 
-        <form action="{{ url_for('user.donate_blood') }}" method="POST" class="donateblood-form">
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" value="{{ current_user.donor.name if current_user.donor and current_user.donor.name else current_user.username }}" required>
+                <form action="{{ url_for('user.donate_blood') }}" method="POST">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label fw-semibold">Full Name</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ current_user.donor.name if current_user.donor and current_user.donor.name else current_user.username }}" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="email" class="form-label fw-semibold">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{current_user.email}}" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label fw-semibold">Phone Number</label>
+                            <input type="text" class="form-control" id="phone" name="phone" value="{{current_user.phone}}" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="address" class="form-label fw-semibold">Address</label>
+                            <input type="text" class="form-control" id="address" name="address" value="{{current_user.address}}" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="blood_type" class="form-label fw-semibold">Blood Type</label>
+                            <select id="blood_type" name="blood_type" class="form-select" required>
+                                <option value="">Select</option>
+                                <option value="A+" {% if current_user.blood_grp == 'A+' %}selected{% endif %}>A+</option>
+                                <option value="A-" {% if current_user.blood_grp == 'A-' %}selected{% endif %}>A-</option>
+                                <option value="B+" {% if current_user.blood_grp == 'B+' %}selected{% endif %}>B+</option>
+                                <option value="B-" {% if current_user.blood_grp == 'B-' %}selected{% endif %}>B-</option>
+                                <option value="O+" {% if current_user.blood_grp == 'O+' %}selected{% endif %}>O+</option>
+                                <option value="O-" {% if current_user.blood_grp == 'O-' %}selected{% endif %}>O-</option>
+                                <option value="AB+" {% if current_user.blood_grp == 'AB+' %}selected{% endif %}>AB+</option>
+                                <option value="AB-" {% if current_user.blood_grp == 'AB-' %}selected{% endif %}>AB-</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="DOB" class="form-label fw-semibold">Date of Birth</label>
+                            <input type="date" class="form-control" id="DOB" name="DOB" value="{{current_user.DOB}}" required>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="gender" class="form-label fw-semibold">Gender</label>
+                            <select id="gender" name="gender" class="form-select" required>
+                                <option>Select</option>
+                                <option value="Male" {% if current_user.gender == 'Male' %}selected{% endif %}>Male</option>
+                                <option value="Female" {% if current_user.gender == 'Female' %}selected{% endif %}>Female</option>
+                                <option value="Other" {% if current_user.gender == 'Other' %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        {% if eligibility %}
+                        <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm">Donate Now</button>
+                        {% else %}
+                        <button type="button" class="btn btn-warning btn-lg w-100 shadow-sm text-dark" id="notEligibleBtn">Donate Now</button>
+                        {% endif %}
+                    </div>
+                </form>
             </div>
 
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" value="{{current_user.email}}" required>
+            <!-- Image Side -->
+            <div class="col-lg-5 d-none d-lg-block position-relative">
+                <img src="{{ url_for('static', filename='static_images/bd_img1.jpeg') }}" 
+                     alt="Donate Blood Illustration" 
+                     class="img-fluid h-100 w-100" 
+                     style="object-fit: cover;">
+                <div class="position-absolute bottom-0 start-0 w-100 p-4 text-white" style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
+                    <h3 class="fw-bold">Be the reason someone smiles today ❤️</h3>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <input type="text" id="phone" name="phone" value="{{current_user.phone}}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="address">Address</label>
-                <input type="text" id="address" name="address" value="{{current_user.address}}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="blood_type">Blood Type</label>
-                <select id="blood_type" name="blood_type" required>
-
-                    <option value>Select</option>
-
-                    <option value="A+" {% if current_user.blood_grp == 'A+' %}selected{% endif %}>A+</option>
-                    <option value="A-" {% if current_user.blood_grp == 'A-' %}selected{% endif %}>A-</option>
-                    <option value="B+" {% if current_user.blood_grp == 'B+' %}selected{% endif %}>B+</option>
-                    <option value="B-" {% if current_user.blood_grp == 'B-' %}selected{% endif %}>B-</option>
-                    <option value="O+" {% if current_user.blood_grp == 'O+' %}selected{% endif %}>O+</option>
-                    <option value="O-" {% if current_user.blood_grp == 'O-' %}selected{% endif %}>O-</option>
-                    <option value="AB+" {% if current_user.blood_grp == 'AB+' %}selected{% endif %}>AB+</option>
-                    <option value="AB-" {% if current_user.blood_grp == 'AB-' %}selected{% endif %}>AB-</option>
-
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="DOB">Date of Birth</label>
-                <input type="date" id="DOB" name="DOB" value="{{current_user.DOB}}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="gender">Gender</label>
-                <select id="gender" name="gender" required>
-                    <option>Select</option>
-                    <option value="Male" {% if current_user.gender == 'Male' %}selected{% endif %}>Male</option>
-                    <option value="Female" {% if current_user.gender == 'Female' %}selected{% endif %}>Female</option>
-                    <option value="Other" {% if current_user.gender == 'Other' %}selected{% endif %}>Other</option>
-                </select>
-            </div>
-            <br>
-
-            {% if eligibility  %}
-            <button type="submit" class="butonUI" style="background-color: green;">Donate Now</button>
-            {% else %}
-            <button type="button" class="butonUI" style="background-color: yellow; color: var(--primary);" id="notEligibleBtn">Donate Now</button>
-            {% endif %}
-
-        </form>
-    </div>
-
-    <div class="donate-right">
-        <img src="{{ url_for('static', filename='static_images/bd_img1.jpeg') }}" alt="Donate Blood Illustration">
-        <div class="overlay-text">
-            <h2>Be the reason someone smiles today ❤️</h2>
         </div>
     </div>
 </div>

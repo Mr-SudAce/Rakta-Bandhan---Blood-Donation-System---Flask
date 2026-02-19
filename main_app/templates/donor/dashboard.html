@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="mt-4">
+    <style>
+        .hover-card:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+    </style>
 
     <!-- Greeting -->
     <h2>Welcome, {{ current_user.username }} 👋</h2>
@@ -9,7 +15,7 @@
     <!-- Stats Section -->
     <div class="row mt-3">
         <div class="col-md-3">
-            <div class="card text-center shadow-sm border-0">
+            <div class="card text-center shadow-sm border-0 h-100 hover-card">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-droplet text-danger"></i> Total Donations</h5>
                     <p class="card-text fs-4 fw-bold">{{ total_donations }}</p>
@@ -17,7 +23,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-center shadow-sm border-0">
+            <div class="card text-center shadow-sm border-0 h-100 hover-card">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-calendar-event text-primary"></i> Upcoming Events</h5>
                     <p class="card-text fs-4 fw-bold">{{ upcoming_events }}</p>
@@ -25,7 +31,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-center shadow-sm border-0">
+            <div class="card text-center shadow-sm border-0 h-100 hover-card">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-bell text-warning"></i> Requests Received</h5>
                     <p class="card-text fs-4 fw-bold">{{ requests_received }}</p>
@@ -33,7 +39,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-center shadow-sm border-0">
+            <div class="card text-center shadow-sm border-0 h-100 hover-card">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-clock-history text-success"></i> Next Eligible Donation</h5>
                     <p class="card-text fs-6 fw-bold">
