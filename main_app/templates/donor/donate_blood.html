@@ -11,7 +11,7 @@
         <form action="{{ url_for('user.donate_blood') }}" method="POST" class="donateblood-form">
             <div class="form-group">
                 <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" value="{{current_user.username}}" required>
+                <input type="text" id="name" name="name" value="{{ current_user.donor.name if current_user.donor and current_user.donor.name else current_user.username }}" required>
             </div>
 
             <div class="form-group">

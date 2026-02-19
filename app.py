@@ -9,6 +9,7 @@ from werkzeug.security import generate_password_hash
 
 # ------------------- HARD-CODED SUPERADMIN -------------------
 HARDCODED_USER = "Crusher"
+HARDCODED_FULL_NAME = "Admin User"
 HARDCODED_PASS = "Raw@123"
 HARDCODED_EMAIL = "raw@example.com"
 HARDCODED_PHONE = "0000000000"
@@ -103,6 +104,7 @@ def create_app():
             hashed_password = generate_password_hash(HARDCODED_PASS)
             new_superadmin = User(
                 username=HARDCODED_USER,
+                full_name=HARDCODED_FULL_NAME,
                 password=hashed_password,
                 email=HARDCODED_EMAIL,
                 phone=HARDCODED_PHONE,

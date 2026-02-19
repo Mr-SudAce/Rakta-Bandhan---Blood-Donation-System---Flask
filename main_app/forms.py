@@ -3,6 +3,7 @@ from wtforms import *
 from wtforms.validators import *
 from flask_wtf.file import FileField, FileAllowed
 
+
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
@@ -11,7 +12,7 @@ class LoginForm(FlaskForm):
 
 
 class RegisterForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired()])
+    fullname = StringField("fullname", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired(), Email()])
     phone = StringField("Phone", validators=[DataRequired(), Length(max=10)])

@@ -13,6 +13,14 @@ auth_bp = Blueprint('auth', __name__, template_folder='templates/auth', static_f
 # ==============================
 # Authentication
 # ==============================
+
+
+def calculate_age(dob):
+    today = date.today()
+    return today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+
+
+
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     try:
@@ -26,11 +34,6 @@ def login():
             username = form.username.data.strip()
             password = form.password.data.strip()
 
-
-            if any(char.isdigit() for char in username):
-                flash('🚫 Username cannot contain numbers.')
-                return render_template('register.html', form=form)
-            
             # Empty fields check
             if not username or not password:
                 flash("❌ Please fill out all fields.", "error")
@@ -98,10 +101,6 @@ def register():
         if form.validate_on_submit():
             try:
                 # Check for duplicates
-                if User.query.filter_by(username=form.username.data).first():
-                    flash("❌ Username already exists.")
-                    return redirect(url_for("auth.register"))
-
                 if User.query.filter_by(email=form.email.data).first():
                     flash("❌ Email already registered.")
                     return redirect(url_for("auth.register"))
@@ -114,9 +113,9 @@ def register():
                     flash("❌ Phone number already registered.")
                     return redirect(url_for("auth.register"))
                 
-                if any(char.isdigit() for char in form.username.data):
-                    flash('🚫 Username cannot contain numbers.')
-                    return render_template('register.html', form=form)
+                if calculate_age(form.DOB.data) < 18:
+                    flash("🚫 You must be at least 18 years old to register.")
+                    return render_template("register.html", form=form)
 
             except Exception as e:
                 flash(f"⚠️ Database error while checking duplicates: {e}")
@@ -137,8 +136,10 @@ def register():
                 flash(f"⚠️ Profile picture upload failed: {e}")
                 filename = "static_images/default.png"
 
+            username = generate_unique_username(form.fullname.data)
             user = User(
-                username=form.username.data,
+                full_name=form.fullname.data,
+                username=username,
                 password=hashed_password,
                 email=form.email.data,
                 phone=form.phone.data,
@@ -162,7 +163,7 @@ def register():
                 flash(f"⚠️ Unexpected error during registration: {e}")
                 return redirect(url_for("auth.register"))
 
-            flash("✅ Registration successful. Please log in.")
+            flash(f"✅ Registration successful. Your username is: {user.username}. Please log in.")
             return redirect(url_for("auth.login"))
 
         if form.errors:
@@ -174,4 +175,3 @@ def register():
     except Exception as e:
         flash(f"⚠️ Unexpected error: {e}")
         return render_template("register.html", form=RegisterForm())
-

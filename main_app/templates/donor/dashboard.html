@@ -49,16 +49,16 @@
     <!-- Quick Actions -->
     <h4 class="mt-4">Quick Actions</h4>
     <div class="btn-group flex-wrap" role="group">
-        <a href="{{ url_for('reg_asDonor') }}" class="btn btn-danger m-1">
+        <a href="{{ url_for('user.donate_blood') }}" class="btn btn-danger m-1">
             <i class="bi bi-heart"></i> Donate Now
         </a>
-        <a href="{{ url_for('events') }}" class="btn btn-primary m-1">
+        <a href="{{ url_for('user.events') }}" class="btn btn-primary m-1">
             <i class="bi bi-calendar-plus"></i> Register for Event
         </a>
-        <a href="{{ url_for('profile') }}" class="btn btn-success m-1">
+        <a href="{{ url_for('user.profile') }}" class="btn btn-success m-1">
             <i class="bi bi-person-circle"></i> Update Profile
         </a>
-        <a href="{{ url_for('my_requests') }}" class="btn btn-info m-1">
+        <a href="{{ url_for('user.my_requests') }}" class="btn btn-info m-1">
             <i class="bi bi-inbox"></i> View Requests
         </a>
     </div>

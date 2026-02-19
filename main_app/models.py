@@ -2,11 +2,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from datetime import datetime
 from extensions import db
+import random
+import string
 
 
 class User(db.Model, UserMixin):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(100), nullable=False)
     username = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -23,6 +26,12 @@ class User(db.Model, UserMixin):
     
     # one-to-many relationship with BloodRequest
     requests = db.relationship('BloodRequest', backref='recipient', lazy=True)
+
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+        if self.full_name and not self.username:
+            self.username = self.generate_username()
+
 
 class Donor(db.Model):
     __tablename__ = "donors"

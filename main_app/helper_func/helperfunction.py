@@ -2,6 +2,7 @@ import os
 from functools import wraps
 from werkzeug.utils import secure_filename
 from flask import current_app, redirect, url_for, flash
+from slugify import slugify
 from flask_login import current_user
 from main_app.models import *
 from datetime import datetime, date, timedelta
@@ -102,3 +103,20 @@ def check__eligibility(getUser_year):
     return getUser_year >= 18
 
 
+
+
+# auto generation username
+def generate_unique_username(fullname):
+    base = slugify(fullname)
+    base = "".join(char for char in base if char.isalnum()).lower()
+
+    if not base:
+        base = "user"
+
+    while True:
+        random_digits = "".join(random.choices(string.digits, k=4))
+        username = f"{base}{random_digits}"
+
+        existing = User.query.filter_by(username=username).first()
+        if not existing:
+            return username

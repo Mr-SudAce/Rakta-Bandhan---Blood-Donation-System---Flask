@@ -18,10 +18,10 @@
                 src="{{ url_for('static', filename='uploads/' ~ pic) }}"
                 alt="Profile" class="rounded-circle shadow mb-3"
                 style="width:140px; height:140px; object-fit:cover; border: 1px solid var(--primary); border-radius: 100%;">
-
-            <span onclick="window.location.href='{{ url_for('user.edit_profile') }}'" style="cursor:pointer;" class="edit_button">
-                <li class="bi bi-pencil"></li>
-            </span>
+            
+            <a href="{{ url_for('user.edit_profile') }}" class="edit_button">
+                <i class="bi bi-pencil"></i>
+            </a>
         </div>
 
         {% elif pic.startswith('static_images/') %}
@@ -33,9 +33,9 @@
                 alt="Profile" class="rounded-circle shadow mb-3"
                 style="width:140px; height:140px; object-fit:cover; border: 1px solid var(--primary); border-radius: 100%;">
 
-            <span onclick="window.location.href='{{ url_for('user.edit_profile') }}'" style="cursor:pointer;" class="edit_button">
-                <li class="bi bi-pencil"></li>
-            </span>
+            <a href="{{ url_for('user.edit_profile') }}" class="edit_button">
+                <i class="bi bi-pencil"></i>
+            </a>
         </div>
         {% else %}
         <div class=" p-2 position-relative">
@@ -45,15 +45,14 @@
                 alt="Profile" class="rounded-circle shadow mb-3"
                 style="width:140px; height:140px; object-fit:cover; border: 1px solid var(--primary); border-radius: 100%;">
 
-            <span onclick="window.location.href='{{ url_for('user.edit_profile') }}'" style="cursor:pointer;" class="edit_button">
-                <li class="bi bi-pencil"></li>
-            </span>
-
+            <a href="{{ url_for('user.edit_profile') }}" class="edit_button">
+                <i class="bi bi-pencil"></i>
+            </a>
         </div>
         {% endif %}
 
         <h3 class="fw-bold mb-0">{{ current_user.username }}</h3>
-        <p class>{{ current_user.email }}</p>
+        <p class="text-muted">{{ current_user.email }}</p>
     </div>
 
     <!-- Donor / Recipient Section -->
@@ -61,7 +60,7 @@
         <div class="card-body">
 
             {% if current_user.role in ['donor', 'recipient', 'superadmin'] %}
-            <h5 class="fw-bold mb-3 head_5">
+            <h5 class="fw-bold mb-3 head_5 te">
                 {% if current_user.role == 'donor' %}
 
                 Donor
@@ -94,7 +93,7 @@
 
             <div class="row mb-2">
                 <div class="col-6"><strong>Last Donation:</strong></div>
-                <div class="col-6 text-end">{{ current_user.donor.last_donation | default("No donation") }}</div>
+                <div class="col-6 text-end">{{ current_user.donor.last_donation if current_user.donor else "No donation" }}</div>
             </div>
 
             <div class="row mb-2">
