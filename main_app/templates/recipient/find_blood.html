@@ -1,74 +1,88 @@
 {% extends 'base.html' %}
-
-{% block title %}Find Blood{% endblock %}
+{% block title %}Find Blood Donors{% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='CSS/find_blood.css') }}">
 
-<section id="find" class="panel container">
-  <!-- Header -->
-  <div class="panel__header text-center">
-    <h2 id="find-title">Find Blood</h2>
-    <p class="muted">Search nearby donors by location, blood group, and urgency.</p>
+<div class="container find-blood-container">
+
+  <!-- Search Header -->
+  <div class="search-card">
+    <h1 class="search-title">Find a Donor</h1>
+    <p class="search-subtitle">Connect with heroes in your community who are ready to save lives.</p>
+
+    <form action="{{ url_for('user.find_blood') }}" method="GET" class="search-form-wrapper">
+      <div class="search-input-wrapper">
+        <i class="bi bi-geo-alt-fill search-icon"></i>
+        <!-- Note: Backend expects 'blood_type' for address/city filter -->
+        <select name="blood_type" class="form-select search-select">
+          <option value="Select" {% if not selected_city or selected_city == 'Select' %}selected{% endif %}>All Locations</option>
+          {% for city in cities %}
+          <option value="{{ city }}" {% if selected_city == city %}selected{% endif %}>{{ city }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="search-input-wrapper">
+        <i class="bi bi-droplet-fill search-icon"></i>
+        <select name="group" class="form-select search-select">
+          <option value="Select" {% if not selected_group or selected_group == 'Select' %}selected{% endif %}>All Blood Groups</option>
+          {% for group in groups %}
+          <option value="{{ group }}" {% if selected_group == group %}selected{% endif %}>{{ group }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <button type="submit" class="btn-search">
+        <i class="bi bi-search"></i> Search
+      </button>
+    </form>
   </div>
 
-  <div class="find-container">
-    <!-- Left: Floating Search Form -->
-    <div class="find-left">
-      <form class="form glass-card" action="{{ url_for('user.find_blood') }}" method="get">
-        <h3 class="form-title">Search Donors</h3>
+  <!-- Results Grid -->
+  <div class="row g-4">
+    {% if donors %}
+    {% for donor in donors %}
+    <div class="col-md-6 col-lg-4 col-xl-3">
+      <div class="donor-card">
+        <i class="bi bi-droplet-fill blood-drop-bg"></i>
 
-        <label>
-          <span>City/District</span>
-          <select name="city" required>
-            <option value>Select</option>
-            {% for city in cities %}
-            <option value="{{ city }}" {% if selected_city == city %}selected{% endif %}>{{ city }}</option>
-            {% endfor %}
-          </select>
-        </label>
-
-        <label>
-          <span>Blood Group</span>
-          <select name="group" required>
-            <option value>Select</option>
-            {% for group in groups %}
-            <option value="{{ group }}" {% if selected_group == group %}selected{% endif %}>{{ group }}</option>
-            {% endfor %}
-          </select>
-        </label>
-
-        <button class="btn-submit" type="submit">Search</button>
-      </form>
-    </div>
-
-    <!-- Right: Donor Cards -->
-    <div class="find-right">
-      {% if donors %}
-      {% for donor in donors %}
-      <div class="donor-card glass-card">
-        <div class="donor-profile">
+        <div class="donor-avatar">
           {% if donor.user.profile_picture %}
           <img src="{{ url_for('static', filename='uploads/' + donor.user.profile_picture) }}" alt="{{ donor.name }}">
           {% else %}
-          <img src="{{ url_for('static', filename='static_images/default.png') }}" alt="No Image">
+          <i class="bi bi-person-fill"></i>
           {% endif %}
         </div>
-        <div class="donor-info">
-          <h3>{{ donor.name }}</h3>
-          <p class="muted">{{ donor.gender }} | {{ donor.address }}</p>
-          <p class="blood-type">{{ donor.blood_type }}</p>
-          <p class="blood-phone">{{ donor.phone }}</p>
+
+        <h3 class="donor-name">{{ donor.name }}</h3>
+        <div class="donor-location">
+          <i class="bi bi-geo-alt-fill"></i> {{ donor.address }}
+        </div>
+
+        <span class="blood-group-badge">{{ donor.blood_type }}</span>
+
+        <div class="donor-actions">
+          <a href="tel:{{ donor.phone }}" class="btn-action btn-call">
+            <i class="bi bi-telephone-fill"></i> Call
+          </a>
+          <a href="mailto:{{ donor.email }}" class="btn-action btn-email">
+            <i class="bi bi-envelope-fill"></i> Email
+          </a>
         </div>
       </div>
-      {% endfor %}
-      {% elif selected_city or selected_group %}
-      <p class="no-data">No donors found matching your search.</p>
-      {% else %}
-      <p class="no-data">Use the form to search for donors.</p>
-      {% endif %}
     </div>
+    {% endfor %}
+    {% else %}
+    <div class="col-12 text-center py-5">
+      <div class="text-muted">
+        <i class="bi bi-search fs-1 mb-3 d-block" style="font-size: 4rem !important; opacity: 0.2;"></i>
+        <h3>No donors found matching your criteria.</h3>
+        <p>Try adjusting your search filters or check back later.</p>
+        <a href="{{ url_for('user.find_blood') }}" class="btn btn-outline-danger mt-3 rounded-pill px-4">Clear Filters</a>
+      </div>
+    </div>
+    {% endif %}
   </div>
-</section>
-
+</div>
 {% endblock %}

@@ -1,17 +1,15 @@
-# Environments
-.env
-.venv
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
 env/
 venv/
-ENV/
-env.bak/
-venv.bak/
+.env
 
-# Byte-compiled / optimized / DLL files
-__pycache__/
+# VSCode
+.vscode/
 
-.pytest_cache/
-
-# Flask stuff:
+# Instance Folder (contains database and other runtime files)
 instance/
-.webassets-cache

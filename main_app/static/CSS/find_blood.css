@@ -1,134 +1,219 @@
-.find-container {
-  display: flex;
-  gap: 2rem;
-  padding: 0 10px;
-  flex-wrap: wrap;
-}
-#find-title {
-  color: var(--primary);
-  font-weight: 900;
+/* find_blood.css */
+.find-blood-container {
+    padding: 2rem 0 4rem;
 }
 
-/* Left: Form */
-.find-left {
-  flex: 1 1 300px;
-  background: var(--surface-2);
-  backdrop-filter: blur(12px);
-  padding: 2rem;
-  border-radius: 16px;
-  transition: transform 0.3s, box-shadow 0.3s;
+/* Search Section */
+.search-card {
+    background: linear-gradient(135deg, var(--primary), #8a0b14);
+    border-radius: 24px;
+    padding: 3rem 2rem;
+    color: white;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(193, 18, 31, 0.2);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
 }
 
-.find-left .form-title {
-  margin-bottom: 1rem;
-  color: var(--primary);
-  font-weight: bold;
+.search-title {
+    font-weight: 800;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 2;
 }
 
-.find-left label {
-  display: block;
-  margin-bottom: 1rem;
+.search-subtitle {
+    opacity: 0.95;
+    margin-bottom: 2.5rem;
+    font-size: 1.1rem;
+    position: relative;
+    z-index: 2;
 }
 
-.find-left select {
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-top: 0.5rem;
-  transition: border 0.3s, box-shadow 0.3s;
+.search-form-wrapper {
+    background: white;
+    padding: 0.8rem;
+    border-radius: 16px;
+    display: flex;
+    gap: 1rem;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    position: relative;
+    z-index: 2;
 }
 
-.find-left select:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 8px rgba(211, 47, 47, 0.3);
+.search-input-wrapper {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
 }
 
-.btn-submit {
-  display: inline-block;
-  padding: 0.6rem 1.5rem;
-  background: var(--primary);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
+.search-icon {
+    position: absolute;
+    left: 1.2rem;
+    color: var(--primary);
+    font-size: 1.2rem;
+    pointer-events: none;
+    z-index: 5;
 }
 
-.btn-submit:hover {
-  background: #b71c1c;
-  transform: translateY(-2px);
+.search-select {
+    border: 2px solid transparent;
+    background: #f8f9fa;
+    padding: 1rem 1.2rem 1rem 3rem;
+    border-radius: 12px;
+    font-weight: 600;
+    color: var(--text);
+    flex: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-/* Right: Results */
-.find-right {
-  flex: 2 1 100px;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+.search-select:focus {
+    box-shadow: 0 0 0 4px rgba(193, 18, 31, 0.1);
+    background: #fff;
+    border-color: var(--primary);
 }
 
+.btn-search {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0 2.5rem;
+    border-radius: 12px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-search:hover {
+    background: #a00f1a;
+    transform: translateY(-2px);
+}
+
+/* Results Grid */
 .donor-card {
-  display: flex;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 1rem;
-  border-radius: 16px;
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.05), -5px -5px 15px rgba(255, 255, 255, 0.6);
-  align-items: center;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.donor-profile img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 50%;
-  margin-right: 1rem;
-  border: 3px solid var(--primary);
-}
-
-.donor-info h3 {
-  margin: 0 0 0.3rem 0;
-  color: var(--text);
-}
-
-.donor-info p.muted {
-  font-size: 0.85rem;
-  color: #555;
-  margin: 0.2rem 0;
-}
-
-.blood-type {
-  font-weight: bold;
-  color: var(--primary);
-  margin: 0;
-}
-
-.blood-phone {
-  margin: 0;
-  border-top: 1px solid var(--primary);
-  padding-top: 0.3rem;
-}
-
-.btn-contact:hover {
-  background: #d32f2f;
-  color: white;
-}
-
-.no-data {
-  text-align: center;
-  font-style: italic;
-  color: #999;
-  margin-top: 9em;
-  align-content: center;
-  /* padding: 5px 0;
-  border-radius: 10px;
-  border: 1px solid var(--primary); */
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .find-container {
+    background: var(--surface, #fff);
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.02);
+    height: 100%;
+    display: flex;
     flex-direction: column;
-  }
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.donor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.blood-drop-bg {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 8rem;
+    color: rgba(193, 18, 31, 0.03);
+    transform: rotate(15deg);
+    pointer-events: none;
+}
+
+.donor-avatar {
+    width: 80px;
+    height: 80px;
+    background: #ffebee;
+    color: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    border: 4px solid white;
+    box-shadow: 0 8px 20px rgba(193, 18, 31, 0.1);
+}
+
+.donor-name {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+    color: var(--text);
+}
+
+.donor-location {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.blood-group-badge {
+    background: var(--primary);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+    box-shadow: 0 4px 10px rgba(193, 18, 31, 0.2);
+}
+
+.donor-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-top: auto;
+}
+
+.btn-action {
+    flex: 1;
+    padding: 0.7rem;
+    border-radius: 10px;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.btn-call {
+    background: #e3f2fd;
+    color: #0d47a1;
+}
+.btn-call:hover { background: #bbdefb; transform: translateY(-2px); }
+
+.btn-email {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+.btn-email:hover { background: #e1bee7; transform: translateY(-2px); }
+
+@media (max-width: 768px) {
+    .search-form-wrapper {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    .btn-search {
+        padding: 1rem;
+        justify-content: center;
+    }
 }

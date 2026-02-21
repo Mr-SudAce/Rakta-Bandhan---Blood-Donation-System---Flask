@@ -1,17 +1,19 @@
 
-<link rel="stylesheet" href="{{url_for('static', filename='blood_type.css')}}">
 
-<!-- Blood Types -->
-<section class="cards" aria-labelledby="blood-types-title">
-    <h2 id="blood-types-title">Blood Types</h2>
-    <div class="grid grid--8">
-        <button class="card card--type">A+</button>
-        <button class="card card--type">A-</button>
-        <button class="card card--type">B+</button>
-        <button class="card card--type">B-</button>
-        <button class="card card--type">AB+</button>
-        <button class="card card--type">AB-</button>
-        <button class="card card--type">O+</button>
-        <button class="card card--type">O-</button>
-    </div>
-</section>
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/blood_type.css') }}">
+
+<main id="main-content" aria-label="Blood Types">
+    <section class="cards" aria-labelledby="blood-types-title">
+        <h2 id="blood-types-title">Blood Types</h2>
+        <div class="grid grid--8" role="list">
+            <button class="card card--type" aria-label="A positive blood type">A+</button>
+            <button class="card card--type" aria-label="A negative blood type">A-</button>
+            <button class="card card--type" aria-label="B positive blood type">B+</button>
+            <button class="card card--type" aria-label="B negative blood type">B-</button>
+            <button class="card card--type" aria-label="AB positive blood type">AB+</button>
+            <button class="card card--type" aria-label="AB negative blood type">AB-</button>
+            <button class="card card--type" aria-label="O positive blood type">O+</button>
+            <button class="card card--type" aria-label="O negative blood type">O-</button>
+        </div>
+    </section>
+</main>

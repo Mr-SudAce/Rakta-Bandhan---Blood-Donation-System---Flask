@@ -3,29 +3,92 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='CSS/campaign_detail.css') }}">
 
-<div class="campaign-container">
-    <div class="campaign-card">
-        <h1 class="campaign-title">{{ campaign.title }}</h1>
+<div class="campaign-detail-wrapper">
 
-        <div class="campaign-image">
-            {% if campaign.camp_img %}
-                <img src="{{ url_for('static', filename='campaigns/' + campaign.camp_img) }}" alt="{{ campaign.title }}">
-            {% else %}
-                <img src="{{ url_for('static', filename='static_images/noimage.jpg') }}" alt="{{ campaign.title }}">
-            {% endif %}
+    <!-- Background Header Shape -->
+    <div class="campaign-header-bg"></div>
+
+    <div class="campaign-content-container">
+
+        <div class="campaign-card">
+
+            <!-- Image Section -->
+            <div class="campaign-image-section">
+
+                {% if campaign.camp_img %}
+                    <img src="{{ url_for('static', filename='uploads/' + campaign.camp_img) }}"
+                         alt="{{ campaign.title }}">
+                {% else %}
+                    <img src="{{ url_for('static', filename='static_images/noimage.jpg') }}"
+                         alt="No Image">
+                {% endif %}
+
+                <div class="campaign-badges">
+                    <span class="badge-date">
+                        {{ campaign.date.strftime('%d %b, %Y') }}
+                    </span>
+                </div>
+
+            </div>
+
+            <!-- Info Section -->
+            <div class="campaign-info-section">
+
+                <h1 class="campaign-title">{{ campaign.title }}</h1>
+
+                <!-- Meta Grid -->
+                <div class="campaign-meta-grid">
+
+                    <div class="meta-item">
+                        <i class="bi bi-geo-alt"></i>
+                        <div>
+                            <span class="label">Location</span>
+                            <span class="value">{{ campaign.location }}</span>
+                        </div>
+                    </div>
+
+                    <div class="meta-item">
+                        <i class="bi bi-calendar-event"></i>
+                        <div>
+                            <span class="label">Expiry</span>
+                            <span class="value">
+                                {{ campaign.exp_date.strftime('%d %b, %Y') }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="meta-item">
+                        <i class="bi bi-person"></i>
+                        <div>
+                            <span class="label">Organizer</span>
+                            <span class="value">{{ campaign.organizer }}</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Description -->
+                <div class="campaign-description">
+                    <h3>About This Campaign</h3>
+                    <p>{{ campaign.description }}</p>
+                </div>
+
+                <!-- Actions -->
+                <div class="campaign-actions">
+                    <form action="{{ url_for('user.join_campaign', campaign_id=campaign.id) }}"
+                          method="post">
+                        <button type="submit" class="join-btn">
+                            <i class="bi bi-heart-fill"></i>
+                            Join Campaign
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="campaign-details">
-            <p class="m-0"><strong>Description:</strong> <br> {{ campaign.description }}</p>
-            <p class="m-0"><strong>Location:</strong> {{ campaign.location }}</p>
-            <p class="m-0"><strong>Date:</strong> {{ campaign.date.strftime('%d %b, %Y') }}</p>
-            <p class="m-0"><strong>Expiry Date:</strong> {{ campaign.exp_date.strftime('%d %b, %Y') }}</p>
-            <p class="m-0"><strong>Organizer:</strong> {{ campaign.organizer }}</p>
-        </div>
-
-        <form action="{{ url_for('user.join_campaign', campaign_id=campaign.id) }}" method="post" class="join-form">
-            <button type="submit" class="join-btn">Join Campaign</button>
-        </form>
     </div>
 </div>
+
 {% endblock %}

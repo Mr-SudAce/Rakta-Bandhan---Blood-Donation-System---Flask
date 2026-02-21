@@ -1,53 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/admin/inventory.css') }}">
 
-<div class="transact-inv-section-container">
-    <button class="transact-inv-toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#transactForm">
-        Sell Blood Unit
-    </button>
-
-    <div class="collapse" id="transactForm">
-        <form action="{{ url_for('dashboard.sell_inventory') }}" method="POST" class="transact-inv-form">
-            <div class="transact-row">
-                <div class="transact-col">
-                    <label class="transact-label">Blood Group</label>
-                    <select name="blood_group" class="transact-input" required>
-                        <option value>Select</option>
-                        {% for item in inventory %}
-                        <option value="{{ item.blood_group }}">{{ item.blood_group }} / {{ item.component }} /
-
-                            {% set days_left = (item.expiry_date - current_date).days %}
-                            <p><strong>Expires in </strong>
-                                {% set days_left = (item.expiry_date - current_date).days %}
-                                {% if days_left < 0 %}
-                                <span class="expired">Expired</span>
-                                {% elif days_left <= 5 %}
-                                <span class="expiring">{{ days_left }} days left</span>
-                                {% else %}
-                                <span class="fresh">{{ days_left }} days</span>
-                                {% endif %}
-                            </p>
-
-                        </option>
-                        {% endfor %}
-                    </select>
+<div class="container admin-inventory-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="admin-card border-danger-subtle" style="border-top: 5px solid var(--primary);">
+                <div class="admin-card-header">
+                    <h2 class="text-danger"><i class="bi bi-box-arrow-right"></i> Issue Blood (Sell)</h2>
+                    <a href="{{ url_for('dashboard.manage_inventory') }}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </a>
                 </div>
-                <div class="transact-col">
-                    <label class="transact-label">Component</label>
-                    <select name="component" class="transact-input" required>
-                        <option value>Select</option>
-                        {% for item in inventory|unique(attribute='component') %}
-                        <option value="{{ item.component }}">{{ item.component }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="transact-row">
-                    <div class="transact-col">
-                        <label class="transact-label">Quantity</label>
-                        <input type="number" name="quantity" class="transact-input" min="1" required>
-                    </div>
+                
+                <div class="admin-card-body">
+                    <form method="POST" action="{{ url_for('dashboard.sell_inventory') }}">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label for="blood_group" class="form-label fw-bold">Blood Group</label>
+                                <select class="form-select form-control-lg" id="blood_group" name="blood_group" required>
+                                    <option value="" selected disabled>Select Group</option>
+                                    {% for bg in ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] %}
+                                    <option value="{{ bg }}">{{ bg }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="component" class="form-label fw-bold">Component</label>
+                                <select class="form-select form-control-lg" id="component" name="component" required>
+                                    <option value="" selected disabled>Select Component</option>
+                                    <option value="Whole Blood">Whole Blood</option>
+                                    <option value="Plasma">Plasma</option>
+                                    <option value="Platelets">Platelets</option>
+                                    <option value="RBC's">RBC's</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label for="quantity" class="form-label fw-bold">Quantity to Issue</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control form-control-lg" id="quantity" name="quantity" min="1" placeholder="e.g. 1" required>
+                                    <span class="input-group-text">Units</span>
+                                </div>
+                                <div class="form-text text-muted">
+                                    This amount will be deducted from the current inventory.
+                                </div>
+                            </div>
+
+                            <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+                                <a href="{{ url_for('dashboard.manage_inventory') }}" class="btn btn-light border btn-lg">Cancel</a>
+                                <button type="submit" class="btn btn-danger btn-lg px-5">Confirm Issue</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-
-            <button type="submit" class="transact-submit-btn">Sell</button>
-        </form>
+        </div>
     </div>
 </div>
+{% endblock %}

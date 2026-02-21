@@ -1,31 +1,17 @@
 :root {
-    --primary: #e81224;
-    --bg: var(--primary);
-    --surface: #373a46;
-    --surface-2: #505050;
-    --text: #000000;
-    --muted: #9aa1ae;
-    /* crimson */
-    --ring: 0 0 0 2px rgba(225, 29, 72, 0.35);
+    --primary: #C1121F;          /* Strong blood red */
+    --bg: #F8FAFC;               /* Clean medical white background */
+    --surface: #FFFFFF;          /* Cards / containers */
+    --surface-2: #F1F5F9;        /* Soft section background */
+    --text: #1E293B;             /* Dark readable text */
+    --muted: #64748B;            /* Neutral muted text */
+    --ring: 0 0 0 2px rgba(193, 18, 31, 0.35); /* crimson glow for focus */
     --radius: 20px;
-    --shadow: 0 10px 25px rgba(0, 0, 0, .35);
+    --shadow: 0 10px 25px rgba(0, 0, 0, .08);
+    --success: #2E7D32;          /* Life saved green */
+    --danger: #B00020;           /* Emergency deep red */
+    --warning: #F59E0B;          /* Softer modern warning */
 }
-
-* {
-    box-sizing: border-box;
-    color: var(--text);
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
-    /* background-color: white; */
-}
-
-.body-content {
-    width: 100%;
-    /* padding: 0 10px; */
-    min-height: 42em;
-    overflow-y: scroll;
-    background: var(--surface);
-}
-
 .body-content::-webkit-scrollbar {
     display: none;
 }
@@ -33,28 +19,28 @@
 body {
     margin: 0;
     font-family: Inter, system-ui, Segoe UI, Arial, Helvetica, sans-serif;
-    background: linear-gradient(180deg, #0e0f13, #10131a 40%, #0e0f13);
+    background: var(--bg);
     color: var(--text);
     line-height: 1.6;
+    min-height: 100vh;
     position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
+
 
 .container {
-    width: 90% !important;
-    max-width: 100% !important;
-    margin-inline: auto;
-    padding: 0 1rem;
+    max-width: 90% !important;
+    width: 100% !important;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    background: transparent;
 }
 
-@media (min-width: 100px) and (max-width: 810px) {
+@media (max-width: 900px) {
     .container {
-        width: 97% !important;
-    }
-}
-
-@media (min-width: 811px) {
-    .container {
-        width: 100% !important;
+        width: 99vw;
+        padding: 0 0.5rem;
     }
 }
 
@@ -74,6 +60,7 @@ body {
 .flash-container .alert {
     border-radius: 0.75rem;
     /* smoother corners */
+    position: absolute;
     padding: 0.75rem 1rem;
     font-size: 0.95rem;
     text-transform: capitalize;
@@ -81,25 +68,23 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+
 .flash-container .alert-success {
-    background-color: #28a745;
+    background-color: var(--success);
+    color: var(--surface);
 }
-
-.flash-container .alert-danger {
-    background-color: #dc3545;
-}
-
-.flash-container .alert-warning {
-    background-color: #ffc107;
-    color: black;
-}
-
+.flash-container .alert-danger,
 .flash-container .alert-error {
-    background-color: #dc3545;
+    background-color: var(--danger);
+    color: var(--surface);
 }
-
+.flash-container .alert-warning {
+    background-color: var(--warning);
+    color: var(--text);
+}
 .flash-container .alert-info {
-    background-color: #17a2b8;
+    background-color: var(--primary);
+    color: var(--surface);
 }
 
 .flash-container .alert-dismissible .btn-close {
@@ -154,20 +139,97 @@ body {
 }
 
 .butonUI {
-    background-color: var(--primary);
-    max-width: 150px;
+    background: var(--primary);
+    max-width: 220px;
     width: 100%;
-    padding: 10px;
-    margin: 20px 0 0 0;
+    padding: 16px 0;
+    margin: 32px 0 0 0;
     text-decoration: none;
-    color: white;
-    border: var(--surface);
-    border-radius: 10px;
+    color: var(--surface);
+    border: none;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 1.15em;
+    box-shadow: var(--shadow);
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+}
+.butonUI:hover, .butonUI:focus {
+    background: var(--danger);
+    color: var(--surface);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(193, 18, 31, 0.18);
 }
 
-.butonUI:hover {
-    background-color: var(--surface);
+/* Modern card style for containers */
+.card, .surface {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 2.5rem 2rem;
+    margin-bottom: 2.5rem;
+    transition: box-shadow 0.3s cubic-bezier(0.4,0,0.2,1), transform 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.card:hover, .surface:hover, .card:focus-within, .surface:focus-within {
+    box-shadow: 0 16px 48px rgba(193, 18, 31, 0.13);
+    transform: translateY(-2px) scale(1.01);
+}
+
+/* Responsive typography */
+h1, .h1 {
+    font-size: clamp(2.5rem, 7vw, 4.5rem);
+    font-weight: 900;
     color: var(--primary);
-    font-size: 0.9em;
-    border: var(--primary) 0.5px solid;
+    letter-spacing: 1px;
+    margin-bottom: 1.2rem;
+}
+h2, .h2 {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+h3, .h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.7rem;
+}
+h4, .h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.7rem;
+}
+
+/* Utility classes */
+.center { display: flex; align-items: center; justify-content: center; }
+.gap-lg { gap: 2rem; }
+.gap-md { gap: 1rem; }
+.gap-sm { gap: 0.5rem; }
+
+/* Glassmorphism effect for hero/important sections */
+.glass {
+    background: rgba(255,255,255,0.7);
+    box-shadow: 0 8px 32px rgba(193, 18, 31, 0.13);
+    backdrop-filter: blur(8px);
+    border-radius: var(--radius);
+    border: 1px solid rgba(193, 18, 31, 0.08);
+}
+
+/* Responsive images */
+img, .img-responsive {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Hide scrollbars for a cleaner look */
+::-webkit-scrollbar { width: 0; background: transparent; }
+
+@media (max-width: 600px) {
+    .card, .surface { padding: 1rem 0.5rem; }
+    h1, .h1 { font-size: 2rem; }
+    h2, .h2 { font-size: 1.3rem; }
 }

@@ -1,13 +1,39 @@
-/* ========== Base Recipient ========== */
-:root {
-    --primary: #8a0303;
-    --bg: var(--primary);
-    --surface: #0f1015;
-    --surface-2: #1b1e29;
-    --text: #000000;
-    --muted: #9aa1ae;
-    /* crimson */
-    --ring: 0 0 0 2px rgba(225, 29, 72, 0.35);
-    --radius: 20px;
-    --shadow: 0 10px 25px rgba(0, 0, 0, .35);
+
+/* Use global :root from main.css */
+
+.recipient-dashboard {
+	background: var(--bg);
+	border-radius: var(--radius);
+	padding: 1.5rem 0.5rem;
+}
+
+.recipient-stat-card {
+	background: var(--surface);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+	transition: box-shadow 0.2s, transform 0.2s;
+}
+.recipient-stat-card:hover {
+	box-shadow: 0 16px 48px rgba(193, 18, 31, 0.13);
+	transform: translateY(-2px) scale(1.01);
+}
+
+.recipient-dashboard .btn {
+	border-radius: 0.7rem;
+	font-weight: 700;
+	box-shadow: var(--shadow);
+	transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.recipient-dashboard .btn:focus {
+	outline: none;
+	box-shadow: var(--ring);
+}
+
+@media (max-width: 900px) {
+	.recipient-dashboard {
+		padding: 0.5rem 0.2rem;
+	}
+	.recipient-stat-card {
+		padding: 1rem 0.5rem;
+	}
 }

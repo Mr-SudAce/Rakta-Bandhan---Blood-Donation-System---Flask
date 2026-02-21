@@ -2,8 +2,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from datetime import datetime
 from extensions import db
-import random
-import string
 
 
 class User(db.Model, UserMixin):
@@ -27,12 +25,6 @@ class User(db.Model, UserMixin):
     # one-to-many relationship with BloodRequest
     requests = db.relationship('BloodRequest', backref='recipient', lazy=True)
 
-    def __init__(self, **kwargs):
-        super(User, self).__init__(**kwargs)
-        if self.full_name and not self.username:
-            self.username = self.generate_username()
-
-
 class Donor(db.Model):
     __tablename__ = "donors"
     __table_args__ = (
@@ -45,7 +37,7 @@ class Donor(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100), nullable=True)
     blood_type = db.Column(db.String(5), nullable=False)
     address = db.Column(db.String(100))
     phone = db.Column(db.String(20))
@@ -53,7 +45,7 @@ class Donor(db.Model):
     gender = db.Column(db.String(10))
     email = db.Column(db.String(120))
     last_donation = db.Column(db.Date)
-    is_active = db.Column(db.Boolean, default=True)  # optional but useful for deactivating donors
+    is_active = db.Column(db.Boolean, default=True)
 
     # Relationship with DonationHistory
     donations = db.relationship('DonationHistory', backref='donor', lazy=True)

@@ -1,104 +1,106 @@
 {% extends 'base.html' %}
-{% block title %}
-Donate Blood
-{% endblock %}
+{% block title %}Donate Blood{% endblock %}
+
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='CSS/donateblood.css') }}">
 
-<div class="container py-5">
-    <div class="card shadow-lg border-0 overflow-hidden">
-        <div class="row g-0">
-            
-            <!-- Form Side -->
-            <div class="col-lg-7 p-4 p-md-5">
-                <h1 class="fw-bold text-danger mb-2">Donate Blood. Save Lives.</h1>
-                <p class="text-muted mb-4">Your single act of kindness can give someone a lifetime.</p>
+<div class="container donate-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="donate-card">
+                <div class="row g-0">
+                    <!-- Form Section -->
+                    <div class="col-lg-7">
+                        <div class="donate-body">
+                            <h2 class="fw-bold mb-2" style="color: var(--primary);">Register to Donate</h2>
+                            <p class="text-muted mb-4">Fill out the form below to become a donor and save lives.</p>
 
-                <form action="{{ url_for('user.donate_blood') }}" method="POST">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="name" class="form-label fw-semibold">Full Name</label>
-                            <input type="text" class="form-control" id="name" name="name" value="{{ current_user.donor.name if current_user.donor and current_user.donor.name else current_user.username }}" required>
-                        </div>
+                            {% if not eligibility %}
+                            <div class="eligibility-alert">
+                                <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+                                <div>
+                                    <strong>Not Eligible Yet</strong><br>
+                                    You must be at least 18 years old to donate blood.
+                                </div>
+                            </div>
+                            {% endif %}
 
-                        <div class="col-md-6">
-                            <label for="email" class="form-label fw-semibold">Email Address</label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{current_user.email}}" required>
-                        </div>
+                            <form action="{{ url_for('user.donate_blood') }}" method="POST">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="name" class="form-label"><i class="bi bi-person"></i> Full Name</label>
+                                        <input type="text" class="form-control" id="name" name="name" value="{{ donor.name if donor else current_user.full_name }}" required>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="phone" class="form-label"><i class="bi bi-telephone"></i> Phone</label>
+                                        <input type="text" class="form-control" id="phone" name="phone" value="{{ donor.phone if donor else current_user.phone }}" required>
+                                    </div>
 
-                        <div class="col-md-6">
-                            <label for="phone" class="form-label fw-semibold">Phone Number</label>
-                            <input type="text" class="form-control" id="phone" name="phone" value="{{current_user.phone}}" required>
-                        </div>
+                                    <div class="col-md-12">
+                                        <label for="email" class="form-label"><i class="bi bi-envelope"></i> Email</label>
+                                        <input type="email" class="form-control" id="email" name="email" value="{{ donor.email if donor else current_user.email }}" required>
+                                    </div>
 
-                        <div class="col-md-6">
-                            <label for="address" class="form-label fw-semibold">Address</label>
-                            <input type="text" class="form-control" id="address" name="address" value="{{current_user.address}}" required>
-                        </div>
+                                    <div class="col-md-12">
+                                        <label for="address" class="form-label"><i class="bi bi-geo-alt"></i> Address</label>
+                                        <input type="text" class="form-control" id="address" name="address" value="{{ donor.address if donor else current_user.address }}" required>
+                                    </div>
 
-                        <div class="col-md-6">
-                            <label for="blood_type" class="form-label fw-semibold">Blood Type</label>
-                            <select id="blood_type" name="blood_type" class="form-select" required>
-                                <option value="">Select</option>
-                                <option value="A+" {% if current_user.blood_grp == 'A+' %}selected{% endif %}>A+</option>
-                                <option value="A-" {% if current_user.blood_grp == 'A-' %}selected{% endif %}>A-</option>
-                                <option value="B+" {% if current_user.blood_grp == 'B+' %}selected{% endif %}>B+</option>
-                                <option value="B-" {% if current_user.blood_grp == 'B-' %}selected{% endif %}>B-</option>
-                                <option value="O+" {% if current_user.blood_grp == 'O+' %}selected{% endif %}>O+</option>
-                                <option value="O-" {% if current_user.blood_grp == 'O-' %}selected{% endif %}>O-</option>
-                                <option value="AB+" {% if current_user.blood_grp == 'AB+' %}selected{% endif %}>AB+</option>
-                                <option value="AB-" {% if current_user.blood_grp == 'AB-' %}selected{% endif %}>AB-</option>
-                            </select>
-                        </div>
+                                    <div class="col-md-4">
+                                        <label for="blood_type" class="form-label"><i class="bi bi-droplet"></i> Blood Type</label>
+                                        <select id="blood_type" name="blood_type" class="form-select" required>
+                                            <option value="">Select</option>
+                                            {% for type in ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'] %}
+                                            <option value="{{ type }}" {% if (donor and donor.blood_type == type) or (not donor and current_user.blood_grp == type) %}selected{% endif %}>{{ type }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
 
-                        <div class="col-md-6">
-                            <label for="DOB" class="form-label fw-semibold">Date of Birth</label>
-                            <input type="date" class="form-control" id="DOB" name="DOB" value="{{current_user.DOB}}" required>
-                        </div>
+                                    <div class="col-md-4">
+                                        <label for="DOB" class="form-label"><i class="bi bi-calendar"></i> Date of Birth</label>
+                                        <input type="date" class="form-control" id="DOB" name="DOB" value="{{ donor.DOB if donor else current_user.DOB }}" required>
+                                    </div>
 
-                        <div class="col-md-12">
-                            <label for="gender" class="form-label fw-semibold">Gender</label>
-                            <select id="gender" name="gender" class="form-select" required>
-                                <option>Select</option>
-                                <option value="Male" {% if current_user.gender == 'Male' %}selected{% endif %}>Male</option>
-                                <option value="Female" {% if current_user.gender == 'Female' %}selected{% endif %}>Female</option>
-                                <option value="Other" {% if current_user.gender == 'Other' %}selected{% endif %}>Other</option>
-                            </select>
+                                    <div class="col-md-4">
+                                        <label for="gender" class="form-label"><i class="bi bi-gender-ambiguous"></i> Gender</label>
+                                        <select id="gender" name="gender" class="form-select" required>
+                                            <option value="">Select</option>
+                                            {% for g in ['Male', 'Female', 'Other'] %}
+                                            <option value="{{ g }}" {% if (donor and donor.gender == g) or (not donor and current_user.gender == g) %}selected{% endif %}>{{ g }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    {% if eligibility %}
+                                    <button type="submit" class="btn-donate">
+                                        <i class="bi bi-heart-fill me-2"></i> Register Donation
+                                    </button>
+                                    {% else %}
+                                    <button type="button" class="btn-donate" disabled>
+                                        Not Eligible
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </form>
                         </div>
                     </div>
 
-                    <div class="mt-4">
-                        {% if eligibility %}
-                        <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm">Donate Now</button>
-                        {% else %}
-                        <button type="button" class="btn btn-warning btn-lg w-100 shadow-sm text-dark" id="notEligibleBtn">Donate Now</button>
-                        {% endif %}
+                    <!-- Image Section -->
+                    <div class="col-lg-5">
+                        <div class="donate-image-col">
+                            <img src="{{ url_for('static', filename='static_images/bd_img1.jpeg') }}" alt="Blood Donation">
+                            <div class="quote-overlay">
+                                <h3 class="fw-bold">"The blood you donate gives someone another chance at life."</h3>
+                                <p class="mb-0 opacity-75">— Be a Hero Today</p>
+                            </div>
+                        </div>
                     </div>
-                </form>
-            </div>
-
-            <!-- Image Side -->
-            <div class="col-lg-5 d-none d-lg-block position-relative">
-                <img src="{{ url_for('static', filename='static_images/bd_img1.jpeg') }}" 
-                     alt="Donate Blood Illustration" 
-                     class="img-fluid h-100 w-100" 
-                     style="object-fit: cover;">
-                <div class="position-absolute bottom-0 start-0 w-100 p-4 text-white" style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
-                    <h3 class="fw-bold">Be the reason someone smiles today ❤️</h3>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const btn = document.getElementById("notEligibleBtn");
-    
-        if (btn) {
-            btn.addEventListener("click", function() {
-                alert("You are not eligible to donate right now. You must be 18years old");
-            });
-        }
-    });
-    </script>
 {% endblock %}

@@ -5,7 +5,7 @@
 
 
 <div class="login-wrapper">
-  <div class="login-card shadow-lg">
+  <div class="login-card">
     <h2 class="text-center mb-4">🩸 <br> Blood Donation <br> Login</h2>
 
     <form method="POST" novalidate>
@@ -13,7 +13,7 @@
 
       <div class="mb-3">
         {{ form.username.label(class="form-label") }}
-        {{ form.username(class="form-control", placeholder="Enter your username") }}
+        {{ form.username(class="form-control", placeholder="Enter your username", autofocus=True) }}
       </div>
 
       <div class="mb-3">

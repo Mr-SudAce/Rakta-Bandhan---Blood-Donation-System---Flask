@@ -1,70 +1,68 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="mt-4">
-    <style>
-        .hover-card:hover {
-            transform: translateY(-5px);
-            transition: transform 0.3s ease;
-        }
-    </style>
+<main id="main-content" aria-label="Donor Dashboard">
+    <section class="donor-dashboard mt-4">
+        <h2 class="fw-bold mb-1" style="color: var(--primary);" aria-label="Welcome">Welcome, {{ current_user.username }} <span aria-hidden="true">👋</span></h2>
+        <p class="text-muted mb-4">Here’s your blood donation activity at a glance.</p>
 
-    <!-- Greeting -->
-    <h2>Welcome, {{ current_user.username }} 👋</h2>
-    <p class="text-muted">Here’s your blood donation activity at a glance.</p>
-
-    <!-- Stats Section -->
-    <div class="row mt-3">
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm border-0 h-100 hover-card">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-droplet text-danger"></i> Total Donations</h5>
-                    <p class="card-text fs-4 fw-bold">{{ total_donations }}</p>
+        <section class="row g-3 mb-4" aria-label="Donor Stats">
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card text-center shadow-sm border-0 h-100 donor-stat-card" tabindex="0" aria-label="Total Donations">
+                    <div class="card-body py-4">
+                        <h5 class="card-title mb-2"><i class="bi bi-droplet text-danger"></i> Total Donations</h5>
+                        <p class="card-text fs-4 fw-bold">{{ total_donations }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm border-0 h-100 hover-card">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-calendar-event text-primary"></i> Upcoming Events</h5>
-                    <p class="card-text fs-4 fw-bold">{{ upcoming_events }}</p>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card text-center shadow-sm border-0 h-100 donor-stat-card" tabindex="0" aria-label="Upcoming Events">
+                    <div class="card-body py-4">
+                        <h5 class="card-title mb-2"><i class="bi bi-calendar-event text-primary"></i> Upcoming Events</h5>
+                        <p class="card-text fs-4 fw-bold">{{ upcoming_events }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm border-0 h-100 hover-card">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-bell text-warning"></i> Requests Received</h5>
-                    <p class="card-text fs-4 fw-bold">{{ requests_received }}</p>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card text-center shadow-sm border-0 h-100 donor-stat-card" tabindex="0" aria-label="Requests Received">
+                    <div class="card-body py-4">
+                        <h5 class="card-title mb-2"><i class="bi bi-bell text-warning"></i> Requests Received</h5>
+                        <p class="card-text fs-4 fw-bold">{{ requests_received }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm border-0 h-100 hover-card">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-clock-history text-success"></i> Next Eligible Donation</h5>
-                    <p class="card-text fs-6 fw-bold">
-                        {{ next_donation_date or "Not Available" }}
-                    </p>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card text-center shadow-sm border-0 h-100 donor-stat-card" tabindex="0" aria-label="Next Eligible Donation">
+                    <div class="card-body py-4">
+                        <h5 class="card-title mb-2"><i class="bi bi-clock-history text-success"></i> Next Eligible Donation</h5>
+                        <p class="card-text fs-6 fw-bold">
+                            {{ next_donation_date or "Not Available" }}
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <hr>
+        <hr>
 
-    <!-- Quick Actions -->
-    <h4 class="mt-4">Quick Actions</h4>
-    <div class="btn-group flex-wrap" role="group">
-        <a href="{{ url_for('user.donate_blood') }}" class="btn btn-danger m-1">
-            <i class="bi bi-heart"></i> Donate Now
-        </a>
-        <a href="{{ url_for('user.events') }}" class="btn btn-primary m-1">
-            <i class="bi bi-calendar-plus"></i> Register for Event
-        </a>
-        <a href="{{ url_for('user.profile') }}" class="btn btn-success m-1">
-            <i class="bi bi-person-circle"></i> Update Profile
-        </a>
-        <a href="{{ url_for('user.my_requests') }}" class="btn btn-info m-1">
+        <section aria-label="Quick Actions">
+            <h4 class="mt-4 mb-3 fw-semibold">Quick Actions</h4>
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                <a href="{{ url_for('user.donate_blood') }}" class="btn btn-danger px-4 py-2 fw-bold" aria-label="Donate Now">
+                    <i class="bi bi-heart"></i> Donate Now
+                </a>
+                <a href="{{ url_for('user.events') }}" class="btn btn-primary px-4 py-2 fw-bold" aria-label="Register for Event">
+                    <i class="bi bi-calendar-plus"></i> Register for Event
+                </a>
+                <a href="{{ url_for('user.profile') }}" class="btn btn-success px-4 py-2 fw-bold" aria-label="Update Profile">
+                    <i class="bi bi-person-circle"></i> Update Profile
+                </a>
+                <a href="{{ url_for('user.my_requests') }}" class="btn btn-info px-4 py-2 fw-bold" aria-label="View My Requests">
+                    <i class="bi bi-envelope"></i> My Requests
+                </a>
+            </div>
+        </section>
+    </section>
+</main>
             <i class="bi bi-inbox"></i> View Requests
         </a>
     </div>
@@ -72,9 +70,9 @@
     <hr>
 
     <!-- Recent Donations -->
-    <h4 class="mt-4">Recent Donations</h4>
+    <h4 class="mt-4 mb-3 fw-semibold">Recent Donations</h4>
     <div class="table-responsive">
-        <table class="table table-striped table-hover mt-3">
+        <table class="table table-striped table-hover mt-3 align-middle">
             <thead class="table-light">
                 <tr>
                     <th>Date</th>
@@ -101,6 +99,5 @@
             </tbody>
         </table>
     </div>
-
 </div>
 {% endblock %}

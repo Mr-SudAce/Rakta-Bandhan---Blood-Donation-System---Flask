@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, redirect, session, url_for, flash
+from flask import Blueprint, render_template, redirect, session, url_for, flash, request
 from main_app.models import *
+
 from main_app.forms import RegisterForm, LoginForm
 from sqlalchemy.exc import IntegrityError
 from main_app.helper_func.helperfunction import * 
@@ -77,7 +78,7 @@ def login():
 
     except Exception as e:
         flash(f"⚠️ Unexpected error: {e}", "error")
-        return render_template("login.html", form=form)
+        return render_template("login.html", form=LoginForm())
 
 
 
@@ -164,7 +165,7 @@ def register():
                 return redirect(url_for("auth.register"))
 
             flash(f"✅ Registration successful. Your username is: {user.username}. Please log in.")
-            return redirect(url_for("auth.login"))
+            return redirect(url_for("auth.login", username=user.username))
 
         if form.errors:
             print("Form errors:", form.errors)  # Debugging

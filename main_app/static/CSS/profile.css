@@ -1,84 +1,94 @@
-/* === Layout Spacing === */
+/* ===== Layout ===== */
 .profile-container {
-    padding: 40px 20px;
+    padding: 50px 20px;
+    max-width: 900px;
 }
 
-/* === Profile Header === */
+/* ===== Header ===== */
 .profile-header {
     text-align: center;
+    margin-bottom: 40px;
+}
+
+.profile-image-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+    transform: scale(1.05);
+}
+
+/* Edit Button */
+.edit-profile-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background-color: #dc3545;
+    color: white;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.edit-profile-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Role Badge */
+.role-badge {
+    display: inline-block;
+    background-color: #f1f1f1;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* ===== Cards ===== */
+.profile-card,
+.certificate-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
     margin-bottom: 30px;
 }
 
-.profile-header img {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    margin-bottom: 15px;
-}
-
-.profile-header h3 {
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
-.edit_button{
-    background-color: #dc3545;
-    border-radius: 100% ;
-}
-
-.profile-header p {
-    color: #6c757d;
-    margin: 0;
-}
-
-/* === Card Styles === */
-.card-body{
-    background-color: var(--surface);
-    border: 1px solid var(--primary);
-    border-radius: 10px;
-}
-
-.head_5{
-    color: var(--primary);
-}
-
-.profile-card, 
-.certificate-card {
-    border: none;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-    border-radius: 12px;
-    margin-bottom: 25px;
-}
-
-.profile-card .card-body,
-.certificate-card .card-body {
-    padding: 25px;
-}
-
-.profile-title {
+.section-title {
     font-weight: 600;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
-/* === Row Data Styling === */
+/* ===== Profile Rows ===== */
 .profile-row {
     display: flex;
     justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px dashed #eaeaea;
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f1f1;
 }
 
 .profile-row:last-child {
     border-bottom: none;
 }
 
-.profile-row strong {
-    font-weight: 600;
-}
-
-/* === Eligibility Colors === */
+/* ===== Eligibility ===== */
 .eligible {
     color: #28a745;
     font-weight: 600;
@@ -89,29 +99,35 @@
     font-weight: 600;
 }
 
-/* === Certificate List === */
-.certificate-card ul li {
-    padding: 12px 5px;
-    border-bottom: 1px solid #eaeaea;
+/* ===== Certificates ===== */
+.certificate-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.certificate-card ul li:last-child {
+.certificate-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.certificate-list li:last-child {
     border-bottom: none;
 }
 
-.certificate-card .btn {
-    padding: 4px 12px;
-    font-size: 14px;
-}
-
-/* === Responsive === */
+/* ===== Responsive ===== */
 @media (max-width: 576px) {
     .profile-row {
         flex-direction: column;
-        text-align: left;
+        gap: 5px;
     }
 
-    .profile-row div {
-        margin-bottom: 5px;
+    .certificate-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
     }
 }

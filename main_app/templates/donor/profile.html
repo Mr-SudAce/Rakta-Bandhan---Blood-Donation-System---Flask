@@ -1,126 +1,115 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<link rel="stylesheet" href="{{url_for('static', filename='CSS/profile.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/profile.css') }}">
 
-<div class="container py-4">
-
-    <!-- Profile Header -->
-    <div class="text-center mb-4">
-
-        {% set pic = current_user.profile_picture %}
-
-        <div class="position-relative d-inline-block">
-            {% if pic.startswith('profile_pics/') %}
-                <!-- UPLOADED IMAGE -->
-                <img class="profile_image"
-                    src="{{ url_for('static', filename='uploads/' ~ pic) }}"
-                    alt="Profile" class="rounded-circle shadow mb-3"
-                    style="width:140px; height:140px; object-fit:cover; border: 4px solid white;">
-            
-            {% elif pic.startswith('static_images/') %}
-                <!-- SYSTEM DEFAULT IMAGE -->
-                <img class="profile_image"
-                    src="{{ url_for('static', filename='static_images/default.png') }}"
-                    alt="Profile" class="rounded-circle shadow mb-3"
-                    style="width:140px; height:140px; object-fit:cover; border: 4px solid white;">
-
-            {% else %}
-                <!-- HARD-CODED IMAGE -->
-                <img class="profile_image"
-                    src="{{ url_for('static', filename='static_images/' ~ pic) }}"
-                    alt="Profile" class="rounded-circle shadow mb-3"
-                    style="width:140px; height:140px; object-fit:cover; border: 4px solid white;">
-            {% endif %}
-            
-            <a href="{{ url_for('user.edit_profile') }}" 
-               class="btn btn-primary btn-sm rounded-circle position-absolute bottom-0 end-0 mb-3 me-2 shadow"
-               style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;">
-                <i class="bi bi-pencil"></i>
-            </a>
-        </div>
-
-        <h3 class="fw-bold mb-0">{{ current_user.username }}</h3>
-        <p class="text-muted">{{ current_user.email }}</p>
-    </div>
-
-    <!-- Donor / Recipient Section -->
-    <div class="card shadow-sm mb-4 border-0">
-        <div class="card-body">
-
-            {% if current_user.role in ['donor', 'recipient', 'superadmin'] %}
-            <h5 class="fw-bold mb-3 head_5 te">
-                {% if current_user.role == 'donor' %}
-
-                Donor
-                {% elif current_user.role == 'recipient' %}
-                Recipient
-                {% elif current_user.role == 'superadmin' %}
-                Superadmin
+<main id="main-content" aria-label="Donor Profile">
+    <section class="container profile-container">
+        <!-- Profile Header -->
+        <div class="profile-header" aria-label="Profile Header">
+            {% set pic = current_user.profile_picture %}
+            <div class="profile-image-wrapper">
+                {% if pic.startswith('profile_pics/') %}
+                    <img class="profile-image"
+                             src="{{ url_for('static', filename='uploads/' ~ pic) }}"
+                             alt="Profile picture of {{ current_user.full_name }}" loading="lazy">
+                {% elif pic.startswith('static_images/') %}
+                    <img class="profile-image"
+                             src="{{ url_for('static', filename='static_images/default.png') }}"
+                             alt="Default profile picture" loading="lazy">
+                {% else %}
+                    <img class="profile-image"
+                             src="{{ url_for('static', filename='static_images/' ~ pic) }}"
+                             alt="Profile picture of {{ current_user.full_name }}" loading="lazy">
                 {% endif %}
-                Information</h5>
+                <a href="{{ url_for('user.edit_profile') }}"
+                     class="edit-profile-btn" aria-label="Edit Profile">
+                    <i class="bi bi-pencil"></i>
+                </a>
+            </div>
+            <h3>{{ current_user.full_name }}</h3>
+            <h5 class="text-muted">{{ current_user.username }}</h5>
+            <p class="text-muted mb-1">{{ current_user.email }}</p>
+            <p class="role-badge">
+                {% if current_user.role == 'donor' %}Donor
+                {% elif current_user.role == 'recipient' %}Recipient
+                {% elif current_user.role == 'superadmin' %}Superadmin
+                {% endif %}
+            </p>
+        </div>
+        <!-- Information Card -->
+        <div class="card profile-card">
+            <div class="card-body">
+                {% if current_user.role in ['donor', 'recipient', 'superadmin'] %}
+                    <h5 class="section-title">Information</h5>
+                    <div class="profile-row">
+                        <strong>Phone</strong>
+                        <span>{{ current_user.phone | default("N/A") }}</span>
+                    </div>
 
-            <div class="row mb-2">
-                <div class="col-6"><strong>Phone:</strong></div>
-                <div class="col-6 text-end">{{ current_user.phone | default("N/A") }}</div>
+            <div class="profile-row">
+                <strong>DOB</strong>
+                <span>{{ current_user.DOB | default("N/A") }}</span>
             </div>
 
-            <div class="row mb-2">
-                <div class="col-6"><strong>DOB:</strong></div>
-                <div class="col-6 text-end">{{ current_user.DOB | default("N/A") }}</div>
+            <div class="profile-row">
+                <strong>Blood Type</strong>
+                <span>{{ current_user.blood_grp | default("N/A") }}</span>
             </div>
 
-            <div class="row mb-2">
-                <div class="col-6"><strong>Blood Type:</strong></div>
-                <div class="col-6 text-end">{{ current_user.blood_grp | default("N/A") }}</div>
+            <div class="profile-row">
+                <strong>Age</strong>
+                <span>{{ age_year | default("N/A") }}</span>
             </div>
 
-            <div class="row mb-2">
-                <div class="col-6"><strong>Age:</strong></div>
-                <div class="col-6 text-end">{{ age_year | default("N/A") }}</div>
+            <div class="profile-row">
+                <strong>Last Donation</strong>
+                <span>{{ current_user.donor.last_donation if current_user.donor else "No donation" }}</span>
             </div>
 
-            <div class="row mb-2">
-                <div class="col-6"><strong>Last Donation:</strong></div>
-                <div class="col-6 text-end">{{ current_user.donor.last_donation if current_user.donor else "No donation" }}</div>
-            </div>
-
-            <div class="row mb-2">
-                <div class="col-6 "><strong>Eligibility:</strong></div>
-                <div class="col-6 text-end">
-                    {% if eligibility %}
-                    <span class="text-success fw-bold">✔ Eligible</span>
-                    {% else %}
-                    <span class="text-danger fw-bold">❌ Not Eligible</span>
-                    {% endif %}
-                </div>
+            <div class="profile-row">
+                <strong>Eligibility</strong>
+                {% if eligibility %}
+                    <span class="eligible">✔ Eligible</span>
+                {% else %}
+                    <span class="not-eligible">❌ Not Eligible</span>
+                {% endif %}
             </div>
 
             {% else %}
-            <h5 class="fw-bold mb-3 head_5">No Information Available</h5>
+            <h5>No Information Available</h5>
             {% endif %}
+
         </div>
     </div>
 
     <!-- Certificates -->
-    <div class="card shadow-sm border-0">
+    <div class="card certificate-card">
         <div class="card-body">
-            <h5 class="fw-bold mb-3 head_5">Donation Certificates</h5>
+
+            <h5 class="section-title">Donation Certificates</h5>
+
             {% if certificates %}
-            <ul class="list-group list-group-flush">
+            <ul class="certificate-list">
                 {% for certificate in certificates %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span>
-                        {{ certificate.date | default("Unknown Date") }} — 
-                        {{ certificate.event_name | default("Event") }}
-                    </span>
-                    <a href="{{ certificate.download_url }}" class="btn btn-sm btn-primary">Download</a>
+                <li>
+                    <div>
+                        <strong>{{ certificate.date | default("Unknown Date") }}</strong>
+                        <div class="text-muted small">
+                            {{ certificate.event_name | default("Event") }}
+                        </div>
+                    </div>
+
+                    <a href="{{ certificate.download_url }}" class="btn btn-sm btn-primary">
+                        Download
+                    </a>
                 </li>
                 {% endfor %}
             </ul>
             {% else %}
-            <p>No certificates available.</p>
+            <p class="text-muted">No certificates available.</p>
             {% endif %}
+
         </div>
     </div>
 

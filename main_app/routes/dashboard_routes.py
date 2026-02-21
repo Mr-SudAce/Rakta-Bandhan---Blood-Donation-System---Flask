@@ -1,5 +1,6 @@
 
 from flask import Blueprint, app, render_template, redirect, url_for, request, flash, Response
+from flask import Blueprint, render_template, redirect, url_for, request, flash, Response
 from main_app.models import *
 from io import StringIO
 from datetime import date
@@ -449,10 +450,10 @@ def admin_download_report():
             query = query.filter(DonationHistory.date <= last_date)
         results = query.all()
 
-        report_headers = ['Donor Name', 'Blood Type', 'Date', 'Quantity']
+        report_headers = ['Donor Name', 'Blood Type', 'Date']
         report_data = [
-            [r.donor_name, r.blood_group, r.date.strftime('%Y-%m-%d'), r.quantity]
-            for r in results
+            [r.donor.name, r.donor.blood_type, r.date.strftime('%Y-%m-%d')]
+            for r in results if r.donor
         ]
 
     # ===== Inventory Report =====
@@ -481,8 +482,8 @@ def admin_download_report():
 
         report_headers = ['Event Name', 'Date', 'Location', 'Participants']
         report_data = [
-            [r.event_name, r.date.strftime('%Y-%m-%d'), r.location, r.participants]
-            for r in results
+            [r.title, r.date.strftime('%Y-%m-%d'), r.location, len(r.participants)]
+            for r in results if r
         ]
 
     # ===== Generate CSV =====

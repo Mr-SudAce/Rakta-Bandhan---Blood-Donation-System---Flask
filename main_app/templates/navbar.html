@@ -1,81 +1,64 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='CSS/navbar.css') }}">
 
 {% if current_user.is_authenticated %}
-<header class="nav">
-  <a class="brand" href="{{ url_for('user.home') }}">🩸 Rakta Bandhan</a>
+<header class="nav" role="banner">
+  <a class="brand" href="{{ url_for('user.home') }}" style="font-size:2rem; font-weight:800; letter-spacing:1px; display:flex; align-items:center; gap:0.5rem;">
+    <img src="{{ url_for('static', filename='static_images/logo.ico') }}" alt="Rakta Bandhan Logo" style="height:2.2rem; width:2.2rem; border-radius:8px; box-shadow:0 2px 8px rgba(193,18,31,0.08);"> Rakta Bandhan
+  </a>
   {% if current_user.role == "superadmin" %}
-  <a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a>
+    <a class="dashboard-link" href="{{ url_for('dashboard.dashboard') }}" style="font-weight:600; color:var(--primary);">Dashboard</a>
   {% endif %}
-
-  <!-- Hidden checkbox for CSS toggle
-  <input type="checkbox" id="menu-toggle" class="menu-toggle"> -->
-
-  <!-- Hamburger button -->
-  <div class="hamburger">
-    <label for="menu-toggle" aria-label="Toggle Menu">☰</label>
+  <div class="hamburger" id="hamburger" aria-label="Open navigation menu" tabindex="0">
+    <span></span>
+    <span></span>
+    <span></span>
   </div>
-
-  <!-- Menu -->
-  <nav class="menu" aria-label="Primary">
+  <nav class="menu" id="menu" role="navigation" aria-label="Main Navigation">
     {% set nav_links = [
-    ('Donate', 'user.donate_blood'),
-    ('Find Blood', 'user.find_blood'),
-    ('Campaigns', 'user.campaigns'),
-    ('About', 'user.about')
+      ('Donate', 'user.donate_blood'),
+      ('Find Blood', 'user.find_blood'),
+      ('Campaigns', 'user.campaigns'),
+      ('About', 'user.about')
     ] %}
-
     {% for label, endpoint in nav_links %}
-    <a href="{{ url_for(endpoint) }}" id="{% if request.endpoint == endpoint %}active{% endif %}" class="{% if request.endpoint == endpoint %}active{% endif %}">{{ label }}</a>
+      <a href="{{ url_for(endpoint) }}" class="{% if request.endpoint == endpoint %}active{% endif %}" style="font-size:1.1rem; font-weight:600; padding:0.7rem 1.2rem;">
+         {{ label }}
+      </a>
     {% endfor %}
-
-    {% if current_user.is_authenticated %}
     <div class="profile-dropdown">
       <div class="profile_pic">
         {% set pic = current_user.profile_picture %}
-
         {% if pic.startswith('profile_pics/') %}
-        <!-- UPLOADED IMAGE -->
-        <img class="profile_image"
-          src="{{ url_for('static', filename='uploads/' ~ pic) }}"
-          alt="Profile">
-
-        {% elif pic.startswith('static_images/') %}
-        <!-- SYSTEM DEFAULT IMAGE -->
-        <img class="profile_image"
-          src="{{ url_for('static', filename='static_images/default.png') }}"
-          alt="Profile">
-
+          <img class="profile_image" src="{{ url_for('static', filename='uploads/' ~ pic) }}" alt="Profile" style="border-radius:50%; border:2px solid var(--primary); width:44px; height:44px;">
         {% else %}
-        <!-- HARD-CODED IMAGE (like admin_dflt.jpg) -->
-        <img class="profile_image"
-          src="{{ url_for('static', filename='static_images/' ~ pic) }}"
-          alt="Profile">
+          <img class="profile_image" src="{{ url_for('static', filename='static_images/' ~ pic) }}" alt="Profile" style="border-radius:50%; border:2px solid var(--primary); width:44px; height:44px;">
         {% endif %}
-
       </div>
-
       <div class="profile_info">
-        <p class="user_name">{{ current_user.username }}</p>
-        <p class="user-role">{{ current_user.role }}</p>
+        <p class="user_name" style="font-size:1rem; font-weight:700; color:var(--text); margin:0;">{{ current_user.username }}</p>
+        <p class="user-role" style="font-size:0.9rem; color:var(--muted); margin:0;">{{ current_user.role }}</p>
       </div>
       <div class="dropdown-content">
-        <a href="{{ url_for('user.profile')}}">Profile</a>
-        <a href="{{ url_for('auth.logout') }}">Logout </a>
+        <a href="{{ url_for('user.profile') }}">Profile</a>
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
       </div>
     </div>
-    {% endif %}
   </nav>
-
 </header>
-
 <script>
-  const hamburger = document.querySelector('.hamburger');
-  const menu = document.querySelector('.menu');
-
-  hamburger.addEventListener('click', () => {
-      menu.classList.toggle('menu--open');
-      hamburger.classList.toggle('active');
-  });
+  const hamburger = document.getElementById('hamburger');
+  const menu = document.getElementById('menu');
+  if (hamburger && menu) {
+    hamburger.addEventListener('click', () => {
+        menu.classList.toggle('menu--open');
+        hamburger.classList.toggle('active');
+    });
+    hamburger.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        menu.classList.toggle('menu--open');
+        hamburger.classList.toggle('active');
+      }
+    });
+  }
 </script>
-
 {% endif %}

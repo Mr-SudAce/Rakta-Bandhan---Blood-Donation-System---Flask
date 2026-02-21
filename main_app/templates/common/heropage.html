@@ -1,34 +1,39 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='CSS/heropage.css') }}">
 
-<section class="hero">
-
-    <div class="hero__overlay">
-        <div class="hero__imageframe">
-            <img src="{{url_for('static', filename='static_images/heropageimage.png')}}" alt="bdimg">
-        </div>
+<section class="hero" role="region" aria-label="Hero Section">
+    <div class="hero__wrapper">
         <div class="hero__content">
-            <h1>Give Blood. Save Lives. Repeat.</h1>
-            <p>Find donors fast, register to donate, and track local blood drives — all in one place.</p>
+            <h1 class="hero__title">Give Blood. Save Lives. <br> Repeat.</h1>
+            <p class="hero__description">
+                Join the Rakta Bandhan community. Find donors instantly, register to donate, and track local blood drives — all in one secure platform.
+            </p>
 
             <div class="hero__actions">
-                <a href="{{url_for('user.donate_blood')}}" class="btn">Donate Now</a>
-                <a href="{{url_for('user.find_blood')}}" class="btn">Find Blood</a>
+                <a href="{{ url_for('user.donate_blood') }}" class="btn-hero btn-hero-primary">
+                    <i class="bi bi-heart-fill"></i> Donate Now
+                </a>
+                <a href="{{ url_for('user.find_blood') }}" class="btn-hero btn-hero-secondary">
+                    <i class="bi bi-search"></i> Find Blood
+                </a>
             </div>
 
-            <div class="stats">
-                <div class="stat">
-                    <span class="stat__num">1,284</span>
-                    <span class="stat__label">Active Donors</span>
+            <div class="hero__stats">
+                <div class="stat-card">
+                    <span class="stat-number">1,284</span>
+                    <span class="stat-label">Active Donors</span>
                 </div>
-                <div class="stat">
-                    <span class="stat__num">342</span>
-                    <span class="stat__label">Urgent Requests</span>
+                <div class="stat-card">
+                    <span class="stat-number">342</span>
+                    <span class="stat-label">Urgent Requests</span>
                 </div>
-                <div class="stat">
-                    <span class="stat__num">87</span>
-                    <span class="stat__label">Campaigns</span>
+                <div class="stat-card">
+                    <span class="stat-number">87</span>
+                    <span class="stat-label">Campaigns</span>
                 </div>
             </div>
+        </div>
+        <div class="hero__image">
+            <img src="{{ url_for('static', filename='static_images/bd_img1.jpeg') }}" alt="Blood Donation Hero">
         </div>
     </div>
 </section>

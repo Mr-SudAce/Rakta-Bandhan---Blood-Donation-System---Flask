@@ -1,41 +1,105 @@
 {% extends 'base.html' %}
+{% block title %}About Us - RaktaBandhan{% endblock %}
 
-{% block title %}About Us{% endblock %}
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/common.css') }}">
 
-<link rel="stylesheet" href="{{ url_for('static', filename='CSS/aboutUs.css') }}">
+<!-- Hero Section -->
+<div class="about-hero">
+    <div class="container">
+        <h1>Saving Lives, One Drop at a Time</h1>
+        <p>RaktaBandhan is dedicated to connecting blood donors with those in need, creating a seamless network of hope and life across the community.</p>
+    </div>
+</div>
 
-
-<section class="about-hero">
-  <div class="overlay"></div>
-  <div class="about-content">
-    <h1>About Our Blood Donation System</h1>
-    <p>Connecting donors and saving lives — one drop at a time.</p>
-  </div>
-</section>
-
-<section class="about-section">
-  <div class="about-container">
-
-    <div class="about-text">
-      <h2>Who We Are</h2>
-      <p>
-        Our Blood Donation System was built to close the gap between people who need help
-        and the heroes willing to donate. With smart matching, real-time availability, and 
-        instant communication, we make the entire process simple, fast, and transparent.
-      </p>
-
-      <p>
-        Every donation counts. By bringing donors, recipients, and hospitals together under one platform, 
-        we’re working to save lives, strengthen communities, and inspire a movement of compassion.
-      </p>
+<div class="container">
+    <!-- Mission Cards (Overlapping Hero) -->
+    <div class="mission-section">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="mission-card">
+                    <div class="mission-icon">
+                        <i class="bi bi-heart-pulse-fill"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">Our Mission</h3>
+                    <p class="text-muted">To bridge the gap between donors and recipients, ensuring no life is lost due to a shortage of blood availability.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mission-card">
+                    <div class="mission-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">Our Community</h3>
+                    <p class="text-muted">Building a strong, compassionate network of volunteers, donors, and health organizations working together.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mission-card">
+                    <div class="mission-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">Our Promise</h3>
+                    <p class="text-muted">To provide a secure, reliable, and fast platform for blood donation management and emergency requests.</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="about-image">
-      <img src="{{ url_for('static', filename='static_images/hero_blood.jpg') }}" alt="Blood Donation">
+    <!-- Story Section -->
+    <div class="row align-items-center mb-5 pb-5">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+            <!-- Placeholder for an illustration or image -->
+            <div class="bg-light rounded-4 d-flex align-items-center justify-content-center" style="height: 400px; border: 2px dashed #ddd;">
+                <div class="text-center text-muted">
+                    <img src="{{ url_for('static', filename='static_images/hero_blood.jpg') }}" alt="Blood Donation">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 ps-lg-5">
+            <h2 class="fw-bold mb-4 display-6" style="color: var(--text);">Who We Are</h2>
+            <p class="lead text-muted mb-4">RaktaBandhan was born out of a simple idea: technology can save lives by connecting hearts.</p>
+            <p class="mb-3">We realized that while there are many willing donors, the connection between them and the recipients is often delayed. Our platform solves this by providing real-time inventory management, donor tracking, and instant request fulfillment.</p>
+            <p class="mb-4">Whether you are a donor wanting to contribute or a hospital in urgent need, RaktaBandhan is your trusted partner in this life-saving journey.</p>
+            <a href="{{ url_for('user.contact') }}" class="btn btn-outline-danger btn-lg rounded-pill px-4">Contact Us</a>
+        </div>
     </div>
 
-  </div>
-</section>
+    <!-- Stats Section -->
+    <div class="stats-section">
+        <div class="row">
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Active Donors</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <span class="stat-number">1.2k</span>
+                    <span class="stat-label">Lives Saved</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">Campaigns</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Support</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- CTA -->
+    <div class="text-center py-5 mb-5">
+        <h2 class="fw-bold mb-3">Ready to make a difference?</h2>
+        <p class="mb-4 text-muted fs-5">Join our community today and become a hero in someone's life.</p>
+        <a href="{{ url_for('user.donate_blood') }}" class="btn btn-lg px-5 fw-bold text-white py-3 rounded-pill shadow-lg" style="background-color: var(--primary);">Become a Donor</a>
+    </div>
+</div>
 {% endblock %}

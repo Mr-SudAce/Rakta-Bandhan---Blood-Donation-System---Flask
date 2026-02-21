@@ -1,0 +1,60 @@
+/* Testimonials Section - Modern, Minimal, Bold, Corporate */
+.quotes {
+  padding: 3rem 1rem;
+  background: var(--surface-2, #f8f9fa);
+  text-align: center;
+
+.quotes h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 2rem;
+}
+
+.grid--3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+}
+
+.quote {
+  background: var(--surface, #fff);
+  border-radius: 18px;
+  box-shadow: var(--shadow, 0 4px 24px rgba(0,0,0,0.07));
+  padding: 2rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text, #222);
+  position: relative;
+  margin: 0;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.quote cite {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: var(--muted, #888);
+  font-style: normal;
+}
+
+.quote:hover, .quote:focus {
+  box-shadow: 0 8px 32px rgba(193, 18, 31, 0.13);
+  transform: translateY(-2px) scale(1.01);
+}
+
+@media (max-width: 700px) {
+  .quotes h2 {
+    font-size: 1.3rem;
+  }
+  .grid--3 {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+  .quote {
+    padding: 1.2rem 0.7rem;
+    font-size: 1rem;
+  }
+}
+}

@@ -5,59 +5,60 @@ Admin Dashboard
 {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ url_for ('static', filename='CSS/admin/dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/admin/dashboard.css') }}">
 
-<div class="my-2 mx-4">
-    {% include "admin/quickaction.html" %}
-    <div class="d-flex gap-2 ">
-        <h2>Admin Dashboard</h2>
-    </div>
-    <div class="row mt-3">
-        <div class="col-md-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Total Donors</h5>
-                    <p class="card-text">{{ total_donors }}</p>
+<main id="main-content" aria-label="Admin Dashboard">
+    <section class="my-2 mx-4">
+        {% include "admin/quickaction.html" %}
+        <div class="d-flex gap-2">
+            <h2 class="fw-bold" style="color: var(--primary);">Admin Dashboard</h2>
+        </div>
+        <section class="row mt-3" aria-label="Admin Stats">
+            <div class="col-md-3">
+                <div class="card text-center shadow-sm border-0 h-100" tabindex="0" aria-label="Total Donors">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Donors</h5>
+                        <p class="card-text fw-bold">{{ total_donors }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Total Recipients</h5>
-                    <p class="card-text">{{ total_recipients }}</p>
+            <div class="col-md-3">
+                <div class="card text-center shadow-sm border-0 h-100" tabindex="0" aria-label="Total Recipients">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Recipients</h5>
+                        <p class="card-text fw-bold">{{ total_recipients }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Upcoming Events</h5>
-                    <p class="card-text">{{ upcoming_events }}</p>
+            <div class="col-md-3">
+                <div class="card text-center shadow-sm border-0 h-100" tabindex="0" aria-label="Upcoming Events">
+                    <div class="card-body">
+                        <h5 class="card-title">Upcoming Events</h5>
+                        <p class="card-text fw-bold">{{ upcoming_events }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Blood Inventory</h5>
-                    <p class="card-text" style="color: {% if inventory_status == 'Stable' %} green {% elif inventory_status == 'Low' %} orange {% else %} red {% endif %};">
-                        {{ inventory_status }}
-                    </p>
+            <div class="col-md-3">
+                <div class="card text-center shadow-sm border-0 h-100" tabindex="0" aria-label="Blood Inventory">
+                    <div class="card-body">
+                        <h5 class="card-title">Blood Inventory</h5>
+                        <p class="card-text fw-bold" style="color: {% if inventory_status == 'Stable' %} green {% elif inventory_status == 'Low' %} orange {% else %} red {% endif %};">
+                            {{ inventory_status }}
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <hr>
-    <h4 class="mt-4">Recent Activity</h4>
-    <ul class="list-group recent_activity-item">
-        {% if recent_activities %}
-        {% for activity in recent_activities %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span class="text-dark">{{ activity.action|safe }}</span>
-            <small class="text-muted">{{ activity.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
-        </li>
+        </section>
+        <hr>
+        <section aria-label="Recent Activity">
+            <h4 class="mt-4 fw-semibold">Recent Activity</h4>
+            <ul class="list-group recent_activity-item">
+                {% if recent_activities %}
+                    {% for activity in recent_activities %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="text-dark">{{ activity.action|safe }}</span>
+                            <small class="text-muted">{{ activity.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                        </li>
         {% endfor %}
         {% else %}
         <li class="list-group-item">No recent activity.</li>

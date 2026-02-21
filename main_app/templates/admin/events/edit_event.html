@@ -1,76 +1,71 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2 class="fw-bold mb-4">Edit Event</h2>
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/admin/events.css') }}">
 
-    <form method="POST" action="{{ url_for('dashboard.admin_edit_event', event_id=event.id) }}">
-        <div class="mb-3">
-            <label for="title" class="form-label">Event Title</label>
-            <input
-                type="text"
-                class="form-control"
-                id="title"
-                name="title"
-                value="{{ event.title }}"
-                required>
-        </div>
+<div class="container admin-events-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2><i class="bi bi-pencil-square"></i> Edit Event</h2>
+                    <a href="{{ url_for('dashboard.admin_events') }}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-arrow-left"></i> Back to List
+                    </a>
+                </div>
+                
+                <div class="admin-card-body p-4">
+                    <form method="POST" action="{{ url_for('dashboard.admin_edit_event', event_id=event.id) }}">
+                        
+                        <h5 class="form-section-title">Basic Information</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-12">
+                                <label for="title" class="form-label">Event Title</label>
+                                <input type="text" class="form-control" id="title" name="title" value="{{ event.title }}" required>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="location" class="form-label">Location</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-geo-alt"></i></span>
+                                    <input type="text" class="form-control" id="location" name="location" value="{{ event.location }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="4" placeholder="Add event details here...">{{ event.description }}</textarea>
+                            </div>
+                        </div>
 
-        <div class="mb-3">
-            <label for="date" class="form-label">Date</label>
-            <input
-                type="date"
-                class="form-control"
-                id="date"
-                name="date"
-                value="{{ event.date.strftime('%Y-%m-%d') if event.date else '' }}"
-                required>
-        </div>
-        <div class="mb-3">
-            <label for="exp_date" class="form-label">Exp. Date</label>
-            <input
-                type="date"
-                class="form-control"
-                id="exp_date"
-                name="exp_date"
-                value="{{ event.exp_date.strftime('%Y-%m-%d') if event.exp_date else '' }}"
-                required>
-        </div>
+                        <h5 class="form-section-title">Date & Media</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label for="date" class="form-label">Start Date</label>
+                                <input type="date" class="form-control" id="date" name="date" value="{{ event.date.strftime('%Y-%m-%d') if event.date else '' }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="exp_date" class="form-label">Expiration Date</label>
+                                <input type="date" class="form-control" id="exp_date" name="exp_date" value="{{ event.exp_date.strftime('%Y-%m-%d') if event.exp_date else '' }}" required>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="camp_img" class="form-label">Event Image (Filename)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-image"></i></span>
+                                    <input type="text" class="form-control" id="camp_img" name="camp_img" value="{{ event.camp_img or '' }}" placeholder="e.g., campaigns/event1.jpg">
+                                </div>
+                                <div class="form-text">Currently, this updates the database filename reference.</div>
+                            </div>
+                        </div>
 
-        <div class="mb-3">
-            <label for="location" class="form-label">Location</label>
-            <input
-                type="text"
-                class="form-control"
-                id="location"
-                name="location"
-                value="{{ event.location }}"
-                required>
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <a href="{{ url_for('dashboard.admin_events') }}" class="btn btn-light border">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="bi bi-save"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea
-                class="form-control"
-                id="description"
-                name="description"
-                rows="4"
-                placeholder="Add event details here...">{{ event.description }}</textarea>
-        </div>
-        <div class="mb-3">
-            <label for="image" class="form-label">Event Image</label>
-            <input
-                type="file"
-                class="form-control"
-                id="camp_img"
-                value="{{event.camp_img}}"
-                name="camp_img">
-        </div>
-
-        <div class="d-flex justify-content-between">
-            <a href="{{ url_for('dashboard.admin_events') }}" class="btn btn-secondary">⬅️ Back</a>
-            <button type="submit" class="btn btn-primary">💾 Update Event</button>
-        </div>
-    </form>
+    </div>
 </div>
 {% endblock %}

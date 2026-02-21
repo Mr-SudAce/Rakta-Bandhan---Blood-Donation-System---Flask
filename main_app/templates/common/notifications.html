@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
+<main id="main-content" aria-label="Notifications">
+  <section class="card" style="max-width: 600px; margin: 2rem auto;">
+    <h2>Notifications</h2>
+    <ul class="notification-list" aria-live="polite">
+      <li>No new notifications at this time.</li>
+    </ul>
+  </section>
+</main>
+{% endblock %}

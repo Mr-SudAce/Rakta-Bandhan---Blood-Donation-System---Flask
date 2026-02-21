@@ -1,15 +1,17 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='CSS/footer.css') }}">
 {% if current_user.is_authenticated %}
 <!-- Footer -->
-
-<footer class="footer ">
+<footer class="footer" role="contentinfo">
     <div class="footer__grid">
-        <div>
-            <h3>Rakta Bandhan</h3>
-            <p class="muted">Connecting donors and patients across Nepal, 24/7.</p>
+        <div style="display:flex;align-items:center;gap:1rem;">
+            <img src="{{ url_for('static', filename='static_images/logo.ico') }}" alt="Rakta Bandhan Logo" style="height:2.5rem;width:2.5rem;border-radius:8px;box-shadow:0 2px 8px rgba(193,18,31,0.08);">
+            <div>
+                <h3 style="font-size:1.5rem;font-weight:800;letter-spacing:1px;color:var(--primary);margin-bottom:0.3rem;">Rakta Bandhan</h3>
+                <p class="muted" style="font-size:1.1rem;">Connecting donors and patients across Nepal, 24/7.</p>
+            </div>
         </div>
         <div>
-            <h4>Links</h4>
+            <h4 style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:0.7rem;">Links</h4>
             <ul>
                 <li><a href="{{ url_for('user.home') }}">Home</a></li>
                 <li><a href="{{ url_for('user.donate_blood') }}">Donate</a></li>
@@ -18,7 +20,7 @@
             </ul>
         </div>
         <div>
-            <h4>Contact</h4>
+            <h4 style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:0.7rem;">Contact</h4>
             <ul>
                 <li>help@raktabandhan.org</li>
                 <li>+977-1-555-1234</li>
@@ -27,13 +29,12 @@
         </div>
     </div>
     <div class="footer__bar">
-        <span>© 2025 Rakta Bandhan</span>
+        <span style="font-weight:600;">© 2025 Rakta Bandhan</span>
         <div class="socials">
-            <a href="#" aria-label="Facebook">F</a>
-            <a href="#" aria-label="X">X</a>
-            <a href="#" aria-label="Instagram">I</a>
+            <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" aria-label="X"><i class="bi bi-twitter"></i></a>
+            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
         </div>
     </div>
 </footer>
-
 {% endif %}

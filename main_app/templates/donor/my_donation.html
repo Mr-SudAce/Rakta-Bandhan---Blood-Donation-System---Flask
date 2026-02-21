@@ -1,7 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div>
-    <h1>My donation</h1>
-  </div>
+<main id="main-content" aria-label="My Donations">
+  <section class="container py-5">
+    <div class="card shadow-lg border-0" style="max-width: 700px; margin: 0 auto;">
+      <div class="card-body">
+        <h2 class="fw-bold mb-4 text-primary">My Donations</h2>
+        {% if donations %}
+          <ul class="list-group list-group-flush">
+            {% for donation in donations %}
+              <li class="list-group-item">
+                <strong>Date:</strong> {{ donation.date }}<br>
+                <strong>Blood Type:</strong> {{ donation.blood_type }}<br>
+                <strong>Location:</strong> {{ donation.location }}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted">No donation records found.</p>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+</main>
 {% endblock %}

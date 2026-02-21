@@ -30,15 +30,12 @@ flash_categories = {
     "secondary": "secondary",
 }
 
-
 # ------------------- APP FACTORY -------------------
 def create_app():
     app = Flask(
-        __name__, 
+        __name__,
         static_folder='main_app/static',
         template_folder='main_app/templates'
-        # template_folder=os.path.join(os.path.abspath(os.path.dirname(__file__)), 'main_app', 'templates'),
-        # static_folder=os.path.join(os.path.abspath(os.path.dirname(__file__)), 'main_app', 'static')
     )
 
     # ------------------- INSTANCE FOLDER & DATABASE CONFIG -------------------
@@ -49,7 +46,6 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(INSTANCE_FOLDER, 'rakta_bandhan.db')}"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_ECHO'] = True
-    app.config['SESSION_PERMANENT'] = True
     app.config['SESSION_PERMANENT'] = True
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=1)
     app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=7)
@@ -65,7 +61,6 @@ def create_app():
 
             if last:
                 last_time = datetime.strptime(last, "%Y-%m-%d %H:%M:%S")
-                # Auto-logout based on PERMANENT_SESSION_LIFETIME
                 if (now - last_time).total_seconds() > app.permanent_session_lifetime.total_seconds():
                     logout_user()
                     session.clear()
@@ -74,17 +69,14 @@ def create_app():
             # Update activity timestamp
             session["last_active"] = now.strftime("%Y-%m-%d %H:%M:%S")
 
-
-
-     # =====================================================
+    # =====================================================
     # 🔒 Prevent Browser Caching (Fix back button issue)
     # =====================================================
     @app.after_request
     def add_header(response):
         response.cache_control.no_store = True
         return response
-    
-    
+
     # ------------------- INITIALIZE EXTENSIONS -------------------
     db.init_app(app)
     migrate.init_app(app, db)
@@ -92,13 +84,11 @@ def create_app():
     login_manager.login_view = 'auth.login'
     login_manager.login_message_category = "info"
 
-    # ------------------- CREATE TABLES -------------------
+    # ------------------- CREATE TABLES & SUPERADMIN -------------------
     with app.app_context():
         db.create_all()
-        
-        # =========================================
+
         # 🧠 AUTO-CREATE HARDCODED SUPERADMIN
-        # =========================================
         existing_superadmin = User.query.filter_by(username=HARDCODED_USER).first()
         if not existing_superadmin:
             hashed_password = generate_password_hash(HARDCODED_PASS)
@@ -118,24 +108,15 @@ def create_app():
             print(f"Superadmin '{HARDCODED_USER}' created successfully.")
         else:
             print("Superadmin already exists. Skipping creation.")
-            
+
     # ------------------- USER LOADER -------------------
-    # @login_manager.user_loader
-    # def load_user(user_id):
-    #     if not user_id or user_id == "None":
-    #         return None
-    #     try:
-    #         return User.query.get(int(user_id))
-    #     except ValueError:
-    #         return None
-    
     @login_manager.user_loader
     def load_user(user_id):
         if not user_id or user_id == "None":
             return None
         try:
-            return db.session.get(User, int(user_id))  # <-- modern SQLAlchemy 2.x way
-        except ValueError:
+            return db.session.get(User, int(user_id))  # Modern SQLAlchemy 2.x
+        except (ValueError, TypeError):
             return None
 
     # ------------------- CONTEXT PROCESSORS -------------------
@@ -164,4 +145,4 @@ def create_app():
 # ------------------- RUN THE APP -------------------
 if __name__ == '__main__':
     app = create_app()
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)

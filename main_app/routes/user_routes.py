@@ -14,6 +14,7 @@ user_bp = Blueprint('user', __name__, template_folder='templates', static_folder
 # ==============================
 @user_bp.route("/", endpoint='home')
 @login_required
+@role_required('donor', 'recipient')
 def home():
     return render_template("home.html")
 
@@ -106,21 +107,35 @@ def donate_blood():
             return redirect(url_for("user.donate_blood"))
 
         try:
-            username = request.form.get("username").strip()
-            phone = request.form.get("phone").strip()
-            address = request.form.get("address").strip()
-            blood_type = request.form.get("blood_type")
+            # Safely get form data and strip whitespace
+            username = request.form.get("name", "").strip() or current_user.full_name
+            phone = request.form.get("phone", "").strip() or current_user.phone
+            address = request.form.get("address", "").strip() or current_user.address
+            blood_type = request.form.get("blood_type") or current_user.blood_grp
             DOB = request.form.get("DOB")
-            gender = request.form.get("gender")
-            email = request.form.get("email").strip()
+            gender = request.form.get("gender") or current_user.gender
+            email = request.form.get("email", "").strip() or current_user.email
 
-            dob_date = datetime.strptime(DOB, '%Y-%m-%d').date() if DOB else None
+            # Basic validation for required fields
+            if not all([username, phone, address, blood_type, email]):
+                flash("❌ Please fill out all required fields.", "danger")
+                return redirect(url_for("user.donate_blood"))
 
-            donor = Donor.query.filter_by(user_id=user.id).first()
-
+            dob_date = datetime.strptime(DOB, '%Y-%m-%d').date() if DOB else user.DOB
             today = datetime.utcnow().date()
 
+            # Find existing donor or prepare a new one
+            donor = Donor.query.filter_by(user_id=user.id).first()
+
+            # Check if donor has donated recently (90 days cooling period)
+            if donor and donor.last_donation:
+                days_since_donation = (today - donor.last_donation).days
+                if days_since_donation < 90:
+                    flash("❌ You have already donated. Please wait for the cooling period.", "danger")
+                    return redirect(url_for("user.donate_blood"))
+
             if donor:
+                # Update existing donor record
                 donor.name = username
                 donor.email = email
                 donor.phone = phone
@@ -130,9 +145,10 @@ def donate_blood():
                 donor.gender = gender
                 donor.last_donation = today
             else:
+                # Create a new donor record
                 donor = Donor(
                     user_id=user.id,
-                    name=name,
+                    name=username,
                     email=email,
                     phone=phone,
                     address=address,
@@ -143,37 +159,36 @@ def donate_blood():
                     is_active=True
                 )
                 db.session.add(donor)
+                # Flush to get the new donor's ID for the history record
                 db.session.flush()
 
+            # Create a history record for this donation
             new_donation = DonationHistory(
                 donor_id=donor.id,
-                request_id=0,
+                request_id=0,  # Assuming 0 is a placeholder for direct donations
                 date=today
             )
             db.session.add(new_donation)
 
+            # Commit all changes to the database
             db.session.commit()
-            flash("✅ Donation successfully registered!", "success")
+            log_activity(f"User '{user.username}' registered a donation.")
+            flash("✅ Donation successfully registered! Thank you for being a hero.", "success")
             return redirect(url_for("user.home"))
 
         except Exception as e:
             db.session.rollback()
-            flash(f"❌ Error: {e}", "danger")
+            flash(f"❌ An unexpected error occurred: {e}", "danger")
             return redirect(url_for("user.donate_blood"))
-        
+
+    # For GET request, you might want to pass existing donor info to pre-fill the form
     donor = Donor.query.filter_by(user_id=user.id).first()
-    print("####################################################################")
-    if donor:
-        print("Last Donated:", donor.last_donation)
-        print("Last Donated:", donor.blood_type)
-    else:
-        print("No donation record found.")
-    print("####################################################################")
 
     return render_template(
         "donor/donate_blood.html",
         eligibility=eligibility,
-        age_year=age_year
+        age_year=age_year,
+        donor=donor  # Pass the donor object to the template
     )
 
 

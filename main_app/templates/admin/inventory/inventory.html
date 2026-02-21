@@ -2,22 +2,89 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='CSS/admin/inventory.css') }}">
 
-<div class="container">
-
+<div class="container admin-inventory-container">
     {% include "admin/quickaction.html" %}
-    <div class="inventory-wrapper ">
 
-        <div>
-
-            {% include "admin/inventory/add_inventory.html" %}
-            {% include "admin/inventory/blood_transaction.html" %}
+    <!-- Summary Section -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="inventory-highlight-card">
+                <div class="highlight-info">
+                    <p>Total Blood Units Available</p>
+                    <h3>{{ total_units }} <span class="fs-5 fw-normal">Units</span></h3>
+                </div>
+                <div class="highlight-icon">
+                    <i class="bi bi-droplet-fill"></i>
+                </div>
+            </div>
         </div>
-        <div>
+    </div>
 
-            {% include "admin/inventory/inventory_display.html" %}
+    <!-- Main Inventory Card -->
+    <div class="admin-card">
+        <div class="admin-card-header">
+            <h2><i class="bi bi-clipboard-data"></i> Blood Inventory</h2>
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('dashboard.sell_inventory') }}" class="btn btn-outline-danger">
+                    <i class="bi bi-dash-circle"></i> Issue Blood
+                </a>
+                <a href="{{ url_for('dashboard.add_inventory') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Add Stock
+                </a>
+            </div>
         </div>
-
+        
+        <div class="admin-card-body p-0">
+            <div class="table-responsive">
+                <table class="inventory-table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">Blood Group</th>
+                            <th>Component</th>
+                            <th>Collection Date</th>
+                            <th>Expiry Date</th>
+                            <th class="text-center">Quantity (Units)</th>
+                            <th class="text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if inventory %}
+                            {% for item in inventory %}
+                            <tr>
+                                <td class="ps-4">
+                                    <span class="blood-badge">{{ item.blood_group }}</span>
+                                </td>
+                                <td>
+                                    <span class="component-badge">{{ item.component }}</span>
+                                </td>
+                                <td>{{ item.collection_date.strftime('%Y-%m-%d') }}</td>
+                                <td>{{ item.expiry_date.strftime('%Y-%m-%d') }}</td>
+                                <td class="text-center">
+                                    <span class="quantity-badge">{{ item.quantity }}</span>
+                                </td>
+                                <td class="text-center">
+                                    {% if item.expiry_date <= current_date %}
+                                        <span class="badge bg-danger">Expired</span>
+                                    {% elif (item.expiry_date - current_date).days < 7 %}
+                                        <span class="badge bg-warning text-dark">Expiring Soon</span>
+                                    {% else %}
+                                        <span class="badge bg-success">Good</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center py-5 text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                    No inventory records found.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
-
 {% endblock %}

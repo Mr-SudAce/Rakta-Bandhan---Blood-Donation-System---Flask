@@ -1,88 +1,77 @@
+
 {% extends "base.html" %}
 {% block title %}Register - Blood Donation{% endblock %}
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='CSS/register.css') }}">
 
-<div class="register-wrapper">
-    <div class="register-card">
-        <div class="register-header">
-            <h2>🩸 Join the Blood Donation Network</h2>
-            <p>Be a hero — every drop counts.</p>
-        </div>
 
-        <form method="POST" enctype="multipart/form-data" class="register-form">
+<main class="register-wrapper" aria-label="Registration Page" role="main">
+    <section class="register-card card" aria-labelledby="register-title">
+        <header class="register-header">
+            <h2 id="register-title" style="font-size:2rem;font-weight:900;letter-spacing:1px;color:var(--primary);margin-bottom:0.7rem;">🩸 Join the Blood Donation Network</h2>
+            <p style="font-size:1.1rem;color:var(--muted);margin-bottom:1.2rem;">Be a hero — every drop counts.</p>
+        </header>
+        <form method="POST" enctype="multipart/form-data" class="register-form" autocomplete="on" aria-describedby="register-title" role="form">
             {{ form.hidden_tag() }}
-
-            <!-- FULL NAME + PASSWORD -->
             <div class="form-row">
                 <div class="form-group">
-                    {{ form.fullname.label }}
-                    {{ form.fullname(class="form-control", placeholder="Enter your full name") }}
+                    {{ form.fullname.label(class="form-label", for="fullname") }}
+                    {{ form.fullname(class="form-control", id="fullname", placeholder="Enter your full name", aria_label="Full Name", required=True, aria_required="true") }}
                 </div>
                 <div class="form-group">
-                    {{ form.password.label }}
-                    {{ form.password(class="form-control", placeholder="Enter a strong password") }}
+                    {{ form.password.label(class="form-label", for="password") }}
+                    {{ form.password(class="form-control", id="password", placeholder="Enter a strong password", aria_label="Password", required=True, aria_required="true") }}
                 </div>
             </div>
-
-            <!-- EMAIL + PHONE -->
             <div class="form-row">
                 <div class="form-group">
-                    {{ form.email.label }}
-                    {{ form.email(class="form-control", placeholder="Enter your email") }}
+                    {{ form.email.label(class="form-label", for="email") }}
+                    {{ form.email(class="form-control", id="email", placeholder="Enter your email", aria_label="Email", required=True, aria_required="true") }}
                 </div>
                 <div class="form-group">
-                    {{ form.phone.label }}
-                    {{ form.phone(class="form-control", placeholder="Phone number") }}
+                    {{ form.phone.label(class="form-label", for="phone") }}
+                    {{ form.phone(class="form-control", id="phone", placeholder="Phone number", aria_label="Phone Number", required=True, aria_required="true") }}
                 </div>
             </div>
-
-            <!-- ADDRESS + PROFILE -->
             <div class="form-row">
                 <div class="form-group">
-                    {{ form.address.label }}
-                    {{ form.address(class="form-control", placeholder="Enter your address") }}
+                    {{ form.address.label(class="form-label", for="address") }}
+                    {{ form.address(class="form-control", id="address", placeholder="Enter your address", aria_label="Address", required=True, aria_required="true") }}
                 </div>
                 <div class="form-group">
-                    {{ form.profile_picture.label }}
-                    {{ form.profile_picture(class="form-control") }}
+                    {{ form.profile_picture.label(class="form-label", for="profile_picture") }}
+                    {{ form.profile_picture(class="form-control", id="profile_picture", aria_label="Profile Picture") }}
                 </div>
             </div>
-
-            <!-- BLOOD GROUP + ROLE -->
             <div class="form-row">
                 <div class="form-group">
-                    {{ form.blood_grp.label }}
-                    {{ form.blood_grp(class="form-control") }}
+                    {{ form.blood_grp.label(class="form-label", for="blood_grp") }}
+                    {{ form.blood_grp(class="form-control", id="blood_grp", aria_label="Blood Group", required=True, aria_required="true") }}
                 </div>
                 <div class="form-group">
-                    {{ form.role.label }}
-                    {{ form.role(class="form-control") }}
+                    {{ form.role.label(class="form-label", for="role") }}
+                    {{ form.role(class="form-control", id="role", aria_label="Role", required=True, aria_required="true") }}
                 </div>
             </div>
-
-            <!-- DOB + GENDER -->
             <div class="form-row">
                 <div class="form-group">
-                    {{ form.DOB.label }}
-                    {{ form.DOB(class="form-control") }}
+                    {{ form.DOB.label(class="form-label", for="DOB") }}
+                    {{ form.DOB(class="form-control", id="DOB", aria_label="Date of Birth", required=True, aria_required="true") }}
                 </div>
                 <div class="form-group">
-                    {{ form.gender.label }}
-                    {{ form.gender(class="form-control") }}
+                    {{ form.gender.label(class="form-label", for="gender") }}
+                    {{ form.gender(class="form-control", id="gender", aria_label="Gender", required=True, aria_required="true") }}
                 </div>
             </div>
-
-            <div class="form-submit">
-                {{ form.submit(class="btn btn-primary w-100") }}
+            <div class="form-submit center">
+                {{ form.submit(class="btn btn-primary w-100", aria_label="Register") }}
             </div>
-
-            <p class="text-center mt-3">
+            <p class="text-center mt-3" style="font-size:1rem;">
                 Already have an account?
-                <a href="{{ url_for('auth.login') }}">Login here</a>.
+                <a href="{{ url_for('auth.login') }}" style="font-weight:600;">Login here</a>.
             </p>
         </form>
-    </div>
-</div>
+    </section>
+</main>
 
 {% endblock %}

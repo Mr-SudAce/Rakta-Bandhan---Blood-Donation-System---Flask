@@ -1,146 +1,115 @@
-/* Page container */
+/* donateblood.css */
 .donate-container {
-    display: flex;
-    height: 42em;
-    background: #fff;
+    padding: 2rem 0 4rem;
+}
+
+.donate-card {
+    background: var(--surface, #fff);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
     overflow: hidden;
-}
-
-/* Left form side */
-.donate-left {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background: #fff;
-}
-
-.donateblood-form{
-    display: grid;
-    gap: 10px;
-    grid-template-columns: 1fr 1fr;
-}
-
-.donate-left h1 {
-    font-size: 2.2rem;
-    color: #b30000;
-    margin-bottom: 10px;
-}
-
-.donate-left p {
-    font-size: 1rem;
-    color: #555;
-    margin-bottom: 30px;
-}
-
-/* Form styling */
-.form-group {
-    margin-bottom: 20px;
-}
-
-label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: #444;
-}
-
-input, select {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 1rem;
-    outline: none;
-    transition: border 0.2s ease;
-}
-
-input:focus, select:focus {
-    border-color: #b30000;
-}
-
-/* Button */
-.btn {
-    background: #b30000;
-    color: #fff;
-    padding: 12px 20px;
     border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s ease;
 }
 
-.btn:hover {
-    background: #8a0000;
+.donate-body {
+    padding: 3rem;
 }
 
-/* Right image side */
-.donate-right {
-    flex: 1;
+.form-label {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-label i {
+    color: var(--primary);
+}
+
+.form-control, .form-select {
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    background: #fff;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(193, 18, 31, 0.1);
+}
+
+.btn-donate {
+    background: var(--primary);
+    color: white;
+    font-weight: 700;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    border: none;
+    width: 100%;
+    font-size: 1.1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 1rem;
+}
+
+.btn-donate:hover {
+    background: #a00f1a;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(193, 18, 31, 0.2);
+}
+
+.btn-donate:disabled {
+    background: var(--muted);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.eligibility-alert {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Image Side */
+.donate-image-col {
+    background: #ffebee;
     position: relative;
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
 }
 
-.donate-right img {
+.donate-image-col img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    position: relative;
-    z-index: 0;
+    opacity: 0.9;
 }
 
-/* Overlay gradient */
-.donate-right::after {
-    content: "";
+.quote-overlay {
     position: absolute;
-    inset: 0;
-    background: linear-gradient(to right, rgba(179, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
-    z-index: 1;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 2rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: white;
 }
 
-/* Overlay text */
-.overlay-text {
-    position: absolute;
-    bottom: 40px;
-    left: 40px;
-    color: #fff;
-    font-size: 1.5rem;
-    z-index: 2;
-    text-shadow: 0 3px 6px rgba(0,0,0,0.5);
-}
-
-/* Animation */
-@keyframes fadeSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Responsive Design */
-@media (max-width: 900px) {
-    .donate-container {
-        flex-direction: column;
-    }
-
-    .donate-left {
-        padding: 40px 30px;
-    }
-
-    .donate-right {
-        height: 40vh;
-    }
-
-
-    .overlay-text {
-        bottom: 20px;
-        left: 20px;
-        font-size: 1.2rem;
+@media (max-width: 991px) {
+    .donate-image-col {
+        height: 300px;
     }
 }

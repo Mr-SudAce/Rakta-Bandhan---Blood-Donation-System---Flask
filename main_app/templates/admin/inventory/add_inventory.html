@@ -1,48 +1,68 @@
-<div class="add-inv-section-container">
-    <button class="add-inv-toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#invAddForm">
-        + Add New Inventory Item
-    </button>
+{% extends 'base.html' %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/admin/inventory.css') }}">
 
-    <div class="collapse" id="invAddForm">
-        <form action="{{ url_for('dashboard.add_inventory') }}" method="POST" class="add-inv-form">
-            <div class="add-inv-row">
-                <div class="add-inv-col">
-                    <label class="add-inv-label">Blood Group</label>
-                    <select name="blood_group" class="add-inv-input" required>
-                        <option value>Select</option>
-                        <option>A+</option><option>A-</option>
-                        <option>B+</option><option>B-</option>
-                        <option>AB+</option><option>AB-</option>
-                        <option>O+</option><option>O-</option>
-                    </select>
+<div class="container admin-inventory-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2><i class="bi bi-plus-square-dotted"></i> Add Blood Stock</h2>
+                    <a href="{{ url_for('dashboard.manage_inventory') }}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </a>
                 </div>
+                
+                <div class="admin-card-body">
+                    <form method="POST" action="{{ url_for('dashboard.add_inventory') }}">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label for="blood_group" class="form-label fw-bold">Blood Group</label>
+                                <select class="form-select form-control-lg" id="blood_group" name="blood_group" required>
+                                    <option value="" selected disabled>Select Group</option>
+                                    {% for bg in ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] %}
+                                    <option value="{{ bg }}">{{ bg }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="component" class="form-label fw-bold">Component</label>
+                                <select class="form-select form-control-lg" id="component" name="component" required>
+                                    <option value="" selected disabled>Select Component</option>
+                                    <option value="Whole Blood">Whole Blood</option>
+                                    <option value="Plasma">Plasma</option>
+                                    <option value="Platelets">Platelets</option>
+                                    <option value="RBC's">RBC's</option>
+                                </select>
+                            </div>
 
-                <div class="add-inv-col">
-                    <label class="add-inv-label">Component</label>
-                    <select name="component" class="add-inv-input" required>
-                        <option value>Select</option>
-                        <option>Whole Blood</option>
-                        <option>Plasma</option>
-                        <option>Platelets</option>
-                        <option>RBCs</option>
-                    </select>
+                            <div class="col-md-12">
+                                <label for="quantity" class="form-label fw-bold">Quantity (Units)</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control form-control-lg" id="quantity" name="quantity" min="1" placeholder="e.g. 5" required>
+                                    <span class="input-group-text">Units</span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <div class="alert alert-info d-flex align-items-center" role="alert">
+                                    <i class="bi bi-info-circle-fill me-2"></i>
+                                    <div>
+                                        Collection date is set to <strong>Today</strong> automatically. Expiry date will be calculated based on the component type.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 d-flex justify-content-end gap-2">
+                                <a href="{{ url_for('dashboard.manage_inventory') }}" class="btn btn-light border btn-lg">Cancel</a>
+                                <button type="submit" class="btn btn-primary btn-lg px-5">Add to Inventory</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-
-            <div class="add-inv-row">
-                <div class="add-inv-col">
-                    <label class="add-inv-label">Quantity</label>
-                    <input type="number" name="quantity" class="add-inv-input" min="1" value="1" required>
-                </div>
-                <!-- <div class="add-inv-col">
-                    <label class="add-inv-label">Collection Date</label>
-                    <input type="date" name="collection_date" class="add-inv-input" required>
-                </div> -->
-            </div>
-
-            
-
-            <button type="submit" class="add-inv-submit-btn">Add Stock</button>
-        </form>
+        </div>
     </div>
 </div>
+{% endblock %}

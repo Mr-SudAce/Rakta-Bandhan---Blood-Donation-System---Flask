@@ -1,25 +1,33 @@
 .register-wrapper {
   display: flex;
   justify-content: center;
+  min-height: 100vh;
   align-items: center;
-  padding: 1rem;
+  padding: 2.5vw 1vw;
+  background: var(--surface-2);
+  box-sizing: border-box;
 }
 
 /* Main Card */
+
 .register-card {
-  background: rgba(27, 30, 41, 0.9);
-  border-radius: 1.2rem;
-  padding: 2.5rem;
-  max-width: 600px;
+  background: rgba(255,255,255,0.85);
+  border-radius: var(--radius);
+  padding: clamp(1.5rem, 5vw, 2.5rem);
+  max-width: 520px;
   width: 100%;
   color: var(--text);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s cubic-bezier(0.4,0,0.2,1);
+  border: 1px solid rgba(193, 18, 31, 0.08);
+  position: relative;
 }
 
-.register-card:hover {
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65);
+
+.register-card:hover, .register-card:focus-within {
+  box-shadow: 0 16px 48px rgba(193, 18, 31, 0.13);
+  transform: translateY(-2px) scale(1.01);
 }
 
 /* Header */
@@ -28,34 +36,43 @@
   margin-bottom: 1.8rem;
 }
 
+
 .register-header h2 {
-  font-size: 1.8rem;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
   color: var(--primary);
   font-weight: 700;
   margin-bottom: 0.3rem;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px rgba(193,18,31,0.08);
 }
 
+
 .register-header p {
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--muted);
+  margin-bottom: 0.5rem;
 }
 
 /* Form Layout */
+
 .register-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.2rem;
+  width: 100%;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
+  gap: 0.3rem;
+  width: 100%;
 }
 
 /* placeholder */
@@ -66,36 +83,55 @@
 }
 
 /* Input Fields */
+
 .register-card .form-control {
   border-radius: 0.6rem;
   padding: 0.8rem 1rem;
-  background: var(--surface);
-  border: 1px solid var(--muted);
+  background: var(--surface-2);
+  border: 1.5px solid var(--muted);
   color: var(--text);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: none;
 }
 
+
 .register-card .form-control:focus {
-    border-color: var(--primary);
-    box-shadow: var(--ring);
-    outline: none;
+  border-color: var(--primary);
+  box-shadow: var(--ring);
+  outline: none;
+  background: var(--surface);
+}
+
+.form-group label {
+  font-size: 0.97rem;
+  text-transform: capitalize;
+  font-weight: 600;
+  color: var(--text);
 }
 
 
 /* Submit Button */
+
 .btn-primary {
   background: var(--primary);
   border: none;
-  border-radius: 0.6rem;
-  font-weight: 600;
-  padding: 0.9rem;
-  font-size: 1rem;
-  transition: background 0.3s ease, transform 0.2s ease;
+  border-radius: 0.7rem;
+  font-weight: 700;
+  padding: 1rem;
+  font-size: 1.08rem;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: var(--shadow);
+  color: var(--surface);
+  letter-spacing: 0.5px;
+  cursor: pointer;
 }
 
-.btn-primary:hover {
-  background: var(--primary-600);
-  transform: scale(1.02);
+.btn-primary:hover, .btn-primary:focus {
+  background: var(--danger);
+  color: var(--surface);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(193, 18, 31, 0.18);
 }
 
 /* Link Styling */
@@ -103,35 +139,52 @@
   color: var(--primary);
   text-decoration: none;
   font-weight: 500;
+  transition: color var(--transition);
 }
 
 .register-card a:hover {
   text-decoration: underline;
-  color: var(--primary-600);
+  color: var(--danger);
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+
+@media (max-width: 900px) {
+  .register-card {
+    padding: 1.2rem;
+    max-width: 98vw;
+  }
+  .register-header h2 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 600px) {
   .form-row {
     grid-template-columns: 1fr;
+    gap: 0.7rem;
   }
-
+  .register-wrapper {
+    padding: 0.5rem;
+  }
   .register-card {
-    padding: 2rem;
-  }
-
-  .register-header h2 {
-    font-size: 1.5rem;
+    padding: 0.7rem;
   }
 }
 
 @media (max-width: 400px) {
   .register-card {
-    padding: 1.5rem;
+    padding: 0.3rem;
   }
-
   .btn-primary {
     font-size: 0.9rem;
-    padding: 0.8rem;
+    padding: 0.7rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *:before, *:after {
+    transition: none !important;
+    animation: none !important;
   }
 }
