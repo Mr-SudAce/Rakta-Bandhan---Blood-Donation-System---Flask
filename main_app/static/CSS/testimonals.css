@@ -1,60 +1,72 @@
-/* Testimonials Section - Modern, Minimal, Bold, Corporate */
-.quotes {
-  padding: 3rem 1rem;
-  background: var(--surface-2, #f8f9fa);
-  text-align: center;
-
-.quotes h2 {
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--primary);
-  margin-bottom: 2rem;
+/* testimonals.css */
+.testimonials-section {
+    background: var(--surface, #fff);
+    padding: 2.5rem;
+    border-radius: 24px;
+    height: 100%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
-.grid--3 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 2rem;
-  justify-items: center;
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 2rem;
+    text-align: left;
 }
 
-.quote {
-  background: var(--surface, #fff);
-  border-radius: 18px;
-  box-shadow: var(--shadow, 0 4px 24px rgba(0,0,0,0.07));
-  padding: 2rem 1.5rem;
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: var(--text, #222);
-  position: relative;
-  margin: 0;
-  transition: box-shadow 0.2s, transform 0.2s;
+.testimonials-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
-.quote cite {
-  display: block;
-  margin-top: 1rem;
-  font-size: 0.95rem;
-  color: var(--muted, #888);
-  font-style: normal;
+.testimonial-card {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid #f0f0f0;
+    position: relative;
 }
 
-.quote:hover, .quote:focus {
-  box-shadow: 0 8px 32px rgba(193, 18, 31, 0.13);
-  transform: translateY(-2px) scale(1.01);
+.quote-icon {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 1.5rem;
+    color: rgba(193, 18, 31, 0.2);
 }
 
-@media (max-width: 700px) {
-  .quotes h2 {
-    font-size: 1.3rem;
-  }
-  .grid--3 {
-    grid-template-columns: 1fr;
-    gap: 1.2rem;
-  }
-  .quote {
-    padding: 1.2rem 0.7rem;
-    font-size: 1rem;
-  }
+.testimonial-text {
+    font-style: italic;
+    color: var(--muted);
+    margin: 0 0 1rem;
+    padding-left: 2rem;
+    line-height: 1.6;
 }
+
+.author-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-left: 2rem;
+}
+
+.author-avatar {
+    width: 36px;
+    height: 36px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.author-info cite {
+    font-weight: 600;
+    color: var(--text);
+    font-style: normal;
 }

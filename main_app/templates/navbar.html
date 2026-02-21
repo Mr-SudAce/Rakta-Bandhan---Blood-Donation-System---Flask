@@ -25,6 +25,9 @@
          {{ label }}
       </a>
     {% endfor %}
+    <a href="{{ url_for('user.my_donations') }}" class="{% if request.endpoint == 'user.my_donations' %}active{% endif %}" style="font-size:1.2rem; padding:0.7rem 1.2rem; display: flex; align-items: center;" aria-label="my_donations">
+      <i class="bi bi-bell"></i>
+    </a>
     <div class="profile-dropdown">
       <div class="profile_pic">
         {% set pic = current_user.profile_picture %}

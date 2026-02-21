@@ -1,26 +1,46 @@
 {% extends 'base.html' %}
+{% block title %}My Donations{% endblock %}
 
 {% block content %}
-<main id="main-content" aria-label="My Donations">
-  <section class="container py-5">
-    <div class="card shadow-lg border-0" style="max-width: 700px; margin: 0 auto;">
-      <div class="card-body">
-        <h2 class="fw-bold mb-4 text-primary">My Donations</h2>
-        {% if donations %}
-          <ul class="list-group list-group-flush">
-            {% for donation in donations %}
-              <li class="list-group-item">
-                <strong>Date:</strong> {{ donation.date }}<br>
-                <strong>Blood Type:</strong> {{ donation.blood_type }}<br>
-                <strong>Location:</strong> {{ donation.location }}
-              </li>
-            {% endfor %}
-          </ul>
-        {% else %}
-          <p class="text-muted">No donation records found.</p>
-        {% endif %}
-      </div>
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/my_donation.css') }}">
+
+<div class="container donation-container">
+    <div class="donation-header">
+        <h2>My Donation Journey</h2>
+        <p class="text-muted">Thank you for being a hero. Here is a record of your life-saving contributions.</p>
     </div>
-  </section>
-</main>
+
+    {% if donations %}
+    <div class="donation-list">
+        {% for donation in donations %}
+        <div class="donation-card">
+            <div class="donation-info">
+                <h5>{{ donation.title }}</h5>
+                <div class="donation-meta">
+                    <div class="meta-item">
+                        <i class="bi bi-calendar-event"></i>
+                        <span>{{ donation.date.strftime('%d %b, %Y') }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="bi bi-geo-alt"></i>
+                        <span>{{ donation.location }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="donation-badge">
+                <i class="bi bi-droplet-fill"></i>
+                <span>{{ current_user.blood_grp }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="bi bi-heartbreak"></i>
+        <h3>No donations yet</h3>
+        <p>You haven't participated in any campaigns yet. Join a campaign to start your journey!</p>
+        <a href="{{ url_for('user.campaigns') }}" class="btn btn-primary mt-3 rounded-pill px-4">Find Campaigns</a>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

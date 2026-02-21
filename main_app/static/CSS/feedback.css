@@ -1,0 +1,65 @@
+/* feedback.css */
+.feedback-section {
+    background: linear-gradient(135deg, var(--primary), #8a0b14);
+    color: white;
+    padding: 2.5rem;
+    border-radius: 24px;
+    height: 100%;
+    box-shadow: 0 10px 30px rgba(193, 18, 31, 0.2);
+}
+
+.feedback-section .section-title {
+    color: white;
+    text-align: left;
+}
+
+.feedback-form .form-group {
+    margin-bottom: 1rem;
+}
+
+.feedback-form .form-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+    opacity: 0.9;
+}
+
+.feedback-form .form-control {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.feedback-form .form-control::placeholder {
+    color: rgba(255,255,255,0.6);
+}
+
+.feedback-form .form-control:focus {
+    background: rgba(255,255,255,0.25);
+    border-color: rgba(255,255,255,0.5);
+    box-shadow: none;
+    outline: none;
+}
+
+.btn-submit-feedback {
+    background: white;
+    color: var(--primary);
+    font-weight: 700;
+    padding: 0.8rem 2rem;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.btn-submit-feedback:hover {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+}

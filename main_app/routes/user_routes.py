@@ -33,6 +33,10 @@ def contact():
 def about():
     return render_template("common/about.html")
 
+@user_bp.route("/notifications")
+@login_required
+def notifications():
+    return render_template("common/notifications.html")
 
 
 
@@ -203,7 +207,17 @@ def donor_register_event():
 @login_required
 @role_required('donor')
 def my_donations():
-    return render_template("donor/my_donation.html")
+    today = date.today()
+    # Fetch campaigns the user joined that have already passed (implying donation/participation)
+    donations = (
+        db.session.query(Campaign)
+        .join(Participant, Participant.campaign_id == Campaign.id)
+        .filter(Participant.user_id == current_user.id)
+        .filter(Campaign.date < today)
+        .order_by(Campaign.date.desc())
+        .all()
+    )
+    return render_template("donor/my_donation.html", donations=donations)
 
 # ==============================
 # Campaigns
