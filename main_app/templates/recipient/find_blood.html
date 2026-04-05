@@ -1,88 +1,99 @@
 {% extends 'base.html' %}
-{% block title %}Find Blood Donors{% endblock %}
+{% block title %}Find Blood Donors - RaktaBandhan{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='CSS/find_blood.css') }}">
+<div class="min-h-screen bg-[var(--bg)] pt-28 pb-12 px-4 md:px-6">
+    <div class="max-w-7xl mx-auto">
+        
+        <div class="my-12 text-center">
+            <h1 class="text-4xl md:text-5xl font-black text-gray-900 tracking-tight mb-4">
+                Find a <span class="text-[var(--primary)]">Donor</span>
+            </h1>
+            <p class="text-gray-500 font-medium max-w-xl mx-auto mb-10">
+                Search our verified database of heroes ready to help in emergencies.
+            </p>
 
-<div class="container find-blood-container">
+            <div class="bg-white p-3 rounded-[2rem] shadow-2xl shadow-red-100/50 border border-gray-100 max-w-4xl mx-auto">
+                <form action="{{ url_for('user.find_blood') }}" method="GET" class="flex flex-col md:flex-row items-center gap-2">
+                    
+                    <div class="flex-1 w-full relative group">
+                        <i class="bi bi-geo-alt absolute left-5 top-1/2 -translate-y-1/2 text-red-500"></i>
+                        <select name="blood_type" class="w-full pl-12 pr-4 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-red-500/20 appearance-none outline-none cursor-pointer font-bold text-gray-700">
+                            <option value="Select" {% if not selected_city or selected_city == 'Select' %}selected{% endif %}>Locations</option>
+                            {% for city in cities %}
+                            <option value="{{ city }}" class="form-control gap-2" {% if selected_city == city %}selected{% endif %}>{{ city }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-  <!-- Search Header -->
-  <div class="search-card">
-    <h1 class="search-title">Find a Donor</h1>
-    <p class="search-subtitle">Connect with heroes in your community who are ready to save lives.</p>
+                    <div class="flex-1 w-full relative">
+                        <i class="bi bi-droplet absolute left-5 top-1/2 -translate-y-1/2 text-red-500"></i>
+                        <select name="group" class="w-full pl-12 pr-4 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-red-500/20 appearance-none outline-none cursor-pointer font-bold text-gray-700">
+                            <option value="Select" {% if not selected_group or selected_group == 'Select' %}selected{% endif %}>Blood Groups</option>
+                            {% for group in groups %}
+                            <option value="{{ group }}" class="form-control gap-2" {% if selected_group == group %}selected{% endif %}>{{ group }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-    <form action="{{ url_for('user.find_blood') }}" method="GET" class="search-form-wrapper">
-      <div class="search-input-wrapper">
-        <i class="bi bi-geo-alt-fill search-icon"></i>
-        <!-- Note: Backend expects 'blood_type' for address/city filter -->
-        <select name="blood_type" class="form-select search-select">
-          <option value="Select" {% if not selected_city or selected_city == 'Select' %}selected{% endif %}>All Locations</option>
-          {% for city in cities %}
-          <option value="{{ city }}" {% if selected_city == city %}selected{% endif %}>{{ city }}</option>
-          {% endfor %}
-        </select>
-      </div>
-
-      <div class="search-input-wrapper">
-        <i class="bi bi-droplet-fill search-icon"></i>
-        <select name="group" class="form-select search-select">
-          <option value="Select" {% if not selected_group or selected_group == 'Select' %}selected{% endif %}>All Blood Groups</option>
-          {% for group in groups %}
-          <option value="{{ group }}" {% if selected_group == group %}selected{% endif %}>{{ group }}</option>
-          {% endfor %}
-        </select>
-      </div>
-
-      <button type="submit" class="btn-search">
-        <i class="bi bi-search"></i> Search
-      </button>
-    </form>
-  </div>
-
-  <!-- Results Grid -->
-  <div class="row g-4">
-    {% if donors %}
-    {% for donor in donors %}
-    <div class="col-md-6 col-lg-4 col-xl-3">
-      <div class="donor-card">
-        <i class="bi bi-droplet-fill blood-drop-bg"></i>
-
-        <div class="donor-avatar">
-          {% if donor.user.profile_picture %}
-          <img src="{{ url_for('static', filename='uploads/' + donor.user.profile_picture) }}" alt="{{ donor.name }}">
-          {% else %}
-          <i class="bi bi-person-fill"></i>
-          {% endif %}
+                    <button type="submit" class="w-full md:w-auto px-10 py-4 bg-[var(--primary-color)] text-white rounded-4 font-black hover:bg-[var(--primary-color)] transition-all">
+                        <i class="bi bi-search me-2"></i> Search
+                    </button>
+                </form>
+            </div>
         </div>
 
-        <h3 class="donor-name">{{ donor.name }}</h3>
-        <div class="donor-location">
-          <i class="bi bi-geo-alt-fill"></i> {{ donor.address }}
-        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {% if donors %}
+            {% for donor in donors %}
+            <div class="group relative bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-xl shadow-gray-200/50 hover:-translate-y-2 transition-all duration-300">
+                
+                <div class="absolute -top-4 -right-4 w-16 h-16 bg-red-600 rounded-4 flex items-center justify-center text-white font-black text-xl rotate-12 group-hover:rotate-0 transition-transform">
+                    {{ donor.blood_type }}
+                </div>
 
-        <span class="blood-group-badge">{{ donor.blood_type }}</span>
+                <div class="flex flex-col items-center text-center space-y-4">
+                    <div class="w-24 h-24 rounded-3xl overflow-hidden bg-gray-100 ring-4 ring-red-50 mb-2">
+                        {% if donor.user.profile_picture %}
+                        <img src="{{ url_for('static', filename='uploads/' + donor.user.profile_picture) }}" alt="{{ donor.name }}" class="w-full h-full object-cover">
+                        {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-gray-300 text-4xl">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-black text-gray-900 leading-tight">{{ donor.name }}</h3>
+                        <p class="text-sm text-[var(--text-color)]/70 font-bold mt-1 uppercase tracking-widest flex items-center justify-center gap-1">
+                            <i class="bi bi-geo-alt-fill text-red-500"></i> {{ donor.address }}
+                        </p>
+                    </div>
+                </div>
 
-        <div class="donor-actions">
-          <a href="tel:{{ donor.phone }}" class="btn-action btn-call">
-            <i class="bi bi-telephone-fill"></i> Call
-          </a>
-          <a href="mailto:{{ donor.email }}" class="btn-action btn-email">
-            <i class="bi bi-envelope-fill"></i> Email
-          </a>
+                <div class="mt-8 grid grid-cols-2 gap-3">
+                    <a href="tel:{{ donor.phone }}" class="flex items-center justify-center gap-2 py-3 hover:bg-[var(--primary-color)] border border-[var(--primary-color)!important] text-[var(--text-color)!important] hover:text-[var(--bg-color)!important] font-black rounded-xl hover:bg-red-600 transition-all">
+                        <i class="bi bi-telephone-fill"></i> Call
+                    </a>
+                    <a href="mailto:{{ donor.email }}" class="flex items-center justify-center gap-2 py-3 hover:bg-[var(--primary-color)] border border-[var(--primary-color)!important] text-[var(--text-color)!important] hover:text-[var(--bg-color)!important] font-black rounded-xl hover:bg-red-600 transition-all">
+                        <i class="bi bi-envelope-fill"></i> Email
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="col-span-full py-20 text-center">
+                <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gray-50 text-gray-200 text-5xl mb-6">
+                    <i class="bi bi-search"></i>
+                </div>
+                <h3 class="text-2xl font-black text-gray-900">No heroes found here...</h3>
+                <p class="text-gray-500 font-medium mt-2">Try adjusting your filters or expanding your search area.</p>
+                <a href="{{ url_for('user.find_blood') }}" class="mt-8 inline-block text-red-600 font-black border-b-2 border-red-600 pb-1">
+                    Clear all filters
+                </a>
+            </div>
+            {% endif %}
         </div>
-      </div>
     </div>
-    {% endfor %}
-    {% else %}
-    <div class="col-12 text-center py-5">
-      <div class="text-muted">
-        <i class="bi bi-search fs-1 mb-3 d-block" style="font-size: 4rem !important; opacity: 0.2;"></i>
-        <h3>No donors found matching your criteria.</h3>
-        <p>Try adjusting your search filters or check back later.</p>
-        <a href="{{ url_for('user.find_blood') }}" class="btn btn-outline-danger mt-3 rounded-pill px-4">Clear Filters</a>
-      </div>
-    </div>
-    {% endif %}
-  </div>
 </div>
 {% endblock %}

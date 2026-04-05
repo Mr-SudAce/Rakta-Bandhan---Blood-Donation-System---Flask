@@ -1,118 +1,140 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<link rel="stylesheet" href="{{ url_for('static', filename='CSS/profile.css') }}">
-
-<main id="main-content" aria-label="Donor Profile">
-    <section class="container profile-container">
-        <!-- Profile Header -->
-        <div class="profile-header" aria-label="Profile Header">
-            {% set pic = current_user.profile_picture %}
-            <div class="profile-image-wrapper">
-                {% if pic.startswith('profile_pics/') %}
-                    <img class="profile-image"
-                             src="{{ url_for('static', filename='uploads/' ~ pic) }}"
-                             alt="Profile picture of {{ current_user.full_name }}" loading="lazy">
-                {% elif pic.startswith('static_images/') %}
-                    <img class="profile-image"
-                             src="{{ url_for('static', filename='static_images/default.png') }}"
-                             alt="Default profile picture" loading="lazy">
-                {% else %}
-                    <img class="profile-image"
-                             src="{{ url_for('static', filename='static_images/' ~ pic) }}"
-                             alt="Profile picture of {{ current_user.full_name }}" loading="lazy">
-                {% endif %}
-                <a href="{{ url_for('user.edit_profile') }}"
-                     class="edit-profile-btn" aria-label="Edit Profile">
-                    <i class="bi bi-pencil"></i>
-                </a>
-            </div>
-            <h3>{{ current_user.full_name }}</h3>
-            <h5 class="text-muted">{{ current_user.username }}</h5>
-            <p class="text-muted mb-1">{{ current_user.email }}</p>
-            <p class="role-badge">
-                {% if current_user.role == 'donor' %}Donor
-                {% elif current_user.role == 'recipient' %}Recipient
-                {% elif current_user.role == 'superadmin' %}Superadmin
-                {% endif %}
-            </p>
-        </div>
-        <!-- Information Card -->
-        <div class="card profile-card">
-            <div class="card-body">
-                {% if current_user.role in ['donor', 'recipient', 'superadmin'] %}
-                    <h5 class="section-title">Information</h5>
-                    <div class="profile-row">
-                        <strong>Phone</strong>
-                        <span>{{ current_user.phone | default("N/A") }}</span>
+<main class="min-h-screen pt-32 pb-12 bg-gray-50/50">
+    <div class="container max-w-5xl mx-auto px-4">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 p-8 text-center sticky top-28">
+                    <div class="relative inline-block group">
+                        <div class="h-32 w-32 rounded-full border-4 border-red-50 p-1 overflow-hidden shadow-md mx-auto transition-transform group-hover:scale-105">
+                            {% set pic = current_user.profile_picture %}
+                            <img class="h-full w-full object-cover rounded-full"
+                                 src="{{ url_for('static', filename='uploads/' ~ pic if pic.startswith('profile_pics/') else 'static_images/' ~ pic) }}"
+                                 alt="Profile picture" loading="lazy">
+                        </div>
+                        <a href="{{ url_for('user.edit_profile') }}"
+                           class="absolute bottom-1 right-1 h-10 w-10 bg-[var(--primary-color)] text-white rounded-full flex items-center justify-center border-4 border-white shadow-lg hover:bg-red-700 transition-all active:scale-90" 
+                           title="Edit Profile">
+                            <i class="bi bi-pencil-fill text-sm"></i>
+                        </a>
                     </div>
 
-            <div class="profile-row">
-                <strong>DOB</strong>
-                <span>{{ current_user.DOB | default("N/A") }}</span>
-            </div>
+                    <div class="mt-6">
+                        <h2 class="text-2xl font-black text-gray-900 leading-tight">{{ current_user.full_name }}</h2>
+                        <p class="text-sm font-medium text-gray-400 mt-1">@{{ current_user.username }}</p>
+                    </div>
 
-            <div class="profile-row">
-                <strong>Blood Type</strong>
-                <span>{{ current_user.blood_grp | default("N/A") }}</span>
-            </div>
+                    <div class="mt-4 inline-flex items-center px-4 py-1.5 rounded-full bg-red-50 text-[var(--primary-color)] text-[10px] font-black uppercase tracking-widest">
+                        {% if current_user.role == 'donor' %}Donor
+                        {% elif current_user.role == 'recipient' %}Recipient
+                        {% elif current_user.role == 'superadmin' %}Administrator
+                        {% endif %}
+                    </div>
 
-            <div class="profile-row">
-                <strong>Age</strong>
-                <span>{{ age_year | default("N/A") }}</span>
-            </div>
-
-            <div class="profile-row">
-                <strong>Last Donation</strong>
-                <span>{{ current_user.donor.last_donation if current_user.donor else "No donation" }}</span>
-            </div>
-
-            <div class="profile-row">
-                <strong>Eligibility</strong>
-                {% if eligibility %}
-                    <span class="eligible">✔ Eligible</span>
-                {% else %}
-                    <span class="not-eligible">❌ Not Eligible</span>
-                {% endif %}
-            </div>
-
-            {% else %}
-            <h5>No Information Available</h5>
-            {% endif %}
-
-        </div>
-    </div>
-
-    <!-- Certificates -->
-    <div class="card certificate-card">
-        <div class="card-body">
-
-            <h5 class="section-title">Donation Certificates</h5>
-
-            {% if certificates %}
-            <ul class="certificate-list">
-                {% for certificate in certificates %}
-                <li>
-                    <div>
-                        <strong>{{ certificate.date | default("Unknown Date") }}</strong>
-                        <div class="text-muted small">
-                            {{ certificate.event_name | default("Event") }}
+                    <div class="mt-8 pt-8 border-t border-gray-50 flex flex-col gap-3">
+                        <div class="flex items-center gap-3 text-sm text-gray-600 px-2">
+                            <i class="bi bi-envelope-at text-red-400"></i>
+                            <span class="truncate">{{ current_user.email }}</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-600 px-2">
+                            <i class="bi bi-telephone text-red-400"></i>
+                            <span>{{ current_user.phone | default("+977 ————") }}</span>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <a href="{{ certificate.download_url }}" class="btn btn-sm btn-primary">
-                        Download
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            <p class="text-muted">No certificates available.</p>
-            {% endif %}
+            <div class="lg:col-span-2 flex flex-col gap-8">
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-white p-6 rounded-[1.5rem] border border-gray-100 shadow-sm text-center">
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Blood Type</p>
+                        <p class="text-2xl font-black text-[var(--primary-color)]">{{ current_user.blood_grp | default("—") }}</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-[1.5rem] border border-gray-100 shadow-sm text-center">
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Age</p>
+                        <p class="text-2xl font-black text-gray-800">{{ age_year | default("—") }}</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-[1.5rem] border border-gray-100 shadow-sm text-center">
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Status</p>
+                        {% if eligibility %}
+                            <p class="text-sm font-bold text-green-600 flex items-center justify-center gap-1 mt-1"><i class="bi bi-check-circle-fill"></i> Ready</p>
+                        {% else %}
+                            <p class="text-sm font-bold text-orange-500 flex items-center justify-center gap-1 mt-1"><i class="bi bi-clock-history"></i> Pending</p>
+                        {% endif %}
+                    </div>
+                    <div class="bg-white p-6 rounded-[1.5rem] border border-gray-100 shadow-sm text-center">
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Birth Year</p>
+                        <p class="text-2xl font-black text-gray-800">{{ current_user.DOB.strftime('%Y') if current_user.DOB else "—" }}</p>
+                    </div>
+                </div>
 
+                <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
+                        <h3 class="font-black text-gray-900 uppercase tracking-tighter">Medical Information</h3>
+                        <i class="bi bi-shield-check text-xl text-green-500"></i>
+                    </div>
+                    <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Date of Birth</span>
+                            <span class="font-bold text-gray-800">{{ current_user.DOB | default("Not provided") }}</span>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Last Donation Date</span>
+                            <span class="font-bold text-gray-800">{{ current_user.donor.last_donation if current_user.donor else "No history recorded" }}</span>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Donation Eligibility</span>
+                            {% if eligibility %}
+                                <span class="text-sm font-bold text-green-600">You are currently eligible to save lives!</span>
+                            {% else %}
+                                <span class="text-sm font-bold text-red-500">Wait until your next eligible date.</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-8 py-6 border-b border-gray-50 bg-gray-50/30">
+                        <h3 class="font-black text-gray-900 uppercase tracking-tighter">Certificates of Honor</h3>
+                    </div>
+                    <div class="p-8">
+                        {% if certificates %}
+                        <div class="space-y-4">
+                            {% for certificate in certificates %}
+                            <div class="group flex items-center justify-between p-5 rounded-2xl border border-gray-100 hover:border-red-100 hover:bg-red-50/30 transition-all">
+                                <div class="flex items-center gap-4">
+                                    <div class="h-12 w-12 rounded-xl bg-red-100 text-[var(--primary-color)] flex items-center justify-center text-xl">
+                                        <i class="bi bi-patch-check"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-black text-gray-900 leading-none mb-1">{{ certificate.event_name | default("Blood Donation Drive") }}</p>
+                                        <p class="text-xs text-gray-500 font-bold uppercase tracking-widest">{{ certificate.date | default("2026") }}</p>
+                                    </div>
+                                </div>
+                                <a href="{{ certificate.download_url }}" class="h-10 px-6 bg-white border border-gray-200 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-[var(--primary-color)] hover:text-white hover:border-[var(--primary-color)] transition-all flex items-center shadow-sm">
+                                    Download
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="text-center py-8">
+                            <div class="h-16 w-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-300 text-2xl">
+                                <i class="bi bi-award"></i>
+                            </div>
+                            <p class="text-sm font-bold text-gray-400">Start donating to earn your first certificate!</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
-
-</div>
+</main>
 
 {% endblock %}

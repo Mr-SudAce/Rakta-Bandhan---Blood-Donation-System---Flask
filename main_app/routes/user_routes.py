@@ -192,7 +192,7 @@ def donate_blood():
         "donor/donate_blood.html",
         eligibility=eligibility,
         age_year=age_year,
-        donor=donor  # Pass the donor object to the template
+        donor=donor
     )
 
 
@@ -208,7 +208,6 @@ def donor_register_event():
 @role_required('donor')
 def my_donations():
     today = date.today()
-    # Fetch campaigns the user joined that have already passed (implying donation/participation)
     donations = (
         db.session.query(Campaign)
         .join(Participant, Participant.campaign_id == Campaign.id)
@@ -239,8 +238,6 @@ def campaign_detail(campaign_id):
 @login_required
 def join_campaign(campaign_id):
     campaign = Campaign.query.get_or_404(campaign_id)
-    
-    # Check if user already joined
     existing = Participant.query.filter_by(user_id=current_user.id, campaign_id=campaign.id).first()
     if existing:
         flash("You've already joined this campaign!", "warning")

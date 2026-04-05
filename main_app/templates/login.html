@@ -1,40 +1,112 @@
 {% extends "base.html" %}
 {% block title %}Login - Blood Donation{% endblock %}
-{% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='CSS/login.css') }}">
+{% block login %}
 
+<div class="min-h-screen flex border m-0">
 
-<div class="login-wrapper">
-  <div class="login-card">
-    <h2 class="text-center mb-4">🩸 <br> Blood Donation <br> Login</h2>
-
-    <form method="POST" novalidate>
-      {{ form.hidden_tag() }}
-
-      <div class="mb-3">
-        {{ form.username.label(class="form-label") }}
-        {{ form.username(class="form-control", placeholder="Enter your username", autofocus=True) }}
+  <div class="hidden lg:flex lg:w-1/2 bg-[var(--primary-color)] relative overflow-hidden">
+    <div class="relative z-10 flex flex-col justify-center px-16 text-white">
+      <div class="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/20">
+        <span class="text-5xl mb-6 block">🩸</span>
+        <h1 class="text-5xl font-black tracking-tight leading-tight mb-4">
+          The gift of blood is the <br> <span class="text-red-300">gift of life.</span>
+        </h1>
+        <p class="text-xl text-red-50 max-w-md">
+          Every drop counts. Join our community of heroes and help us manage
+          life-saving donations.
+        </p>
       </div>
 
-      <div class="mb-3">
-        {{ form.password.label(class="form-label") }}
-        {{ form.password(class="form-control", placeholder="Enter your password") }}
+      <div class="mt-12 flex gap-8">
+        <div>
+          <p class="text-3xl font-bold">2.5k+</p>
+          <p class="text-red-200 text-sm">Daily Donors</p>
+        </div>
+        <div class="border-l border-white/30 pl-8">
+          <p class="text-3xl font-bold">100%</p>
+          <p class="text-red-200 text-sm">Safe Process</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full lg:w-1/2 flex items-center justify-center bg-white px-8 md:px-16 lg:px-24">
+    <div class="max-w-md w-full">
+
+      <div class="lg:hidden text-center mb-8">
+        <span class="text-5xl">🩸</span>
+        <h2 class="text-2xl font-bold mt-2 text-gray-900">Blood Donation</h2>
       </div>
 
-      <div class="mb-3 form-check">
-        {{ form.remember_me(class="form-check-input") }}
-        {{ form.remember_me.label(class="form-check-label") }}
+      <div class="mb-10">
+        <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Login</h2>
+        <p class="text-gray-500 mt-2">Enter your credentials to access your donor dashboard.</p>
       </div>
 
-      <div class="d-grid mb-3">
-        {{ form.submit(class="btn btn-danger btn-lg") }}
-      </div>
+      <form method="POST" novalidate class="space-y-6">
+        {{ form.hidden_tag() }}
 
-      <p class="text-center small">
-        Don&apos;t have an account? <a href="{{ url_for('auth.register') }}">Register here</a>.
-      </p>
-    </form>
+        <div>
+          <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Username</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+            {# Added id="username-field" to target with JS #}
+            {{ form.username(
+                id="username-field",
+                class="block w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:bg-white transition-all outline-none",
+                placeholder="username123"
+            ) }}
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between mb-2">
+            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider">Password</label>
+          </div>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            {{ form.password(class="block w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:bg-white transition-all outline-none", placeholder="••••••••") }}
+          </div>
+        </div>
+
+        <div>
+          {{ form.submit(class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-xl shadow-red-200 transition-all active:scale-[0.98] cursor-pointer text-lg") }}
+        </div>
+
+        <p class="text-center text-gray-600 mt-8">
+          Not a member yet?
+          <a href="{{ url_for('auth.register') }}" class="text-red-600 font-bold hover:underline">Join the cause</a>
+        </p>
+      </form>
+
+    </div>
   </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Parse the URL to find the 'username' parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const registeredUser = urlParams.get('username');
+
+        if (registeredUser) {
+            const input = document.getElementById('username-field');
+            if (input) {
+                input.value = registeredUser;
+                // Subtle UX: focus the password field so they can just start typing
+                const passwordField = document.querySelector('input[type="password"]');
+                if (passwordField) passwordField.focus();
+            }
+        }
+    });
+</script>
 
 {% endblock %}

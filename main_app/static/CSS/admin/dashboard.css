@@ -1,9 +1,0 @@
-.card-text{
-    color: var(--muted);
-}
-
-
-.recent_activity-item{
-    max-height: 18em;
-    overflow-y: auto;
-}

@@ -1,67 +1,156 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='CSS/navbar.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
 
 {% if current_user.is_authenticated %}
-<header class="nav" role="banner">
-  <a class="brand" href="{{ url_for('user.home') }}" style="font-size:2rem; font-weight:800; letter-spacing:1px; display:flex; align-items:center; gap:0.5rem;">
-    <img src="{{ url_for('static', filename='static_images/logo.ico') }}" alt="Rakta Bandhan Logo" style="height:2.2rem; width:2.2rem; border-radius:8px; box-shadow:0 2px 8px rgba(193,18,31,0.08);"> Rakta Bandhan
-  </a>
-  {% if current_user.role == "superadmin" %}
-    <a class="dashboard-link" href="{{ url_for('dashboard.dashboard') }}" style="font-weight:600; color:var(--primary);">Dashboard</a>
-  {% endif %}
-  <div class="hamburger" id="hamburger" aria-label="Open navigation menu" tabindex="0">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
-  <nav class="menu" id="menu" role="navigation" aria-label="Main Navigation">
-    {% set nav_links = [
-      ('Donate', 'user.donate_blood'),
-      ('Find Blood', 'user.find_blood'),
-      ('Campaigns', 'user.campaigns'),
-      ('About', 'user.about')
-    ] %}
-    {% for label, endpoint in nav_links %}
-      <a href="{{ url_for(endpoint) }}" class="{% if request.endpoint == endpoint %}active{% endif %}" style="font-size:1.1rem; font-weight:600; padding:0.7rem 1.2rem;">
-         {{ label }}
-      </a>
-    {% endfor %}
-    <a href="{{ url_for('user.my_donations') }}" class="{% if request.endpoint == 'user.my_donations' %}active{% endif %}" style="font-size:1.2rem; padding:0.7rem 1.2rem; display: flex; align-items: center;" aria-label="my_donations">
-      <i class="bi bi-bell"></i>
+<header class="fixed top-0 left-0 w-full z-50 p-4" role="banner">
+  <div class="container mx-auto backdrop-blur-md bg-white/80 border border-gray-100 shadow-lg rounded-2xl px-6 py-3 flex items-center justify-between">
+
+    <a class="flex items-center gap-3 group no-underline" href="{{ url_for('user.home') }}">
+      <div class="overflow-hidden rounded-xl transition-transform duration-300 group-hover:scale-110">
+        <img src="{{ url_for('static', filename='static_images/logo.ico') }}"
+          alt="Logo" class="h-9 w-9 object-cover">
+      </div>
+      <span class="text-xl font-black text-gray-900 tracking-tight">
+        Rakta <span class="text-[var(--primary-color)]">Bandhan</span>
+      </span>
     </a>
-    <div class="profile-dropdown">
-      <div class="profile_pic">
-        {% set pic = current_user.profile_picture %}
-        {% if pic.startswith('profile_pics/') %}
-          <img class="profile_image" src="{{ url_for('static', filename='uploads/' ~ pic) }}" alt="Profile" style="border-radius:50%; border:2px solid var(--primary); width:44px; height:44px;">
-        {% else %}
-          <img class="profile_image" src="{{ url_for('static', filename='static_images/' ~ pic) }}" alt="Profile" style="border-radius:50%; border:2px solid var(--primary); width:44px; height:44px;">
+
+    <button id="hamburger"
+      class="lg:hidden flex flex-col gap-1.5 p-2 focus:outline-none"
+      aria-label="Toggle Menu">
+      <span class="w-6 h-0.5 bg-gray-800 rounded-full transition-all duration-300 origin-center" id="line1"></span>
+      <span class="w-6 h-0.5 bg-gray-800 rounded-full transition-all duration-300" id="line2"></span>
+      <span class="w-6 h-0.5 bg-gray-800 rounded-full transition-all duration-300 origin-center" id="line3"></span>
+    </button>
+
+    <nav id="menu" class="hidden lg:flex items-center gap-2">
+        {% if current_user.role == "superadmin" %}
+        <a href="{{ url_for('dashboard.dashboard') }}"
+          class="px-3 py-1.5 bg-red-600 text-white text-[10px] font-black tracking-widest rounded-lg hover:bg-red-700 transition-all mr-2 shadow-sm uppercase">
+          Admin
+        </a>
         {% endif %}
+
+        {% set nav_links = [
+          ('Donate', 'user.donate_blood'),
+          ('Find Blood', 'user.find_blood'),
+          ('Campaigns', 'user.campaigns'),
+          ('About', 'user.about')
+        ] %}
+
+        {% for label, endpoint in nav_links %}
+        <a href="{{ url_for(endpoint) }}"
+          class="px-4 py-2 text-sm font-bold rounded-xl transition-all
+             {% if request.endpoint == endpoint %}
+                text-[var(--primary-color)] bg-[var(--primary-color)]/10
+             {% else %}
+                text-gray-600 hover:text-[var(--primary-color)] hover:bg-gray-50
+             {% endif %}">
+          {{ label }}
+        </a>
+        {% endfor %}
+
+      <div class="flex items-center gap-5 ml-4 pl-6 border-l border-gray-200">
+        
+        <a href="{{ url_for('user.my_donations') }}"
+          class="relative text-gray-500 hover:text-[var(--primary-color)] transition-colors">
+          <i class="bi bi-bell text-xl"></i>
+          <span class="absolute top-0 right-0 w-2 h-2 bg-[var(--primary-color)] border-2 border-white rounded-full"></span>
+        </a>
+
+        <div class="relative" id="profileDropdown">
+          <button id="dropdownBtn" class="flex items-center gap-3 focus:outline-none group">
+            <div class="text-right hidden xl:block leading-tight">
+              <p class="text-sm font-bold text-gray-900 group-hover:text-[var(--primary-color)] transition-colors">
+                {{ current_user.username }}
+              </p>
+              <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">
+                {{ current_user.role }}
+              </p>
+            </div>
+            <div class="h-10 w-10 rounded-full border-2 border-gray-200 p-0.5 overflow-hidden transition-all group-hover:border-[var(--primary-color)] shadow-sm">
+              {% set pic = current_user.profile_picture %}
+              <img src="{{ url_for('static', filename='uploads/' ~ pic if pic.startswith('profile_pics/') else 'static_images/' ~ pic) }}"
+                alt="Profile" class="h-full w-full object-cover rounded-full">
+            </div>
+          </button>
+
+          <div id="dropdownMenu"
+            class="absolute right-0 top-[120%] w-64 opacity-0 invisible translate-y-4 transition-all duration-300 z-50">
+            <div class="bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 overflow-hidden">
+              <div class="px-5 py-3 bg-gray-50/50">
+                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Signed in as</p>
+                <p class="text-sm font-bold text-gray-900 truncate">{{ current_user.email }}</p>
+              </div>
+
+              <div class="h-px bg-gray-100"></div>
+
+              {% set userLinks = [
+                ('user.profile', 'My Profile', 'bi-person'),
+                ('user.my_donations', 'My Donations', 'bi-droplet'),
+                ('auth.logout', 'Logout', 'bi-box-arrow-right')
+              ] %}
+
+              {% for endpoint, title, icon in userLinks %}
+                <a href="{{ url_for(endpoint) }}"
+                  class="flex items-center gap-3 px-5 py-3 text-sm font-semibold transition-colors
+                  {% if endpoint == 'auth.logout' %}
+                    text-red-600 hover:bg-red-50
+                  {% else %}
+                    text-gray-700 hover:text-[var(--primary-color)] hover:bg-gray-50
+                  {% endif %}">
+                  <i class="bi {{ icon }} text-lg"></i>
+                  {{ title }}
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="profile_info">
-        <p class="user_name" style="font-size:1rem; font-weight:700; color:var(--text); margin:0;">{{ current_user.username }}</p>
-        <p class="user-role" style="font-size:0.9rem; color:var(--muted); margin:0;">{{ current_user.role }}</p>
-      </div>
-      <div class="dropdown-content">
-        <a href="{{ url_for('user.profile') }}">Profile</a>
-        <a href="{{ url_for('auth.logout') }}">Logout</a>
-      </div>
-    </div>
-  </nav>
+    </nav>
+  </div>
 </header>
+
 <script>
+  // Mobile Menu Toggle
   const hamburger = document.getElementById('hamburger');
   const menu = document.getElementById('menu');
-  if (hamburger && menu) {
-    hamburger.addEventListener('click', () => {
-        menu.classList.toggle('menu--open');
-        hamburger.classList.toggle('active');
-    });
-    hamburger.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        menu.classList.toggle('menu--open');
-        hamburger.classList.toggle('active');
-      }
-    });
-  }
+  const lines = [document.getElementById('line1'), document.getElementById('line2'), document.getElementById('line3')];
+
+  hamburger.addEventListener('click', () => {
+    menu.classList.toggle('hidden');
+    menu.classList.toggle('flex');
+    // Simple Hamburger Animation
+    lines[1].classList.toggle('opacity-0');
+    lines[0].classList.toggle('rotate-45');
+    lines[0].classList.toggle('translate-y-2');
+    lines[2].classList.toggle('-rotate-45');
+    lines[2].classList.toggle('-translate-y-2');
+    
+    // Mobile specific styles when open
+    if (!menu.classList.contains('hidden')) {
+      menu.className = "flex flex-col absolute top-full left-0 w-full bg-white mt-4 p-6 rounded-2xl shadow-2xl border border-gray-100 lg:hidden animate-in fade-in slide-in-from-top-4";
+    }
+  });
+
+  // Dropdown Logic
+  const dropdownBtn = document.getElementById("dropdownBtn");
+  const dropdownMenu = document.getElementById("dropdownMenu");
+  const dropdownWrapper = document.getElementById("profileDropdown");
+
+  dropdownBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isVisible = !dropdownMenu.classList.contains('invisible');
+    if (isVisible) {
+      dropdownMenu.classList.add("opacity-0", "invisible", "translate-y-4");
+    } else {
+      dropdownMenu.classList.remove("opacity-0", "invisible", "translate-y-4");
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!dropdownWrapper.contains(e.target)) {
+      dropdownMenu.classList.add("opacity-0", "invisible", "translate-y-4");
+    }
+  });
 </script>
 {% endif %}

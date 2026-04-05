@@ -25,11 +25,12 @@ def calculate_age(dob):
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     try:
-        # Redirect if already logged in
         if current_user.is_authenticated:
             return redirect(url_for("user.home"))
 
         form = LoginForm()
+        if request.method == "GET" and request.args.get("username"):
+            form.username.data = request.args.get("username")
 
         if form.validate_on_submit():
             username = form.username.data.strip()
@@ -38,6 +39,18 @@ def login():
             # Empty fields check
             if not username or not password:
                 flash("❌ Please fill out all fields.", "error")
+                return render_template("login.html", form=form)
+            if len(username) < 3 or len(password) < 6:
+                flash("❌ Username must be at least 3 characters and password at least 6 characters.", "error")
+                return render_template("login.html", form=form)
+            if " " in username:
+                flash("❌ Username cannot contain spaces.", "error")
+                return render_template("login.html", form=form)
+            if " " in password:
+                flash("❌ Password cannot contain spaces.", "error")
+                return render_template("login.html", form=form)
+            if not username.isalnum():
+                flash("❌ Username can only contain letters and numbers.", "error")
                 return render_template("login.html", form=form)
 
             # =========================================
@@ -66,7 +79,7 @@ def login():
             
             
 
-            login_user(user, remember=False)
+            login_user(user, remember=True)
 
             session.permanent = True
             session["last_active"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
@@ -101,7 +114,6 @@ def register():
 
         if form.validate_on_submit():
             try:
-                # Check for duplicates
                 if User.query.filter_by(email=form.email.data).first():
                     flash("❌ Email already registered.")
                     return redirect(url_for("auth.register"))

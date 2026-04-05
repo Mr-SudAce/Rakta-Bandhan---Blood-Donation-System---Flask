@@ -1,105 +1,179 @@
 {% extends 'base.html' %}
-{% block title %}Donate Blood{% endblock %}
+{% block title %}Donate Blood - Rakta Bandhan{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='CSS/donateblood.css') }}">
+<div
+    class="min-h-screen bg-[var(--bg-color)!important] pt-32 pb-12 px-4 md:px-6">
+    <div class="max-w-7xl mx-auto">
+        <div
+            class="bg-white rounded-[2.5rem] shadow-2xl shadow-red-100/50 overflow-hidden border border-gray-100 flex flex-col lg:flex-row">
 
-<div class="container donate-container">
-    <div class="row justify-content-center">
-        <div class="col-lg-11">
-            <div class="donate-card">
-                <div class="row g-0">
-                    <!-- Form Section -->
-                    <div class="col-lg-7">
-                        <div class="donate-body">
-                            <h2 class="fw-bold mb-2" style="color: var(--primary);">Register to Donate</h2>
-                            <p class="text-muted mb-4">Fill out the form below to become a donor and save lives.</p>
+            <div class="lg:w-full p-8 md:p-12">
+                <div class="mb-10">
+                    <h2
+                        class="text-4xl font-black text-gray-900 tracking-tight mb-3">
+                        Register to <span
+                            class="text-[var(--primary)]">Donate</span>
+                    </h2>
+                    <p
+                        class="text-gray-500 font-medium leading-relaxed max-w-md">
+                        Fill out the details below. Your contribution helps us
+                        keep the blood bank ready for emergencies.
+                    </p>
+                </div>
 
-                            {% if not eligibility %}
-                            <div class="eligibility-alert">
-                                <i class="bi bi-exclamation-triangle-fill fs-4"></i>
-                                <div>
-                                    <strong>Not Eligible Yet</strong><br>
-                                    You must be at least 18 years old to donate blood.
-                                </div>
+                {% if not eligibility %}
+                <div
+                    class="flex items-center gap-4 p-5 mb-8 bg-red-50 border-l-4 border-red-600 rounded-r-2xl animate-pulse">
+                    <div class="bg-red-600 text-white p-2 rounded-lg">
+                        <i class="bi bi-exclamation-triangle-fill text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="font-black text-red-900 leading-none">Access
+                            Restricted</p>
+                        <p class="text-sm text-red-700 mt-1">Users under 18 are
+                            not eligible to register as donors.</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                <form action="{{ url_for('user.donate_blood') }}" method="POST"
+                    class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label
+                                class="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Full
+                                Name</label>
+                            <div class="relative">
+                                <i
+                                    class="bi bi-person absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" name="name"
+                                    value="{{ donor.name if donor else current_user.full_name }}"
+                                    class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all outline-none"
+                                    required>
                             </div>
-                            {% endif %}
+                        </div>
 
-                            <form action="{{ url_for('user.donate_blood') }}" method="POST">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="name" class="form-label"><i class="bi bi-person"></i> Full Name</label>
-                                        <input type="text" class="form-control" id="name" name="name" value="{{ donor.name if donor else current_user.full_name }}" required>
-                                    </div>
-                                    
-                                    <div class="col-md-6">
-                                        <label for="phone" class="form-label"><i class="bi bi-telephone"></i> Phone</label>
-                                        <input type="text" class="form-control" id="phone" name="phone" value="{{ donor.phone if donor else current_user.phone }}" required>
-                                    </div>
+                        <div class="space-y-2">
+                            <label
+                                class="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Phone
+                                Number</label>
+                            <div class="relative">
+                                <i
+                                    class="bi bi-telephone absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" name="phone"
+                                    value="{{ donor.phone if donor else current_user.phone }}"
+                                    class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all outline-none"
+                                    required>
+                            </div>
+                        </div>
 
-                                    <div class="col-md-12">
-                                        <label for="email" class="form-label"><i class="bi bi-envelope"></i> Email</label>
-                                        <input type="email" class="form-control" id="email" name="email" value="{{ donor.email if donor else current_user.email }}" required>
-                                    </div>
+                        <div class="md:col-span-2 space-y-2">
+                            <label
+                                class="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Email
+                                Address</label>
+                            <div class="relative">
+                                <i
+                                    class="bi bi-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                <input type="email" name="email"
+                                    value="{{ donor.email if donor else current_user.email }}"
+                                    class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all outline-none"
+                                    required>
+                            </div>
+                        </div>
 
-                                    <div class="col-md-12">
-                                        <label for="address" class="form-label"><i class="bi bi-geo-alt"></i> Address</label>
-                                        <input type="text" class="form-control" id="address" name="address" value="{{ donor.address if donor else current_user.address }}" required>
-                                    </div>
+                        <div class="md:col-span-2 space-y-2">
+                            <label
+                                class="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Current
+                                Address</label>
+                            <div class="relative">
+                                <i
+                                    class="bi bi-geo-alt absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" name="address"
+                                    value="{{ donor.address if donor else current_user.address }}"
+                                    class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all outline-none"
+                                    required>
+                            </div>
+                        </div>
 
-                                    <div class="col-md-4">
-                                        <label for="blood_type" class="form-label"><i class="bi bi-droplet"></i> Blood Type</label>
-                                        <select id="blood_type" name="blood_type" class="form-select" required>
-                                            <option value="">Select</option>
-                                            {% for type in ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'] %}
-                                            <option value="{{ type }}" {% if (donor and donor.blood_type == type) or (not donor and current_user.blood_grp == type) %}selected{% endif %}>{{ type }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+                        <div class="space-y-2">
+                            <label
+                                class="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Blood
+                                Group</label>
+                            <div class="relative">
+                                <i
+                                    class="bi bi-droplet absolute left-4 top-1/2 -translate-y-1/2 text-red-500"></i>
+                                <select name="blood_type"
+                                    class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:ring-2 focus:ring-red-500/20 focus:border-red-500 appearance-none outline-none cursor-pointer"
+                                    required>
+                                    <option value>Select Group</option>
+                                    {% for type in ['A+', 'A-', 'B+', 'B-',
+                                    'O+', 'O-', 'AB+', 'AB-'] %}
+                                    <option value="{{ type }}" {% if (donor and
+                                        donor.blood_type == type) or (not donor
+                                        and current_user.blood_grp == type)
+                                        %}selected{% endif %}>{{ type
+                                        }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
 
-                                    <div class="col-md-4">
-                                        <label for="DOB" class="form-label"><i class="bi bi-calendar"></i> Date of Birth</label>
-                                        <input type="date" class="form-control" id="DOB" name="DOB" value="{{ donor.DOB if donor else current_user.DOB }}" required>
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <label for="gender" class="form-label"><i class="bi bi-gender-ambiguous"></i> Gender</label>
-                                        <select id="gender" name="gender" class="form-select" required>
-                                            <option value="">Select</option>
-                                            {% for g in ['Male', 'Female', 'Other'] %}
-                                            <option value="{{ g }}" {% if (donor and donor.gender == g) or (not donor and current_user.gender == g) %}selected{% endif %}>{{ g }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="mt-4">
-                                    {% if eligibility %}
-                                    <button type="submit" class="btn-donate">
-                                        <i class="bi bi-heart-fill me-2"></i> Register Donation
-                                    </button>
-                                    {% else %}
-                                    <button type="button" class="btn-donate" disabled>
-                                        Not Eligible
-                                    </button>
-                                    {% endif %}
-                                </div>
-                            </form>
+                        <div class="space-y-2">
+                            <label
+                                class="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Date
+                                of Birth</label>
+                            <div class="relative">
+                                <i
+                                    class="bi bi-calendar absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                <input type="date" name="DOB"
+                                    value="{{ donor.DOB if donor else current_user.DOB }}"
+                                    class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all outline-none"
+                                    required>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Image Section -->
-                    <div class="col-lg-5">
-                        <div class="donate-image-col">
-                            <img src="{{ url_for('static', filename='static_images/bd_img1.jpeg') }}" alt="Blood Donation">
-                            <div class="quote-overlay">
-                                <h3 class="fw-bold">"The blood you donate gives someone another chance at life."</h3>
-                                <p class="mb-0 opacity-75">— Be a Hero Today</p>
-                            </div>
+                    <div class="pt-6">
+                        {% if eligibility %}
+                        <button type="submit"
+                            class="w-full md:w-auto px-12 py-4 bg-[var(--primary-color)!important] rounded-2 hover:bg-[var(--primary-color)!important]/60] text-white font-bold rounded-2xl hover:bg-[var(--primary-color)!important]/60 transition-all active:scale-95">
+                            <i class="bi bi-heart-fill me-2"></i> Confirm
+                            Registration
+                        </button>
+                        {% else %}
+                        <button type="button"
+                            class="w-full md:w-auto px-12 py-4 bg-gray-100 text-gray-400 font-bold rounded-2xl cursor-not-allowed"
+                            disabled>
+                            Not Eligible
+                        </button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+
+            <div class="lg:w-3/5 relative min-h-[300px] lg:min-h-full">
+                <img
+                    src="{{ url_for('static', filename='static_images/bd_img1.jpeg') }}"
+                    alt="Blood Donation"
+                    class="absolute inset-0 w-full h-full object-cover">
+                <div
+                    class="absolute inset-0 bg-gradient-to-t from-red-900/90 via-red-900/40 to-transparent flex flex-col justify-end p-12 text-white">
+                    <div
+                        class="bg-white/10 backdrop-blur-md p-6 rounded-3xl border border-white/20">
+                        <p class="text-2xl font-bold italic leading-tight mb-4">
+                            "The blood you donate gives someone another chance at life."
+                        </p>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-1 bg-red-400"></div>
+                            <span
+                                class="text-sm font-black uppercase tracking-widest">Be
+                                a Hero Today</span>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

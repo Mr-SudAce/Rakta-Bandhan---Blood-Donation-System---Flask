@@ -1,83 +1,159 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Campaigns
-{% endblock %}
+{% block title %}Campaigns - RaktaBandhan{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='CSS/campaign.css') }}">
+<div class="min-h-screen bg-[var(--bg)] pt-28 pb-20 px-4 md:px-6">
+    <div class="container mx-auto max-w-7xl">
 
-<section class="campaigns-section">
+        <div class="mb-16 mt-3 text-center space-y-4">
+            <span
+                class="px-5 py-2 text-[10px] font-black tracking-[0.25em] text-[var(--primary-color)!important] uppercase bg-[var(--primary-color)]/20 rounded-full border border-red-100/50">
+                Live Opportunities
+            </span>
+            <h1
+                class="text-4xl md:text-6xl font-black text-gray-900 tracking-tighter mt-2">
+                Blood Donation <span
+                    class="text-[var(--primary-color)!important]">Campaigns</span>
+            </h1>
+            <p
+                class="text-gray-500 font-medium max-w-2xl mx-auto text-lg leading-relaxed">
+                Every drop counts. Join the nearest campaign in Nepal and become
+                a hero for someone in need today.
+            </p>
+        </div>
 
-    <!-- Header -->
-    <div class="campaigns-header">
-        <h1>Blood Donation Campaigns</h1>
-        <p>Be part of something bigger — donate blood, save lives.</p>
-    </div>
-
-    <div class="container">
-        <!-- Grid -->
-        <div class="campaigns-grid">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for c in campaigns.items %}
-            <div class="campaign-card">
+            <div
+                class="group bg-white rounded-[3rem] overflow-hidden border border-gray-100 shadow-2xl shadow-red-900/5 hover:shadow-red-900/10 transition-all duration-500 flex flex-col h-full">
 
-                <div class="card-image">
+                <div class="relative h-64 overflow-hidden">
                     {% if c.camp_img %}
-                    <img src="{{ url_for('static', filename='uploads/' + c.camp_img) }}" alt="{{ c.title }}">
+                    <img
+                        src="{{ url_for('static', filename='uploads/' + c.camp_img) }}"
+                        alt="{{ c.title }}"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     {% else %}
-                    <img src="{{ url_for('static', filename='static_images/noimage.jpg') }}" alt="Default Image">
+                    <img
+                        src="{{ url_for('static', filename='static_images/noimage.jpg') }}"
+                        alt="Default"
+                        class="w-full h-full object-cover opacity-40 grayscale">
                     {% endif %}
 
-                    <div class="date-badge">
-                        {{ c.date.strftime('%d %b %Y') }}
+                    <div
+                        class="absolute top-6 left-6 bg-white/80 backdrop-blur-xl px-4 py-3 rounded-3xl shadow-2xl border border-white/50 text-center min-w-[70px]">
+                        <span
+                            class="block text-2xl font-black text-red-600 leading-none">{{
+                            c.date.strftime('%d') }}</span>
+                        <span
+                            class="block text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mt-1">{{
+                            c.date.strftime('%b') }}</span>
+                    </div>
+
+                    <div class="absolute top-6 right-6">
+                        <span
+                            class="flex items-center gap-2 px-3 py-1.5 bg-green-500/90 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest rounded-full">
+                            <span
+                                class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
+                            Open
+                        </span>
                     </div>
                 </div>
 
-                <div class="card-content">
-                    <h3>{{ c.title }}</h3>
-                    <p class="location">
-                        <i class="bi bi-geo-alt"></i>
-                        {{ c.location }}
-                    </p>
-                </div>
+                <div class="p-10 flex flex-col flex-grow">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <div
+                                class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center">
+                                <i
+                                    class="bi bi-geo-alt-fill text-red-500 text-xs"></i>
+                            </div>
+                            <span
+                                class="text-[10px] font-black uppercase tracking-widest text-gray-400">{{
+                                c.location }}</span>
+                        </div>
+                    </div>
 
-                <div class="card-footer">
-                    <a href="{{ url_for('user.campaign_detail', campaign_id=c.id) }}" class="btn-join">
-                        View Details
-                    </a>
+                    <h3
+                        class="text-2xl font-black text-gray-900 mb-4 leading-tight group-hover:text-red-600 transition-colors">
+                        {{ c.title }}
+                    </h3>
+
+                    <p
+                        class="text-gray-500 text-sm font-medium line-clamp-2 mb-8">
+                        {{ c.description|truncate(100) }}
+                    </p>
+
+                    <div class="mt-auto">
+                        <a
+                            href="{{ url_for('user.campaign_detail', campaign_id=c.id) }}"
+                            class="inline-flex items-center justify-between w-full p-1 bg-gray-50 border border-gray-100 rounded-2xl group-hover:bg-red-600 transition-all duration-300">
+                            <span
+                                class="ps-6 text-xs font-black uppercase tracking-widest text-gray-900 group-hover:text-white">View
+                                Details</span>
+                            <div
+                                class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-red-600 shadow-sm group-hover:text-red-600">
+                                <i
+                                    class="bi bi-arrow-right text-lg transition-transform group-hover:translate-x-1"></i>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
             {% else %}
-            <div class="no-campaigns">
-                <h4>No campaigns available right now</h4>
-                <p>Check back later for upcoming drives.</p>
+            <div
+                class="col-span-full py-32 text-center bg-white rounded-[4rem] border-2 border-dashed border-gray-100">
+                <div
+                    class="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-8">
+                    <i class="bi bi-megaphone text-red-200 text-4xl"></i>
+                </div>
+                <h4 class="text-3xl font-black text-gray-900">Quiet for
+                    now...</h4>
+                <p
+                    class="text-gray-400 font-medium mt-3 max-w-xs mx-auto text-lg">No
+                    active campaigns today. Why not start one?</p>
             </div>
             {% endfor %}
         </div>
 
-        <!-- Pagination -->
         {% if campaigns.pages > 1 %}
-        <div class="pagination">
+        <div
+            class="mt-24 flex flex-col md:flex-row items-center justify-between gap-8 border-t border-gray-100 pt-12">
+            <div class="flex items-center gap-4">
+                <div class="flex -space-x-2">
+                    {% for i in range(1, campaigns.pages + 1) %}
+                    <a href="{{ url_for('user.campaigns', page=i) }}"
+                        class="w-10 h-10 flex items-center justify-center rounded-full border-2 border-white text-xs font-black shadow-sm transition-all
+                       {% if i == campaigns.page %} bg-red-600 text-white z-10 scale-110 {% else %} bg-gray-100 text-gray-400 hover:bg-gray-200 {% endif %}">
+                        {{ i }}
+                    </a>
+                    {% endfor %}
+                </div>
+                <span
+                    class="text-xs font-black uppercase tracking-widest text-gray-400">Total
+                    {{ campaigns.pages }} Pages</span>
+            </div>
 
-            {% if campaigns.has_prev %}
-            <a href="{{ url_for('user.campaigns', page=campaigns.prev_num) }}" class="page-btn">
-                ← Prev
-            </a>
-            {% endif %}
+            <div class="flex items-center gap-4">
+                {% if campaigns.has_prev %}
+                <a
+                    href="{{ url_for('user.campaigns', page=campaigns.prev_num) }}"
+                    class="px-8 py-4 bg-white border border-gray-200 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] text-gray-700 hover:border-red-500 hover:text-red-600 transition-all shadow-sm">
+                    Back
+                </a>
+                {% endif %}
 
-            <span class="page-info">
-                Page {{ campaigns.page }} of {{ campaigns.pages }}
-            </span>
-
-            {% if campaigns.has_next %}
-            <a href="{{ url_for('user.campaigns', page=campaigns.next_num) }}" class="page-btn">
-                Next →
-            </a>
-            {% endif %}
-
+                {% if campaigns.has_next %}
+                <a
+                    href="{{ url_for('user.campaigns', page=campaigns.next_num) }}"
+                    class="px-8 py-4 bg-gray-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-red-600 transition-all shadow-xl shadow-gray-200">
+                    Next Page
+                </a>
+                {% endif %}
+            </div>
         </div>
         {% endif %}
     </div>
-
-</section>
+</div>
 {% endblock %}

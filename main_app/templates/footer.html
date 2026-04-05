@@ -1,39 +1,103 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='CSS/footer.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
 {% if current_user.is_authenticated %}
 <!-- Footer -->
-<footer class="footer" role="contentinfo">
-    <div class="footer__grid">
-        <div style="display:flex;align-items:center;gap:1rem;">
-            <img src="{{ url_for('static', filename='static_images/logo.ico') }}" alt="Rakta Bandhan Logo" style="height:2.5rem;width:2.5rem;border-radius:8px;box-shadow:0 2px 8px rgba(193,18,31,0.08);">
-            <div>
-                <h3 style="font-size:1.5rem;font-weight:800;letter-spacing:1px;color:var(--primary);margin-bottom:0.3rem;">Rakta Bandhan</h3>
-                <p class="muted" style="font-size:1.1rem;">Connecting donors and patients across Nepal, 24/7.</p>
+<footer class="bg-white border-t border-gray-100 pt-16 pb-8 px-6"
+    role="contentinfo">
+    <div class="container mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+
+            <div class="space-y-6">
+                <div class="flex items-center gap-4">
+                    <div class="p-2 bg-red-50 rounded-xl shadow-sm">
+                        <img
+                            src="{{ url_for('static', filename='static_images/logo.ico') }}"
+                            alt="Rakta Bandhan Logo"
+                            class="h-10 w-10 object-contain">
+                    </div>
+                    <div>
+                        <h3
+                            class="text-2xl font-black tracking-tighter text-gray-900">
+                            Rakta <span
+                                class="text-[var(--primary-color)!important]">Bandhan</span>
+                        </h3>
+                    </div>
+                </div>
+                <p
+                    class="text-gray-500 font-medium text-justify leading-relaxed max-w-xs">
+                    Connecting donors and patients across <span
+                        class="text-[var(--primary-color)!important] font-bold">Nepal</span>.
+                    Our mission is to ensure no life is lost due to blood
+                    scarcity.
+                </p>
+            </div>
+
+            <div class="flex flex-col gap-6">
+                <h4
+                    class="text-xs font-black uppercase tracking-[0.2em] text-gray-400">Quick
+                    Links</h4>
+                <ul class="space-y-4">
+
+                    {% for links, url in [('Home', 'user.home'),
+                    ('Donate Blood', 'user.donate_blood'), ('Find Blood',
+                    'user.find_blood'), ('Campaigns', 'user.campaigns')] %}
+                    <li>
+                        <a href="{{ url_for(url) }}"
+                            class="text-[var(--primary-color)!important] font-semibold hover:text-red-600 transition-colors flex items-center gap-2 group">
+                            <span
+                                class="w-0 h-0.5 bg-red-600 group-hover:w-4 transition-all"></span>
+                            {{ links }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="flex flex-col gap-6">
+                <h4
+                    class="text-xs font-black uppercase tracking-[0.2em] text-gray-400">Contact
+                    Us</h4>
+                <ul class="space-y-4  font-semibold">
+                    <li class="flex items-center gap-3 ">
+                        <i
+                            class="bi bi-envelope text-[var(--primary-color)!important]"></i>
+                        <span>help@raktabandhan.org</span>
+                    </li>
+                    <li class="flex items-center gap-3 ">
+                        <i
+                            class="bi bi-telephone text-[var(--primary-color)!important]"></i>
+                        <span>+977-1-555-1234</span>
+                    </li>
+                    <li class="flex items-center gap-3 ">
+                        <i
+                            class="bi bi-geo-alt text-[var(--primary-color)!important]"></i>
+                        <span>Kathmandu, Nepal</span>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div>
-            <h4 style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:0.7rem;">Links</h4>
-            <ul>
-                <li><a href="{{ url_for('user.home') }}">Home</a></li>
-                <li><a href="{{ url_for('user.donate_blood') }}">Donate</a></li>
-                <li><a href="{{ url_for('user.find_blood') }}">Find Blood</a></li>
-                <li><a href="{{ url_for('user.campaigns') }}">Campaigns</a></li>
-            </ul>
-        </div>
-        <div>
-            <h4 style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:0.7rem;">Contact</h4>
-            <ul>
-                <li>help@raktabandhan.org</li>
-                <li>+977-1-555-1234</li>
-                <li>Kathmandu, Nepal</li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer__bar">
-        <span style="font-weight:600;">© 2025 Rakta Bandhan</span>
-        <div class="socials">
-            <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-            <a href="#" aria-label="X"><i class="bi bi-twitter"></i></a>
-            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+
+        <div
+            class="pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6">
+            <span class="text-gray-400 font-bold text-sm tracking-wide">
+                © 2026 <span class="text-[var(--primary-color)!important]">Rakta
+                    Bandhan</span>. All rights reserved.
+            </span>
+
+            <div class="flex items-center gap-4">
+                <a href="#"
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 text-[var(--text-color)!important] transition-all shadow-sm">
+                    <i class="bi bi-facebook"></i>
+                </a>
+                <a href="#"
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 text-[var(--text-color)!important] transition-all shadow-sm">
+                    <i class="bi bi-twitter-x"></i>
+                </a>
+                <a href="#"
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 text-[var(--text-color)!important] transition-all shadow-sm">
+                    <i
+                        class="bi bi-instagram"></i>
+                </a>
+            </div>
         </div>
     </div>
 </footer>

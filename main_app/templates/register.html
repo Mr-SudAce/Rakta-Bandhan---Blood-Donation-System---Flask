@@ -1,77 +1,120 @@
-
 {% extends "base.html" %}
 {% block title %}Register - Blood Donation{% endblock %}
-{% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='CSS/register.css') }}">
+{% block register %}
 
+<div class="min-h-screen flex">
+    <div class="hidden xl:flex xl:w-1/2 bg-[var(--primary-color)] relative overflow-hidden">
+        <div class="relative z-10 flex flex-col justify-center px-16 text-white w-full">
+            <div class="bg-white/10 backdrop-blur-md p-10 rounded-3xl border border-white/20">
+                <span class="text-6xl mb-6 block">🩸</span>
+                <h1 class="text-5xl xl:text-6xl font-black tracking-tight leading-tight mb-6">
+                    Be a <span class="text-red-300">hero</span>.<br> Every drop counts.
+                </h1>
+                <p class="text-xl text-red-100 max-w-lg">
+                    Join the Blood Donation Network. Registration is the first step toward saving lives and managing crucial, time-sensitive donations in your community.
+                </p>
+            </div>
 
-<main class="register-wrapper" aria-label="Registration Page" role="main">
-    <section class="register-card card" aria-labelledby="register-title">
-        <header class="register-header">
-            <h2 id="register-title" style="font-size:2rem;font-weight:900;letter-spacing:1px;color:var(--primary);margin-bottom:0.7rem;">🩸 Join the Blood Donation Network</h2>
-            <p style="font-size:1.1rem;color:var(--muted);margin-bottom:1.2rem;">Be a hero — every drop counts.</p>
-        </header>
-        <form method="POST" enctype="multipart/form-data" class="register-form" autocomplete="on" aria-describedby="register-title" role="form">
-            {{ form.hidden_tag() }}
-            <div class="form-row">
-                <div class="form-group">
-                    {{ form.fullname.label(class="form-label", for="fullname") }}
-                    {{ form.fullname(class="form-control", id="fullname", placeholder="Enter your full name", aria_label="Full Name", required=True, aria_required="true") }}
+            <div class="mt-12 flex gap-8">
+                <div>
+                    <p class="text-4xl font-bold">5k+</p>
+                    <p class="text-red-200 text-sm font-medium">Volunteers Signed Up</p>
                 </div>
-                <div class="form-group">
-                    {{ form.password.label(class="form-label", for="password") }}
-                    {{ form.password(class="form-control", id="password", placeholder="Enter a strong password", aria_label="Password", required=True, aria_required="true") }}
+                <div class="border-l border-white/30 pl-8">
+                    <p class="text-4xl font-bold">120</p>
+                    <p class="text-red-200 text-sm font-medium">Hospitals Serviced</p>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    {{ form.email.label(class="form-label", for="email") }}
-                    {{ form.email(class="form-control", id="email", placeholder="Enter your email", aria_label="Email", required=True, aria_required="true") }}
-                </div>
-                <div class="form-group">
-                    {{ form.phone.label(class="form-label", for="phone") }}
-                    {{ form.phone(class="form-control", id="phone", placeholder="Phone number", aria_label="Phone Number", required=True, aria_required="true") }}
-                </div>
+        </div>
+    </div>
+
+    <div class="w-full xl:w-1/2 flex items-center justify-center bg-white px-6 md:px-12 lg:px-20 py-12">
+        <div class="max-w-4xl w-full">
+            
+            <div class="xl:hidden text-center mb-10">
+                <span class="text-6xl">🩸</span>
+                <h2 class="text-2xl font-bold mt-2 text-gray-900">Blood Donation Network</h2>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    {{ form.address.label(class="form-label", for="address") }}
-                    {{ form.address(class="form-control", id="address", placeholder="Enter your address", aria_label="Address", required=True, aria_required="true") }}
-                </div>
-                <div class="form-group">
-                    {{ form.profile_picture.label(class="form-label", for="profile_picture") }}
-                    {{ form.profile_picture(class="form-control", id="profile_picture", aria_label="Profile Picture") }}
-                </div>
+
+            <div class="mb-10 text-center xl:text-left">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">Create Account</h2>
+                <p class="text-lg text-gray-600 mt-3">Join our community and start saving lives today.</p>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    {{ form.blood_grp.label(class="form-label", for="blood_grp") }}
-                    {{ form.blood_grp(class="form-control", id="blood_grp", aria_label="Blood Group", required=True, aria_required="true") }}
+
+            <form method="POST" enctype="multipart/form-data" class="space-y-8 h-screen" autocomplete="on" role="form">
+                {{ form.hidden_tag() }}
+                <div class="space-y-2">
+                    <h3 class="text-sm font-black uppercase tracking-widest text-[var(--primary-color)] border-b border-gray-100 pb-2">Personal Identity</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider">Full Name</label>
+                            {{ form.fullname(class="block w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:bg-white transition-all outline-none", placeholder="John Doe") }}
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider">Profile Picture <span class="text-gray-400 font-normal">(Optional)</span></label>
+                            {{ form.profile_picture(class="block w-full text-sm text-gray-600 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer bg-gray-50 border border-gray-200 rounded-xl") }}
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    {{ form.role.label(class="form-label", for="role") }}
-                    {{ form.role(class="form-control", id="role", aria_label="Role", required=True, aria_required="true") }}
+
+                <div class="space-y-2">
+                    <h3 class="text-sm font-black uppercase tracking-widest text-[var(--primary-color)] border-b border-gray-100 pb-2">Contact & Security</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider">Email Address</label>
+                            {{ form.email(class="block w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:bg-white transition-all outline-none", placeholder="john@example.com") }}
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider">Password</label>
+                            {{ form.password(class="block w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:bg-white transition-all outline-none", placeholder="••••••••") }}
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider">Phone Number</label>
+                            {{ form.phone(class="block w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:bg-white transition-all outline-none", placeholder="+977 xxx-xxxxxxx") }}
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider">Current Address</label>
+                            {{ form.address(class="block w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:bg-white transition-all outline-none", placeholder="City, Country") }}
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    {{ form.DOB.label(class="form-label", for="DOB") }}
-                    {{ form.DOB(class="form-control", id="DOB", aria_label="Date of Birth", required=True, aria_required="true") }}
+
+                <div class="space-y-2">
+                    <h3 class="text-sm font-black uppercase tracking-widest text-[var(--primary-color)] border-b border-gray-100 pb-2">Medical & Role Details</h3>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="space-y-2 lg:col-span-1">
+                            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider">Blood Group</label>
+                            {{ form.blood_grp(class="block w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 outline-none cursor-pointer") }}
+                        </div>
+                        <div class="space-y-2 lg:col-span-1">
+                            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider">Gender</label>
+                            {{ form.gender(class="block w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 outline-none cursor-pointer") }}
+                        </div>
+                        <div class="space-y-2 lg:col-span-2">
+                            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider">Date of Birth</label>
+                            {{ form.DOB(class="block w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 outline-none") }}
+                        </div>
+                    </div>
+                    <div class="space-y-2 pt-2">
+                        <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider">I am registering as a:</label>
+                        {{ form.role(class="block w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 outline-none cursor-pointer") }}
+                    </div>
                 </div>
-                <div class="form-group">
-                    {{ form.gender.label(class="form-label", for="gender") }}
-                    {{ form.gender(class="form-control", id="gender", aria_label="Gender", required=True, aria_required="true") }}
+
+                <div class="pt-4">
+                    {{ form.submit(class="w-full bg-[var(--primary-color)] hover:bg-[var(--primary-color)]/80 text-white font-bold py-4 rounded-xl transition-all active:scale-[0.98] cursor-pointer text-lg") }}
+                    
+                    <p class="text-center text-gray-600 mt-8">
+                        Already a member? 
+                        <a href="{{ url_for('auth.login') }}" class="text-[var(--primary-color)] font-bold hover:underline ml-1">
+                            Login here
+                        </a>
+                    </p>
                 </div>
-            </div>
-            <div class="form-submit center">
-                {{ form.submit(class="btn btn-primary w-100", aria_label="Register") }}
-            </div>
-            <p class="text-center mt-3" style="font-size:1rem;">
-                Already have an account?
-                <a href="{{ url_for('auth.login') }}" style="font-weight:600;">Login here</a>.
-            </p>
-        </form>
-    </section>
-</main>
+            </form>
+
+        </div>
+    </div>
+</div>
 
 {% endblock %}
