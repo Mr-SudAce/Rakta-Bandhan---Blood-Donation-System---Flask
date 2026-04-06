@@ -1,75 +1,111 @@
 {% extends 'base.html' %}
+{% block title %}System Reports{% endblock %}
 
 {% block content %}
-<div class=" container">
+<div class="container mx-auto px-4 py-6 max-w-7xl">
+    <div class="mb-6">
+        {% include "admin/quickaction.html" %}
+    </div>
 
-    {% include "admin/quickaction.html" %}
+    <div class="mb-8">
+        <h2 class="text-2xl font-black text-gray-900 tracking-tight flex items-center gap-2">
+            <i class="bi bi-graph-up-arrow text-[var(--primary-color)]"></i>
+            Reports
+        </h2>
+    </div>
 
-    <h2>Reports</h2>
-
-    <div class="mb-3 lover">
+    <div class="bg-white border border-gray-100 rounded-[2rem] shadow-sm p-6 mb-8">
         <form method="get" action="{{ url_for('dashboard.view_reports') }}">
-            <div class="row">
-                <!-- Report Type -->
-                <div class="col-md-4">
-                    <label for="report_type" class="form-label">Select Report Type</label>
-                    <select id="report_type" name="report_type" class="form-select">
-                        <option value>-- Select --</option>
-                        <option value="donations" {% if report_type == 'donations' %}selected{% endif %}>Donations</option>
-                        <option value="inventory" {% if report_type == 'inventory' %}selected{% endif %}>Inventory</option>
-                        <option value="events" {% if report_type == 'events' %}selected{% endif %}>Events</option>
-                    </select>
-                </div>
-
-                <!-- Date Filters -->
-                <div class="col-md-4 d-flex gap-3">
-                    <div>
-                        <label for="start_date" class="form-label">Start Date</label>
-                        <input type="date" id="start_date" name="start_date" class="form-control" value="{{ start_date }}">
-                    </div>
-                    <div>
-                        <label for="last_date" class="form-label">Last Date</label>
-                        <input type="date" id="last_date" name="last_date" class="form-control" value="{{ last_date }}">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
+                
+                <div class="md:col-span-4 space-y-2">
+                    <label for="report_type" class="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Report Category</label>
+                    <div class="relative">
+                        <select id="report_type" name="report_type" 
+                                class="w-full pl-4 pr-10 py-3 bg-gray-50 border-transparent rounded-xl text-sm font-bold text-gray-700 focus:bg-white focus:border-[var(--primary-color)] focus:ring-4 focus:ring-red-50 transition-all appearance-none outline-none">
+                            <option value="">-- Choose Module --</option>
+                            <option value="donations" {% if report_type == 'donations' %}selected{% endif %}>Donations Registry</option>
+                            <option value="inventory" {% if report_type == 'inventory' %}selected{% endif %}>Live Inventory</option>
+                            <option value="events" {% if report_type == 'events' %}selected{% endif %}>Event Performance</option>
+                        </select>
+                        <i class="bi bi-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs"></i>
                     </div>
                 </div>
 
-                <!-- Submit -->
-                <div class="col-md-4 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary">Generate Report</button>
+                <div class="md:col-span-5 grid grid-cols-2 gap-3">
+                    <div class="space-y-2">
+                        <label for="start_date" class="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">From Date</label>
+                        <input type="date" id="start_date" name="start_date" value="{{ start_date }}"
+                               class="w-full px-4 py-3 bg-gray-50 border-transparent rounded-xl text-sm font-bold text-gray-700 focus:bg-white focus:border-[var(--primary-color)] transition-all outline-none">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="last_date" class="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">To Date</label>
+                        <input type="date" id="last_date" name="last_date" value="{{ last_date }}"
+                               class="w-full px-4 py-3 bg-gray-50 border-transparent rounded-xl text-sm font-bold text-gray-700 focus:bg-white focus:border-[var(--primary-color)] transition-all outline-none">
+                    </div>
+                </div>
+
+                <div class="md:col-span-3">
+                    <button type="submit" 
+                            class="w-full py-3 bg-gray-900 text-white text-sm font-black rounded-xl shadow-lg hover:bg-black hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2">
+                        <i class="bi bi-lightning-charge-fill"></i> Generate Report
+                    </button>
                 </div>
             </div>
         </form>
     </div>
 
-    <hr>
-
     {% if report_data %}
-    <h4 class="mt-4">{{ title }} Result</h4>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                {% for header in report_headers %}
-                <th>{{ header }}</th>
-                {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in report_data %}
-            <tr>
-                {% for cell in row %}
-                <td>{{ cell }}</td>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="bg-white border border-gray-100 rounded-[2rem] shadow-xl shadow-gray-100/50 overflow-hidden">
+        <div class="px-6 py-5 border-b border-gray-50 flex items-center justify-between bg-gray-50/30">
+            <h4 class="text-sm font-black text-gray-800 uppercase tracking-tighter italic">
+                Showing: {{ title }}
+            </h4>
+            
+            <a href="{{ url_for('dashboard.admin_download_report') }}?report_type={{ report_type }}&start_date={{ start_date }}&last_date={{ last_date }}"
+               class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white text-[11px] font-black uppercase rounded-lg hover:bg-emerald-600 transition-all shadow-md shadow-emerald-100">
+                <i class="bi bi-file-earmark-spreadsheet-fill"></i> Export CSV
+            </a>
+        </div>
 
-    <a href="{{ url_for('dashboard.admin_download_report') }}?report_type={{ report_type }}&start_date={{ start_date }}&last_date={{ last_date }}"
-        class="btn btn-success mt-2">
-        Download Report
-    </a>
+        <div class="overflow-y-auto custom-scrollbar" style="height: 400px;">
+            <table class="w-full text-left border-collapse">
+                <thead class="sticky top-0 bg-white shadow-sm z-10">
+                    <tr>
+                        {% for header in report_headers %}
+                        <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-100">
+                            {{ header }}
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50">
+                    {% for row in report_data %}
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                        {% for cell in row %}
+                        <td class="px-6 py-4 text-xs font-bold text-gray-600">
+                            {{ cell }}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     {% else %}
-    <p class="text-muted mt-3">No data available for the selected filters.</p>
+    <div class="text-center py-20 bg-gray-50 rounded-[2rem] border border-dashed border-gray-200">
+        <i class="bi bi-search text-4xl text-gray-300"></i>
+        <p class="text-sm text-gray-400 font-medium mt-4">No data matches your current filters.</p>
+    </div>
     {% endif %}
 </div>
+
+<style>
+    /* Sleek Scrollbar */
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
+</style>
 {% endblock %}
