@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
-
-<h1>{% block title %} Home {% endblock %}</h1>
+{% block title %} Home {% endblock %}
 {% block content %}
-
-<div>   
-    {% include "common/homepage.html" %}
-</div>
-
+<main>
+    {% include "common/heropage.html" %} {# Ensure heropage.html is included outside the main grid if it's a full-width hero #}
+    <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 md:grid-cols-1 gap-12 pb-10">
+      <div>
+        {% include "common/testimonals.html" %}
+      </div>
+      <div>
+        {% include "common/feedback.html" %}
+      </div>
+    </div>
+  </div>
+</main>
 {% endblock %}

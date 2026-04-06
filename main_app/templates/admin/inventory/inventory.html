@@ -1,90 +1,109 @@
 {% extends 'base.html' %}
+{% block title %}Blood Inventory{% endblock %}
+
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='CSS/admin/inventory.css') }}">
+<div class="container mx-auto px-4 py-6 max-w-7xl">
+    <div class="mb-6">
+        {% include "admin/quickaction.html" %}
+    </div>
 
-<div class="container admin-inventory-container">
-    {% include "admin/quickaction.html" %}
-
-    <!-- Summary Section -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="inventory-highlight-card">
-                <div class="highlight-info">
-                    <p>Total Blood Units Available</p>
-                    <h3>{{ total_units }} <span class="fs-5 fw-normal">Units</span></h3>
-                </div>
-                <div class="highlight-icon">
-                    <i class="bi bi-droplet-fill"></i>
-                </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="md:col-span-2 bg-gradient-to-br from-red-500 to-red-600 rounded-[2rem] p-6 text-white shadow-lg shadow-red-100 flex items-center justify-between">
+            <div>
+                <p class="text-red-100 text-xs font-black uppercase tracking-widest mb-1">Total Stock Availability</p>
+                <h3 class="text-4xl font-black">{{ total_units }} <span class="text-lg font-medium opacity-80">Units</span></h3>
             </div>
+            <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center">
+                <i class="bi bi-droplet-fill text-3xl"></i>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-3">
+            <a href="{{ url_for('dashboard.add_inventory') }}" 
+               class="flex-1 flex items-center justify-center gap-2 bg-white border border-gray-100 rounded-2xl font-bold text-gray-700 hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] shadow-sm transition-all">
+                <i class="bi bi-plus-circle-fill"></i> Add Stock
+            </a>
+            <a href="{{ url_for('dashboard.sell_inventory') }}" 
+               class="flex-1 flex items-center justify-center gap-2 bg-gray-900 rounded-2xl font-bold text-white hover:bg-gray-800 shadow-sm transition-all">
+                <i class="bi bi-dash-circle-fill"></i> Issue Blood
+            </a>
         </div>
     </div>
 
-    <!-- Main Inventory Card -->
-    <div class="admin-card">
-        <div class="admin-card-header">
-            <h2><i class="bi bi-clipboard-data"></i> Blood Inventory</h2>
-            <div class="d-flex gap-2">
-                <a href="{{ url_for('dashboard.sell_inventory') }}" class="btn btn-outline-danger">
-                    <i class="bi bi-dash-circle"></i> Issue Blood
-                </a>
-                <a href="{{ url_for('dashboard.add_inventory') }}" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i> Add Stock
-                </a>
-            </div>
+    <div class="bg-white border border-gray-100 rounded-[2rem] shadow-sm overflow-hidden mb-[50px]">
+        <div class="p-4 border-b border-gray-50 flex items-center gap-2">
+            <i class="bi bi-clipboard2-pulse text-[var(--primary-color)]"></i>
+            <h4 class="font-black text-gray-800 tracking-tight">Stock Ledger</h4>
         </div>
-        
-        <div class="admin-card-body p-0">
-            <div class="table-responsive">
-                <table class="inventory-table table-hover">
-                    <thead>
-                        <tr>
-                            <th class="ps-4">Blood Group</th>
-                            <th>Component</th>
-                            <th>Collection Date</th>
-                            <th>Expiry Date</th>
-                            <th class="text-center">Quantity (Units)</th>
-                            <th class="text-center">Status</th>
+
+        <div class="overflow-y-auto custom-scrollbar" style="height: 400px;">
+            <table class="w-full text-left border-collapse">
+                <thead class="sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10 shadow-sm">
+                    <tr>
+                        <th class="px-6 py-3 text-[10px] font-black uppercase tracking-wider text-gray-400">Type</th>
+                        <th class="px-6 py-3 text-[10px] font-black uppercase tracking-wider text-gray-400">Component</th>
+                        <th class="px-6 py-3 text-[10px] font-black uppercase tracking-wider text-gray-400">Dates</th>
+                        <th class="px-6 py-3 text-[10px] font-black uppercase tracking-wider text-gray-400 text-center">Qty</th>
+                        <th class="px-6 py-3 text-[10px] font-black uppercase tracking-wider text-gray-400 text-right">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50">
+                    {% if inventory %}
+                        {% for item in inventory %}
+                        <tr class="hover:bg-gray-50/30 transition-all group">
+                            <td class="px-6 py-4">
+                                <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-red-50 text-red-600 font-black text-sm border border-red-100">
+                                    {{ item.blood_group }}
+                                </span>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                <span class="text-xs font-bold text-gray-700 bg-gray-100 px-2 py-1 rounded-md uppercase tracking-tighter">
+                                    {{ item.component }}
+                                </span>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                <div class="flex flex-col">
+                                    <span class="text-[11px] font-medium text-gray-500">Collected: {{ item.collection_date.strftime('%d %b') }}</span>
+                                    <span class="text-[11px] font-bold text-gray-800">Expires: {{ item.expiry_date.strftime('%d %b %Y') }}</span>
+                                </div>
+                            </td>
+
+                            <td class="px-6 py-4 text-center font-mono font-bold text-gray-700">
+                                {{ item.quantity }} <span class="text-[9px] text-gray-400">U</span>
+                            </td>
+
+                            <td class="px-6 py-4 text-right">
+                                {% if item.expiry_date <= current_date %}
+                                    <span class="text-[10px] font-black uppercase px-2 py-1 bg-red-100 text-red-600 rounded-lg">Expired</span>
+                                {% elif (item.expiry_date - current_date).days < 7 %}
+                                    <span class="text-[10px] font-black uppercase px-2 py-1 bg-amber-100 text-amber-600 rounded-lg">Soon</span>
+                                {% else %}
+                                    <span class="text-[10px] font-black uppercase px-2 py-1 bg-emerald-100 text-emerald-600 rounded-lg">Stable</span>
+                                {% endif %}
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% if inventory %}
-                            {% for item in inventory %}
-                            <tr>
-                                <td class="ps-4">
-                                    <span class="blood-badge">{{ item.blood_group }}</span>
-                                </td>
-                                <td>
-                                    <span class="component-badge">{{ item.component }}</span>
-                                </td>
-                                <td>{{ item.collection_date.strftime('%Y-%m-%d') }}</td>
-                                <td>{{ item.expiry_date.strftime('%Y-%m-%d') }}</td>
-                                <td class="text-center">
-                                    <span class="quantity-badge">{{ item.quantity }}</span>
-                                </td>
-                                <td class="text-center">
-                                    {% if item.expiry_date <= current_date %}
-                                        <span class="badge bg-danger">Expired</span>
-                                    {% elif (item.expiry_date - current_date).days < 7 %}
-                                        <span class="badge bg-warning text-dark">Expiring Soon</span>
-                                    {% else %}
-                                        <span class="badge bg-success">Good</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        {% else %}
-                            <tr>
-                                <td colspan="6" class="text-center py-5 text-muted">
-                                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                                    No inventory records found.
-                                </td>
-                            </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
-            </div>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="py-20 text-center">
+                                <i class="bi bi-box2 text-4xl text-gray-200"></i>
+                                <p class="text-sm text-gray-400 italic mt-2">Inventory is empty.</p>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+
+<style>
+    /* Custom Scrollbar for the 400px container */
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
+</style>
 {% endblock %}

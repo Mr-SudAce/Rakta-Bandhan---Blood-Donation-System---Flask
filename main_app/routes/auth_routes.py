@@ -35,8 +35,6 @@ def login():
         if form.validate_on_submit():
             username = form.username.data.strip()
             password = form.password.data.strip()
-
-            # Empty fields check
             if not username or not password:
                 flash("❌ Please fill out all fields.", "error")
                 return render_template("login.html", form=form)
@@ -60,14 +58,12 @@ def login():
                 user = User.query.filter_by(username=HARDCODED_USER).first()
                 if user:
                     login_user(user, remember=False)
-                    # 🔥 Auto logout timer here
                     session.permanent = True
                     session["last_active"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
                     flash(f"✅ Logged in successfully as {user.role.capitalize()}!", "success")
                     return redirect(url_for("dashboard.dashboard"))
 
-            # --- Database login ---
             user = User.query.filter_by(username=username).first()
             if not user:
                 flash("❌ Username not found. Please register first.", "error")
@@ -77,8 +73,6 @@ def login():
                 flash("❌ Incorrect password.", "error")
                 return render_template("login.html", form=form)
             
-            
-
             login_user(user, remember=True)
 
             session.permanent = True

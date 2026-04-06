@@ -1,30 +1,30 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
 {% if current_user.is_authenticated %}
 <!-- Footer -->
-<footer class="bg-white border-t border-gray-100 pt-16 pb-8 px-6"
-    role="contentinfo">
+{# The CSS link should be in the <head> section of your base.html, not here. #}
+<footer class="bg-white border-t border-gray-100 pt-16 pb-8" role="contentinfo">
     <div class="container mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
-
             <div class="space-y-6">
                 <div class="flex items-center gap-4">
-                    <div class="p-2 bg-red-50 rounded-xl shadow-sm">
+                    <div class="p-2 bg-red-50 rounded-xl shadow-md">
                         <img
                             src="{{ url_for('static', filename='static_images/logo.ico') }}"
                             alt="Rakta Bandhan Logo"
-                            class="h-10 w-10 object-contain">
+                            class="h-10 w-10 object-contain" />
                     </div>
                     <div>
                         <h3
                             class="text-2xl font-black tracking-tighter text-gray-900">
-                            Rakta <span
+                            Rakta
+                            <span
                                 class="text-[var(--primary-color)!important]">Bandhan</span>
                         </h3>
                     </div>
                 </div>
                 <p
                     class="text-gray-500 font-medium text-justify leading-relaxed max-w-xs">
-                    Connecting donors and patients across <span
+                    Connecting donors and patients across
+                    <span
                         class="text-[var(--primary-color)!important] font-bold">Nepal</span>.
                     Our mission is to ensure no life is lost due to blood
                     scarcity.
@@ -33,15 +33,18 @@
 
             <div class="flex flex-col gap-6">
                 <h4
-                    class="text-xs font-black uppercase tracking-[0.2em] text-gray-400">Quick
-                    Links</h4>
+                    class="text-xs font-black uppercase tracking-[0.2em] text-gray-400">
+                    Quick Links
+                </h4>
                 <ul class="space-y-4">
-
                     {% for links, url in [('Home', 'user.home'),
-                    ('Donate Blood', 'user.donate_blood'), ('Find Blood',
-                    'user.find_blood'), ('Campaigns', 'user.campaigns')] %}
+                    ('Donate Blood',
+                    'user.donate_blood'), ('Find Blood', 'user.find_blood'),
+                    ('Campaigns',
+                    'user.campaigns')] %}
                     <li>
-                        <a href="{{ url_for(url) }}"
+                        <a
+                            href="{{ url_for(url) }}"
                             class="text-[var(--primary-color)!important] font-semibold hover:text-red-600 transition-colors flex items-center gap-2 group">
                             <span
                                 class="w-0 h-0.5 bg-red-600 group-hover:w-4 transition-all"></span>
@@ -54,20 +57,21 @@
 
             <div class="flex flex-col gap-6">
                 <h4
-                    class="text-xs font-black uppercase tracking-[0.2em] text-gray-400">Contact
-                    Us</h4>
-                <ul class="space-y-4  font-semibold">
-                    <li class="flex items-center gap-3 ">
+                    class="text-xs font-black uppercase tracking-[0.2em] text-gray-400">
+                    Contact Us
+                </h4>
+                <ul class="space-y-4 font-semibold">
+                    <li class="flex items-center gap-3">
                         <i
                             class="bi bi-envelope text-[var(--primary-color)!important]"></i>
                         <span>help@raktabandhan.org</span>
                     </li>
-                    <li class="flex items-center gap-3 ">
+                    <li class="flex items-center gap-3">
                         <i
                             class="bi bi-telephone text-[var(--primary-color)!important]"></i>
                         <span>+977-1-555-1234</span>
                     </li>
-                    <li class="flex items-center gap-3 ">
+                    <li class="flex items-center gap-3">
                         <i
                             class="bi bi-geo-alt text-[var(--primary-color)!important]"></i>
                         <span>Kathmandu, Nepal</span>
@@ -79,23 +83,26 @@
         <div
             class="pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6">
             <span class="text-gray-400 font-bold text-sm tracking-wide">
-                © 2026 <span class="text-[var(--primary-color)!important]">Rakta
+                © 2026
+                <span class="text-[var(--primary-color)!important]">Rakta
                     Bandhan</span>. All rights reserved.
             </span>
 
             <div class="flex items-center gap-4">
-                <a href="#"
+                <a
+                    href="#" aria-label="Follow us on Facebook"
                     class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 text-[var(--text-color)!important] transition-all shadow-sm">
                     <i class="bi bi-facebook"></i>
                 </a>
-                <a href="#"
+                <a
+                    href="#" aria-label="Follow us on X (formerly Twitter)"
                     class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 text-[var(--text-color)!important] transition-all shadow-sm">
                     <i class="bi bi-twitter-x"></i>
                 </a>
-                <a href="#"
+                <a
+                    href="#" aria-label="Follow us on Instagram"
                     class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 text-[var(--text-color)!important] transition-all shadow-sm">
-                    <i
-                        class="bi bi-instagram"></i>
+                    <i class="bi bi-instagram"></i>
                 </a>
             </div>
         </div>

@@ -1,20 +1,60 @@
-<div class="my-2">
-    <div class="btn-group gap-4 justify-content-between d-flex">
-
-        <div class="d-flex gap-4">
-
+<div class="my-4 space-y-4">
+    <div class="flex items-center justify-between bg-white/50 backdrop-blur-md p-2 px-3 rounded-2xl border border-gray-100 shadow-sm">
+        <div class="flex items-center gap-1">
             {% if request.path != '/dashboard' %}
-            <i onclick="window.history.back()" class="bi bi-arrow-left-circle-fill" style="font-size: 1.5rem; cursor: pointer;"></i>
+            <button onclick="window.history.back()" 
+                    class="p-2 text-gray-400 hover:text-[var(--primary-color)] hover:bg-red-50 rounded-lg transition-all"
+                    title="Go Back">
+                <i class="bi bi-arrow-left text-lg"></i>
+            </button>
             {% endif %}
-            <a href="{{ url_for('dashboard.dashboard') }}" style="align-content: center; font-size: 1.5rem;"> <i class="bi bi-house-door-fill"></i> </a>
+
+            <a href="{{ url_for('dashboard.dashboard') }}" 
+               class="p-2 {% if request.path == '/dashboard' %} text-[var(--primary-color)] bg-red-50 {% else %} text-gray-400 {% endif %} hover:text-[var(--primary-color)] hover:bg-red-50 rounded-lg transition-all"
+               title="Dashboard Home">
+                <i class="bi bi-grid-1x2-fill text-lg"></i>
+            </a>
         </div>
-        <a href="{{ url_for('auth.logout') }}" style="align-content: center; font-size: 1.5rem;"> <i class="bi bi-box-arrow-right"></i> </a>
+
+        <a href="{{ url_for('auth.logout') }}" 
+           class="group flex items-center gap-2 px-3 py-1.5 text-xs font-black uppercase tracking-wider text-red-500 hover:bg-red-50 rounded-xl transition-all">
+            <span>Logout</span>
+            <i class="bi bi-power text-lg transition-transform group-hover:scale-110"></i>
+        </a>
     </div>
-    <h4 class>Quick Actions</h4>
-    <div class="btn-group" role="group">
-        <a href="{{ url_for('dashboard.admin_events') }}" class="btn btn-primary">Manage Events</a>
-        <a href="{{ url_for('dashboard.manage_inventory') }}" class="btn btn-success">Manage Inventory</a>
-        <a href="{{ url_for('dashboard.view_reports') }}" class="btn btn-info">View Reports</a>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <a href="{{ url_for('dashboard.admin_events') }}" 
+           class="flex items-center gap-4 p-3 bg-white border border-gray-100 rounded-2xl hover:border-blue-200 hover:shadow-lg hover:shadow-blue-500/5 transition-all group">
+            <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-blue-50 text-blue-600 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-all">
+                <i class="bi bi-calendar2-week text-lg"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-sm font-bold text-gray-800">Events</span>
+                <span class="text-[10px] text-gray-400 font-medium leading-none">Manage Drives</span>
+            </div>
+        </a>
+
+        <a href="{{ url_for('dashboard.manage_inventory') }}" 
+           class="flex items-center gap-4 p-3 bg-white border border-gray-100 rounded-2xl hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-500/5 transition-all group">
+            <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-emerald-50 text-emerald-600 rounded-xl group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                <i class="bi bi-droplet text-lg"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-sm font-bold text-gray-800">Inventory</span>
+                <span class="text-[10px] text-gray-400 font-medium leading-none">Stock Levels</span>
+            </div>
+        </a>
+
+        <a href="{{ url_for('dashboard.view_reports') }}" 
+           class="flex items-center gap-4 p-3 bg-white border border-gray-100 rounded-2xl hover:border-purple-200 hover:shadow-lg hover:shadow-purple-500/5 transition-all group">
+            <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-purple-50 text-purple-600 rounded-xl group-hover:bg-purple-600 group-hover:text-white transition-all">
+                <i class="bi bi-pie-chart text-lg"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-sm font-bold text-gray-800">Analytics</span>
+                <span class="text-[10px] text-gray-400 font-medium leading-none">View Reports</span>
+            </div>
+        </a>
     </div>
 </div>
-<hr>

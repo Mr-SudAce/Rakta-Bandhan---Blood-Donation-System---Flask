@@ -1,61 +1,94 @@
 {% extends 'base.html' %}
+{% block title %}Issue Blood Stock{% endblock %}
+
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='CSS/admin/inventory.css') }}">
+<div class="container mx-auto px-4 py-12 max-w-3xl">
+    <div class="mb-6">
+        <a href="{{ url_for('dashboard.manage_inventory') }}" 
+           class="inline-flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-red-600 transition-colors">
+            <i class="bi bi-arrow-left"></i>
+            Back to Inventory
+        </a>
+    </div>
 
-<div class="container admin-inventory-container">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="admin-card border-danger-subtle" style="border-top: 5px solid var(--primary);">
-                <div class="admin-card-header">
-                    <h2 class="text-danger"><i class="bi bi-box-arrow-right"></i> Issue Blood (Sell)</h2>
-                    <a href="{{ url_for('dashboard.manage_inventory') }}" class="btn btn-outline-secondary btn-sm">
-                        <i class="bi bi-arrow-left"></i> Back
-                    </a>
-                </div>
-                
-                <div class="admin-card-body">
-                    <form method="POST" action="{{ url_for('dashboard.sell_inventory') }}">
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <label for="blood_group" class="form-label fw-bold">Blood Group</label>
-                                <select class="form-select form-control-lg" id="blood_group" name="blood_group" required>
-                                    <option value="" selected disabled>Select Group</option>
-                                    {% for bg in ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] %}
-                                    <option value="{{ bg }}">{{ bg }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            
-                            <div class="col-md-6">
-                                <label for="component" class="form-label fw-bold">Component</label>
-                                <select class="form-select form-control-lg" id="component" name="component" required>
-                                    <option value="" selected disabled>Select Component</option>
-                                    <option value="Whole Blood">Whole Blood</option>
-                                    <option value="Plasma">Plasma</option>
-                                    <option value="Platelets">Platelets</option>
-                                    <option value="RBC's">RBC's</option>
-                                </select>
-                            </div>
+    <div class="bg-white border border-gray-100 rounded-[2.5rem] shadow-xl shadow-gray-100/50 overflow-hidden">
+        <div class="px-8 py-8 bg-gray-900 border-b border-gray-800 flex items-center justify-between">
+            <div>
+                <h2 class="text-2xl font-black text-white tracking-tight">Issue Blood</h2>
+                <p class="text-xs text-gray-400 font-medium uppercase tracking-widest mt-1">Deduct from Live Inventory</p>
+            </div>
+        </div>
 
-                            <div class="col-md-12">
-                                <label for="quantity" class="form-label fw-bold">Quantity to Issue</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control form-control-lg" id="quantity" name="quantity" min="1" placeholder="e.g. 1" required>
-                                    <span class="input-group-text">Units</span>
-                                </div>
-                                <div class="form-text text-muted">
-                                    This amount will be deducted from the current inventory.
-                                </div>
-                            </div>
-
-                            <div class="col-12 d-flex justify-content-end gap-2 mt-4">
-                                <a href="{{ url_for('dashboard.manage_inventory') }}" class="btn btn-light border btn-lg">Cancel</a>
-                                <button type="submit" class="btn btn-danger btn-lg px-5">Confirm Issue</button>
+        <div class="p-8">
+            <form method="POST" action="{{ url_for('dashboard.sell_inventory') }}" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label for="blood_group" class="text-xs font-black uppercase tracking-wider text-gray-500 ml-1">Required Blood Group</label>
+                        <div class="relative">
+                            <select id="blood_group" name="blood_group" required
+                                    class="w-full pl-4 pr-10 py-3.5 bg-gray-50 border-transparent rounded-2xl text-gray-900 font-bold focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-50 transition-all appearance-none outline-none cursor-pointer">
+                                <option value="" selected disabled>Select Group</option>
+                                {% for bg in ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] %}
+                                    <option value="{{ bg }}">{{ bg }} Group</option>
+                                {% endfor %}
+                            </select>
+                            <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400">
+                                <i class="bi bi-droplet-fill text-xs"></i>
                             </div>
                         </div>
-                    </form>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="component" class="text-xs font-black uppercase tracking-wider text-gray-500 ml-1">Specific Component</label>
+                        <div class="relative">
+                            <select id="component" name="component" required
+                                    class="w-full pl-4 pr-10 py-3.5 bg-gray-50 border-transparent rounded-2xl text-gray-900 font-bold focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-50 transition-all appearance-none outline-none cursor-pointer">
+                                <option value="" selected disabled>Select Component</option>
+                                <option value="Whole Blood">Whole Blood</option>
+                                <option value="Plasma">Plasma</option>
+                                <option value="Platelets">Platelets</option>
+                                <option value="RBC's">RBC's</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400">
+                                <i class="bi bi-chevron-down text-xs"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                <div class="space-y-2">
+                    <label for="quantity" class="text-xs font-black uppercase tracking-wider text-gray-500 ml-1">Quantity to Issue (Units)</label>
+                    <div class="relative group">
+                        <input type="number" id="quantity" name="quantity" min="1" placeholder="Enter number of units..." required
+                               class="w-full pl-12 pr-4 py-4 bg-gray-50 border-transparent rounded-2xl text-gray-900 font-bold focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-50 transition-all outline-none">
+                        <div class="absolute inset-y-0 left-4 flex items-center text-gray-400 group-focus-within:text-red-500 transition-colors">
+                            <i class="bi bi-dash-circle-dotted text-lg"></i>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-gray-400 font-medium italic ml-1">Note: This action cannot be undone once confirmed.</p>
+                </div>
+
+                <div class="bg-amber-50 border border-amber-100 rounded-2xl p-4 flex gap-4">
+                    <div class="text-amber-500 text-xl">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                    </div>
+                    <div class="text-xs text-amber-800 font-medium leading-relaxed">
+                        Validation will occur upon submission. If the requested units exceed current stock levels, 
+                        the transaction will be <span class="font-bold underline">rejected</span>.
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-4">
+                    <a href="{{ url_for('dashboard.manage_inventory') }}" 
+                       class="px-8 py-4 text-sm font-black text-gray-400 hover:text-gray-600 transition-colors">
+                        Cancel
+                    </a>
+                    <button type="submit" 
+                            class="px-10 py-4 bg-red-600 text-white font-black rounded-2xl shadow-lg shadow-red-100 hover:bg-red-700 hover:shadow-red-200 hover:-translate-y-0.5 transition-all">
+                        Confirm Issue
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

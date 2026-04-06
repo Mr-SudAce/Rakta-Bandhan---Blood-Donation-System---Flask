@@ -1,113 +1,106 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
-
 <section
-    class="relative min-h-[90vh] flex items-center justify-center pt-32 pb-12 px-6 overflow-hidden bg-[var(--bg)]"
-    role="region" aria-label="Hero Section">
-    <div
-        class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full opacity-[0.03] pointer-events-none">
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <pattern id="grid" width="40" height="40"
-                    patternUnits="userSpaceOnUse">
-                    <path d="M 40 0 L 0 0 0 40" fill="none"
-                        stroke="currentColor" stroke-width="1" />
-                </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" />
-        </svg>
+  class="relative min-h-screen flex items-center justify-center pb-12 overflow-hidden bg-[var(--bg-color)]"
+  role="main"
+  aria-label="Hero Section">
+  <div
+    class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full opacity-[0.03] pointer-events-none">
+    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path
+            d="M 40 0 L 0 0 0 40"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1" />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#grid)" />
+    </svg>
+  </div>
+
+  <div
+    class="container mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
+    <div class="hero__content space-y-8 animate-fade-in">
+      <h1
+        class="text-5xl lg:text-6xl font-black text-gray-900 leading-[1.1] tracking-tight">
+        Give Blood, <span class="text-[var(--primary-color)]">Save Lives,</span> <br />
+        Repeat.
+      </h1>
+      <p class="text-lg text-gray-600 max-w-xl leading-relaxed">
+        Join the
+        <span class="font-bold text-gray-800">Rakta Bandhan</span>
+        community. Find donors instantly, register to donate, and track local
+        blood drives — all in one secure platform.
+      </p>
+      <div class="flex flex-wrap gap-4 pt-4">
+        <a
+          href="{{ url_for('user.donate_blood') }}"
+          class="inline-flex items-center gap-3 px-8 py-4 bg-[var(--primary-color)] text-white font-bold rounded-2xl shadow-md shadow-red-200 hover:bg-[var(--primary-color)]/80 transition-all active:scale-95">
+          <i class="bi bi-heart-fill"></i> Donate Now
+        </a>
+        <a
+          href="{{ url_for('user.find_blood') }}"
+          class="inline-flex items-center gap-3 px-8 hover:border hover:border-red-600 text-[var(--text-color)!important] hover:text-[var(--primary-color)!important] py-4 bg-white text-gray-900 border-2 border-gray-100 font-bold rounded-2xl shadow-md hover:bg-gray-50 hover:border-gray-200 transition-all active:scale-95">
+          <i class="bi bi-search"></i> Find Blood
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10">
+        {% set stats = [ {'value': '1,284', 'label': 'Active Donors', 'color':
+        'text-blue-600', 'bg': 'bg-blue-50'}, {'value': '342', 'label': 'Urgent
+        Needs', 'color': 'text-red-600', 'bg': 'bg-red-50'}, {'value': '87',
+        'label': 'Campaigns', 'color': 'text-emerald-600', 'bg':
+        'bg-emerald-50'} ] %} {% for stat in stats %}
+        <div
+          class="group relative p-6 rounded-2xl bg-white border border-gray-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-transparent">
+          {# Changed shadow-sm to shadow-md for initial state #}
+          <div
+            class="absolute inset-x-0 -top-px h-1 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity {{ stat.bg.replace('bg-', 'bg-opacity-100 ') }}"></div>
+
+          <div class="flex flex-col gap-1">
+            <span
+              class="text-3xl font-extrabold tracking-tight {{ stat.color }}">
+              {{ stat.value }}
+            </span>
+            <span
+              class="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+              {{ stat.label }}
+            </span>
+          </div>
+
+          <div
+            class="absolute -right-2 -bottom-2 w-16 h-16 rounded-full {{ stat.bg }} opacity-40 group-hover:scale-150 transition-transform duration-500"></div>
+        </div>
+        {% endfor %}
+      </div>
     </div>
 
-    <div
-        class="container mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
+    <div class="hero__image relative lg:block">
+      <div
+        class="absolute -top-10 -right-10 w-64 h-64 bg-red-100 rounded-full blur-3xl opacity-50"></div>
+      <div
+        class="absolute -bottom-10 -left-10 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-50"></div>
 
-        <div class="hero__content space-y-8 animate-fade-in">
-            <!-- <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-100 text-[var(--primary)] text-xs font-bold uppercase tracking-wider">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
-                </span>
-                Live Blood Requests Nearby
-            </div> -->
+      <div
+        class="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-[12px] border-white hidden lg:block ring-1 ring-gray-100">
+        <img
+          src="{{ url_for('static', filename='static_images/bd_img1.jpeg') }}"
+          alt="Blood Donation Hero"
+          loading="lazy"
+          class="w-full h-[500px] object-cover transition-transform duration-700" />
+      </div>
 
-            <h1
-                class="text-5xl lg:text-7xl font-black text-gray-900 leading-[1.1] tracking-tight">
-                Give Blood. <br>
-                <span class="text-[var(--primary)]">Save Lives.</span> <br>
-                Repeat.
-            </h1>
-
-            <p class="text-lg text-gray-600 max-w-xl leading-relaxed">
-                Join the <span class="font-bold text-gray-800">Rakta
-                    Bandhan</span> community. Find donors instantly, register to
-                donate, and track local blood drives — all in one secure
-                platform.
-            </p>
-
-            <div class="flex flex-wrap gap-4 pt-4">
-                <a href="{{ url_for('user.donate_blood') }}"
-                    class="inline-flex items-center gap-3 px-8 py-4 bg-[var(--primary-color)] text-white font-bold rounded-2xl shadow-lg shadow-red-200 hover:bg-[var(--primary-color)]/80 transition-all active:scale-95">
-                    <i class="bi bi-heart-fill"></i> Donate Now
-                </a>
-                <a href="{{ url_for('user.find_blood') }}"
-                    class="inline-flex items-center gap-3 px-8 hover:border hover:border-red-600 text-[var(--text-color)!important] hover:text-[var(--primary-color)!important] py-4 bg-white text-gray-900 border-2 border-gray-100 font-bold rounded-2xl hover:bg-gray-50 hover:border-gray-200 transition-all active:scale-95">
-                    <i class="bi bi-search"></i> Find Blood
-                </a>
-            </div>
-
-            <div class="grid grid-cols-3 gap-4 pt-8">
-                <div
-                    class="p-4 rounded-2xl bg-white/50 border border-gray-100 backdrop-blur-sm transition-hover hover:bg-white hover:shadow-md">
-                    <span
-                        class="block text-2xl font-black text-gray-900">1,284</span>
-                    <span
-                        class="text-xs font-bold text-gray-500 uppercase tracking-tighter">Active
-                        Donors</span>
-                </div>
-                <div
-                    class="p-4 rounded-2xl bg-white/50 border border-gray-100 backdrop-blur-sm transition-hover hover:bg-white hover:shadow-md">
-                    <span
-                        class="block text-2xl font-black text-red-700">342</span>
-                    <span
-                        class="text-xs font-bold text-gray-500 uppercase tracking-tighter">Urgent
-                        Needs</span>
-                </div>
-                <div
-                    class="p-4 rounded-2xl bg-white/50 border border-gray-100 backdrop-blur-sm transition-hover hover:bg-white hover:shadow-md">
-                    <span
-                        class="block text-2xl font-black text-gray-900">87</span>
-                    <span
-                        class="text-xs font-bold text-gray-500 uppercase tracking-tighter">Campaigns</span>
-                </div>
-            </div>
+      <div
+        class="absolute z-50 -bottom-10 -left-6 bg-white px-3 py-3 rounded-2xl shadow-2xl border border-gray-100 hidden sm:flex items-center gap-4 animate-bounce-slow">
+        <div
+          class="h-12 w-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xl">
+          <i class="bi bi-shield-check"></i>
         </div>
-
-        <div class="hero__image relative lg:block">
-            <div
-                class="absolute -top-10 -right-10 w-64 h-64 bg-red-100 rounded-full blur-3xl opacity-50"></div>
-            <div
-                class="absolute -bottom-10 -left-10 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-50"></div>
-
-            <div
-                class="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-[12px] border-white ring-1 ring-gray-100">
-                <img
-                    src="{{ url_for('static', filename='static_images/bd_img1.jpeg') }}"
-                    alt="Blood Donation Hero"
-                    class="w-full h-[500px] object-cover hover:scale-105 transition-transform duration-700">
-            </div>
-
-            <div
-                class="absolute -bottom-6 -left-6 bg-white p-5 rounded-2xl shadow-xl border border-gray-100 hidden sm:flex items-center gap-4 animate-bounce-slow">
-                <div
-                    class="h-12 w-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xl">
-                    <i class="bi bi-shield-check"></i>
-                </div>
-                <div>
-                    <p class="text-sm font-black text-gray-900">Verified
-                        Platform</p>
-                    <p class="text-xs text-gray-500">Secure & Confidential</p>
-                </div>
-            </div>
+        <div>
+          <p class="text-sm font-black text-gray-900">Verified Platform</p>
+          <p class="text-xs text-gray-500">Secure & Confidential</p>
         </div>
-
+      </div>
     </div>
+  </div>
 </section>

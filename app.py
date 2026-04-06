@@ -38,7 +38,7 @@ def create_app():
         template_folder='main_app/templates'
     )
 
-    # ------------------- INSTANCE FOLDER & DATABASE CONFIG -------------------
+# ------------------- INSTANCE FOLDER & DATABASE CONFIG -------------------
     INSTANCE_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'instance')
     os.makedirs(INSTANCE_FOLDER, exist_ok=True)
 
@@ -50,9 +50,6 @@ def create_app():
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=1)
     app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=7)
 
-    # =====================================================
-    # 🚀 AUTO-LOGOUT AFTER INACTIVITY
-    # =====================================================
     @app.before_request
     def check_session_timeout():
         if current_user.is_authenticated:
@@ -66,12 +63,7 @@ def create_app():
                     session.clear()
                     return "Session expired — please login again.", 401
 
-            # Update activity timestamp
             session["last_active"] = now.strftime("%Y-%m-%d %H:%M:%S")
-
-    # =====================================================
-    # 🔒 Prevent Browser Caching (Fix back button issue)
-    # =====================================================
     @app.after_request
     def add_header(response):
         response.cache_control.no_store = True
@@ -88,7 +80,7 @@ def create_app():
     with app.app_context():
         db.create_all()
 
-        # 🧠 AUTO-CREATE HARDCODED SUPERADMIN
+        # AUTO-CREATE HARDCODED SUPERADMIN
         existing_superadmin = User.query.filter_by(username=HARDCODED_USER).first()
         if not existing_superadmin:
             hashed_password = generate_password_hash(HARDCODED_PASS)
@@ -101,7 +93,7 @@ def create_app():
                 blood_grp=HARDCODED_BLOOD_GRP,
                 address=HARDCODED_ADDRESS,
                 role=HARDCODED_ROLE,
-                profile_picture=HARDCODED_PROFILE_PIC,  # static path only
+                profile_picture=HARDCODED_PROFILE_PIC,
             )
             db.session.add(new_superadmin)
             db.session.commit()
@@ -109,13 +101,13 @@ def create_app():
         else:
             print("Superadmin already exists. Skipping creation.")
 
-    # ------------------- USER LOADER -------------------
+# ------------------- USER LOADER -------------------
     @login_manager.user_loader
     def load_user(user_id):
         if not user_id or user_id == "None":
             return None
         try:
-            return db.session.get(User, int(user_id))  # Modern SQLAlchemy 2.x
+            return db.session.get(User, int(user_id))
         except (ValueError, TypeError):
             return None
 

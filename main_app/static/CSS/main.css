@@ -35,21 +35,14 @@ body {
 }
 
 .container {
-  max-width: 90% !important;
+  max-width: 95% !important;
   width: 100% !important;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
-a{
+a {
   text-decoration: none;
-}
-
-@media (max-width: 900px) {
-  .container {
-    width: 99vw;
-    padding: 0 0.5rem;
-  }
 }
 
 .flash-container {
@@ -73,33 +66,10 @@ a{
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.flash-container .alert-success {
-  background-color: var(--success-color);
-  color: var(--surface-color);
-}
-.flash-container .alert-danger,
-.flash-container .alert-error {
-  background-color: var(--danger-color);
-  color: var(--surface-color);
-}
-.flash-container .alert-warning {
-  background-color: var(--warning-color);
-  color: var(--text-color);
-}
-.flash-container .alert-info {
-  background-color: var(--primary_color);
-  color: var(--surface-color);
-}
-
-.flash-container .alert-dismissible .btn-close {
-  color: white;
-  opacity: 1;
-}
-
-.flash-container .alert-dismissible .btn-close:hover {
-  color: #ddd;
-}
-
-.flash-container .alert-dismissible .btn-close:focus {
-  box-shadow: none;
-}
+.flash-container .alert-success {background-color: var(--success-color);color: var(--surface-color);}
+.flash-container .alert-danger,.flash-container .alert-error {background-color: var(--danger-color);color: var(--surface-color);}
+.flash-container .alert-warning {background-color: var(--warning-color);color: var(--text-color);}
+.flash-container .alert-info {background-color: var(--primary_color);color: var(--surface-color);}
+.flash-container .alert-dismissible .btn-close {color: white;opacity: 1;}
+.flash-container .alert-dismissible .btn-close:hover { color: #ddd;}
+.flash-container .alert-dismissible .btn-close:focus {box-shadow: none;}
